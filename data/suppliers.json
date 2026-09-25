@@ -1,0 +1,32 @@
+[
+  {
+    "id": "floortrade",
+    "name": "FloorTrade CZ s.r.o.",
+    "feedUrl": "file://data/feeds/incoming/floortrade.xml",
+    "adapter": "floortrade",
+    "shipsFrom": "Brno",
+    "lastSyncAt": "2026-09-21T07:03:00.186Z",
+    "lastSyncStatus": "ok",
+    "active": true
+  },
+  {
+    "id": "vinylia",
+    "name": "Vinylia Distribution a.s.",
+    "feedUrl": "file://data/feeds/incoming/vinylia.xml",
+    "adapter": "vinylia",
+    "shipsFrom": "Praha",
+    "lastSyncAt": "2026-09-21T07:03:00.207Z",
+    "lastSyncStatus": "ok",
+    "active": true
+  },
+  {
+    "id": "nordic",
+    "name": "Nordic Floors s.r.o.",
+    "feedUrl": "file://data/feeds/incoming/nordic.xml",
+    "adapter": "nordic",
+    "shipsFrom": "Ostrava",
+    "lastSyncAt": "2026-09-21T07:03:00.217Z",
+    "lastSyncStatus": "ok",
+    "active": true
+  }
+]

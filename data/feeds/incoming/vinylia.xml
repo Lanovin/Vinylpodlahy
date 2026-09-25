@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<products generated="2026-09-21T07:03:00.163Z">
+  <product sku="TER-RIGIDSTO-DUBSKANDINÁVSKÝ" kind="floor">
+    <name>Rigid Stone 5.5 Dub Skandinávský</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone 5.5</collection>
+    <decor>Dub Skandinávský</decor>
+    <tone>light-oak</tone>
+    <core>SPC</core>
+    <thickness_mm>5.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1220</plank_length_mm>
+    <plank_width_mm>180</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.2</pack_m2>
+    <pack_kg>30</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>486</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>520</price_net>
+    <image>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-designecologist-15226296.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:1.05,&quot;saturation&quot;:0.8}</image_transform>
+    <description>Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-DUBMEDOVÝ" kind="floor">
+    <name>Rigid Stone 5.5 Dub Medový</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone 5.5</collection>
+    <decor>Dub Medový</decor>
+    <tone>light-oak</tone>
+    <core>SPC</core>
+    <thickness_mm>5.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1220</plank_length_mm>
+    <plank_width_mm>180</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.2</pack_m2>
+    <pack_kg>30</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>312</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>520</price_net>
+    <image>file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg</image_room>
+    
+    <description>Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-DUBKOUŘOVÝ" kind="floor">
+    <name>Rigid Stone 5.5 Dub Kouřový</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone 5.5</collection>
+    <decor>Dub Kouřový</decor>
+    <tone>dark-wood</tone>
+    <core>SPC</core>
+    <thickness_mm>5.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1220</plank_length_mm>
+    <plank_width_mm>180</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.2</pack_m2>
+    <pack_kg>30</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>198</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>520</price_net>
+    <image>file://fotky_podlahy/pexels-digitalbuggu-314073.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:0.8,&quot;saturation&quot;:0.7}</image_transform>
+    <description>Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-OŘECHTMAVÝ" kind="floor">
+    <name>Rigid Stone 5.5 Ořech Tmavý</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone 5.5</collection>
+    <decor>Ořech Tmavý</decor>
+    <tone>dark-wood</tone>
+    <core>SPC</core>
+    <thickness_mm>5.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1220</plank_length_mm>
+    <plank_width_mm>180</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.2</pack_m2>
+    <pack_kg>30</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>92</stock_m2>
+    <lead_time_days>7</lead_time_days>
+    <price_net>520</price_net>
+    <image>file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:0.9,&quot;saturation&quot;:1.3,&quot;hue&quot;:15}</image_transform>
+    <description>Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-DUBŠEDÝ" kind="floor">
+    <name>Rigid Stone 5.5 Dub Šedý</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone 5.5</collection>
+    <decor>Dub Šedý</decor>
+    <tone>grey</tone>
+    <core>SPC</core>
+    <thickness_mm>5.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1220</plank_length_mm>
+    <plank_width_mm>180</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.2</pack_m2>
+    <pack_kg>30</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>264</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>520</price_net>
+    <image>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-designecologist-15226296.jpg</image_room>
+    <image_transform>{&quot;saturation&quot;:0.15,&quot;brightness&quot;:0.9}</image_transform>
+    <description>Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-BETONŠEDÝ" kind="floor">
+    <name>Rigid Stone 5.5 Beton Šedý</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone 5.5</collection>
+    <decor>Beton Šedý</decor>
+    <tone>stone</tone>
+    <core>SPC</core>
+    <thickness_mm>5.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1220</plank_length_mm>
+    <plank_width_mm>180</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.2</pack_m2>
+    <pack_kg>30</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>140</stock_m2>
+    <lead_time_days>7</lead_time_days>
+    <price_net>520</price_net>
+    <image>file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg</image_room>
+    <image_transform>{&quot;saturation&quot;:0.4,&quot;crop&quot;:&quot;bottom&quot;}</image_transform>
+    <description>Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.</description>
+  </product>
+  <product sku="LUM-GLUEDOWN-DUBVANILKOVÝ" kind="floor">
+    <name>Glue Down 2.5 Dub Vanilkový</name>
+    <brand>Lumea</brand>
+    <collection>Glue Down 2.5</collection>
+    <decor>Dub Vanilkový</decor>
+    <tone>light-oak</tone>
+    <core>LVT glue-down</core>
+    <thickness_mm>2.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>glue</installation>
+    <plank_length_mm>1219</plank_length_mm>
+    <plank_width_mm>184</plank_width_mm>
+    <bevel>0</bevel>
+    <pack_m2>3.37</pack_m2>
+    <pack_kg>15</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>0</integrated_underlay>
+    <stock_m2>320</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>390</price_net>
+    <image>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:1.08,&quot;saturation&quot;:0.75}</image_transform>
+    <description>Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.</description>
+  </product>
+  <product sku="LUM-GLUEDOWN-DUBUHLOVÝ" kind="floor">
+    <name>Glue Down 2.5 Dub Uhlový</name>
+    <brand>Lumea</brand>
+    <collection>Glue Down 2.5</collection>
+    <decor>Dub Uhlový</decor>
+    <tone>dark-wood</tone>
+    <core>LVT glue-down</core>
+    <thickness_mm>2.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>glue</installation>
+    <plank_length_mm>1219</plank_length_mm>
+    <plank_width_mm>184</plank_width_mm>
+    <bevel>0</bevel>
+    <pack_m2>3.37</pack_m2>
+    <pack_kg>15</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>0</integrated_underlay>
+    <stock_m2>145</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>390</price_net>
+    <image>file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:0.75,&quot;saturation&quot;:0.5}</image_transform>
+    <description>Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.</description>
+  </product>
+  <product sku="LUM-GLUEDOWN-DUBGRAFIT" kind="floor">
+    <name>Glue Down 2.5 Dub Grafit</name>
+    <brand>Lumea</brand>
+    <collection>Glue Down 2.5</collection>
+    <decor>Dub Grafit</decor>
+    <tone>grey</tone>
+    <core>LVT glue-down</core>
+    <thickness_mm>2.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>glue</installation>
+    <plank_length_mm>1219</plank_length_mm>
+    <plank_width_mm>184</plank_width_mm>
+    <bevel>0</bevel>
+    <pack_m2>3.37</pack_m2>
+    <pack_kg>15</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>0</integrated_underlay>
+    <stock_m2>200</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>390</price_net>
+    <image>file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-thuan-33701233.jpg</image_room>
+    <image_transform>{&quot;saturation&quot;:0.05,&quot;brightness&quot;:0.95}</image_transform>
+    <description>Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.</description>
+  </product>
+  <product sku="LUM-GLUEDOWN-TRAVERTINBÉŽOVÝ" kind="floor">
+    <name>Glue Down 2.5 Travertin Béžový</name>
+    <brand>Lumea</brand>
+    <collection>Glue Down 2.5</collection>
+    <decor>Travertin Béžový</decor>
+    <tone>stone</tone>
+    <core>LVT glue-down</core>
+    <thickness_mm>2.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>glue</installation>
+    <plank_length_mm>1219</plank_length_mm>
+    <plank_width_mm>184</plank_width_mm>
+    <bevel>0</bevel>
+    <pack_m2>3.37</pack_m2>
+    <pack_kg>15</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>0</integrated_underlay>
+    <stock_m2>260</stock_m2>
+    <lead_time_days>5</lead_time_days>
+    <price_net>390</price_net>
+    <image>file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg</image_room>
+    <image_transform>{&quot;crop&quot;:&quot;bottom&quot;,&quot;saturation&quot;:0.8}</image_transform>
+    <description>Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.</description>
+  </product>
+  <product sku="LUM-GLUEDOWN-MRAMORBÍLÝ" kind="floor">
+    <name>Glue Down 2.5 Mramor Bílý</name>
+    <brand>Lumea</brand>
+    <collection>Glue Down 2.5</collection>
+    <decor>Mramor Bílý</decor>
+    <tone>stone</tone>
+    <core>LVT glue-down</core>
+    <thickness_mm>2.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>glue</installation>
+    <plank_length_mm>1219</plank_length_mm>
+    <plank_width_mm>184</plank_width_mm>
+    <bevel>0</bevel>
+    <pack_m2>3.37</pack_m2>
+    <pack_kg>15</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>0</integrated_underlay>
+    <stock_m2>88</stock_m2>
+    <lead_time_days>9</lead_time_days>
+    <price_net>390</price_net>
+    <image>file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:1.1,&quot;saturation&quot;:0.3,&quot;crop&quot;:&quot;bottom&quot;}</image_transform>
+    <description>Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.</description>
+  </product>
+  <product sku="LUM-GLUEDOWN-BŘIDLICETMAVÁ" kind="floor">
+    <name>Glue Down 2.5 Břidlice Tmavá</name>
+    <brand>Lumea</brand>
+    <collection>Glue Down 2.5</collection>
+    <decor>Břidlice Tmavá</decor>
+    <tone>stone</tone>
+    <core>LVT glue-down</core>
+    <thickness_mm>2.5</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>33</usage_class>
+    <installation>glue</installation>
+    <plank_length_mm>1219</plank_length_mm>
+    <plank_width_mm>184</plank_width_mm>
+    <bevel>0</bevel>
+    <pack_m2>3.37</pack_m2>
+    <pack_kg>15</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>0</integrated_underlay>
+    <stock_m2>132</stock_m2>
+    <lead_time_days>7</lead_time_days>
+    <price_net>390</price_net>
+    <image>file://fotky_podlahy/pexels-thuan-33701233.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-thuan-33701233.jpg</image_room>
+    <image_transform>{&quot;saturation&quot;:0.3,&quot;brightness&quot;:0.9,&quot;crop&quot;:&quot;bottom&quot;}</image_transform>
+    <description>Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-DUBPÍSEČNÝ" kind="floor">
+    <name>Rigid Stone XL Commercial Dub Písečný</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone XL Commercial</collection>
+    <decor>Dub Písečný</decor>
+    <tone>light-oak</tone>
+    <core>SPC</core>
+    <thickness_mm>6</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>42</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1800</plank_length_mm>
+    <plank_width_mm>228</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.46</pack_m2>
+    <pack_kg>34</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>520</stock_m2>
+    <lead_time_days>6</lead_time_days>
+    <price_net>620</price_net>
+    <image>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:1.02,&quot;saturation&quot;:0.7,&quot;hue&quot;:10}</image_transform>
+    <description>Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-WENGE" kind="floor">
+    <name>Rigid Stone XL Commercial Wenge</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone XL Commercial</collection>
+    <decor>Wenge</decor>
+    <tone>dark-wood</tone>
+    <core>SPC</core>
+    <thickness_mm>6</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>42</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1800</plank_length_mm>
+    <plank_width_mm>228</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.46</pack_m2>
+    <pack_kg>34</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>240</stock_m2>
+    <lead_time_days>6</lead_time_days>
+    <price_net>620</price_net>
+    <image>file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</image_room>
+    <image_transform>{&quot;brightness&quot;:0.8,&quot;saturation&quot;:0.9,&quot;hue&quot;:10}</image_transform>
+    <description>Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.</description>
+  </product>
+  <product sku="TER-RIGIDSTO-KÁMENANTRACIT" kind="floor">
+    <name>Rigid Stone XL Commercial Kámen Antracit</name>
+    <brand>Terrano</brand>
+    <collection>Rigid Stone XL Commercial</collection>
+    <decor>Kámen Antracit</decor>
+    <tone>stone</tone>
+    <core>SPC</core>
+    <thickness_mm>6</thickness_mm>
+    <wear_layer_mm>0.55</wear_layer_mm>
+    <usage_class>42</usage_class>
+    <installation>click</installation>
+    <plank_length_mm>1800</plank_length_mm>
+    <plank_width_mm>228</plank_width_mm>
+    <bevel>1</bevel>
+    <pack_m2>2.46</pack_m2>
+    <pack_kg>34</pack_kg>
+    <underfloor_heating>1</underfloor_heating>
+    <integrated_underlay>1</integrated_underlay>
+    <stock_m2>310</stock_m2>
+    <lead_time_days>6</lead_time_days>
+    <price_net>620</price_net>
+    <image>file://fotky_podlahy/pexels-thuan-33701233.jpg</image>
+    <image_room>file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg</image_room>
+    <image_transform>{&quot;saturation&quot;:0.2,&quot;brightness&quot;:0.8,&quot;crop&quot;:&quot;bottom&quot;}</image_transform>
+    <description>Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.</description>
+  </product>
+  <product sku="VN-SKT-60-LIGHT" kind="accessory">
+    <name>Soklová lišta MDF 60 mm — Dub světlý (2,4 m)</name>
+    <accessory_type>skirting</accessory_type>
+    <unit>ks</unit>
+    <coverage>2.4</coverage>
+    <coverage_label>2,4 m / ks</coverage_label>
+    <unit_kg>0.9</unit_kg>
+    <price_net>85</price_net>
+    <tones>light-oak</tones>
+    <underfloor_heating>0</underfloor_heating>
+    <stock_units>1200</stock_units>
+    <lead_time_days>5</lead_time_days>
+    <image>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</image>
+    <description>Foliovaná MDF lišta 60 × 15 mm s kabelovým kanálkem. Odstín sladěný se světlými dubovými dekory.</description>
+  </product>
+  <product sku="VN-SKT-60-DARK" kind="accessory">
+    <name>Soklová lišta MDF 60 mm — Dub tmavý (2,4 m)</name>
+    <accessory_type>skirting</accessory_type>
+    <unit>ks</unit>
+    <coverage>2.4</coverage>
+    <coverage_label>2,4 m / ks</coverage_label>
+    <unit_kg>0.9</unit_kg>
+    <price_net>85</price_net>
+    <tones>dark-wood</tones>
+    <underfloor_heating>0</underfloor_heating>
+    <stock_units>640</stock_units>
+    <lead_time_days>5</lead_time_days>
+    <image>file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg</image>
+    <description>Foliovaná MDF lišta 60 × 15 mm s kabelovým kanálkem. Odstín pro tmavé dřevěné dekory.</description>
+  </product>
+  <product sku="VN-SKT-60-GREY" kind="accessory">
+    <name>Soklová lišta MDF 60 mm — Šedá (2,4 m)</name>
+    <accessory_type>skirting</accessory_type>
+    <unit>ks</unit>
+    <coverage>2.4</coverage>
+    <coverage_label>2,4 m / ks</coverage_label>
+    <unit_kg>0.9</unit_kg>
+    <price_net>85</price_net>
+    <tones>grey</tones>
+    <underfloor_heating>0</underfloor_heating>
+    <stock_units>380</stock_units>
+    <lead_time_days>5</lead_time_days>
+    <image>file://fotky_podlahy/pexels-thuan-33701233.jpg</image>
+    <description>Foliovaná MDF lišta 60 × 15 mm s kabelovým kanálkem. Šedý odstín.</description>
+  </product>
+  <product sku="VN-SKT-60-WHITE" kind="accessory">
+    <name>Soklová lišta MDF 60 mm — Bílá (2,4 m)</name>
+    <accessory_type>skirting</accessory_type>
+    <unit>ks</unit>
+    <coverage>2.4</coverage>
+    <coverage_label>2,4 m / ks</coverage_label>
+    <unit_kg>0.9</unit_kg>
+    <price_net>79</price_net>
+    <tones>stone</tones>
+    <underfloor_heating>0</underfloor_heating>
+    <stock_units>2100</stock_units>
+    <lead_time_days>5</lead_time_days>
+    <image>file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg</image>
+    <description>Bílá lakovaná MDF lišta 60 × 15 mm. Univerzální ke kamenným a betonovým dekorům i k bílým stěnám.</description>
+  </product>
+  <product sku="VN-ADH-LVT-6" kind="accessory">
+    <name>Disperzní lepidlo na vinyl 6 kg</name>
+    <accessory_type>floor-adhesive</accessory_type>
+    <unit>balení</unit>
+    <coverage>20</coverage>
+    <coverage_label>6 kg ≈ 20 m²</coverage_label>
+    <unit_kg>6.5</unit_kg>
+    <price_net>690</price_net>
+    <tones></tones>
+    <underfloor_heating>1</underfloor_heating>
+    <stock_units>90</stock_units>
+    <lead_time_days>5</lead_time_days>
+    
+    <description>Disperzní lepidlo pro celoplošné lepení LVT dílců, vhodné na podlahové topení. Spotřeba cca 300 g/m².</description>
+  </product>
+</products>

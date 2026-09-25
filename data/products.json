@@ -1,0 +1,2019 @@
+[
+  {
+    "id": "p_floortrade_qua-basicspc-dubprirodni",
+    "slug": "quaro-basic-spc-4-dub-prirodni",
+    "name": "Basic SPC 4 Dub Přírodní",
+    "brand": "Quaro",
+    "collection": "Basic SPC 4",
+    "decor": "Dub Přírodní",
+    "decorTone": "light-oak",
+    "type": "spc",
+    "thicknessMm": 4,
+    "wearLayerMm": 0.3,
+    "usageClass": 31,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 183,
+    "bevel": false,
+    "m2PerPack": 2.23,
+    "packWeightKg": 26,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 640,
+    "stockM2": 576,
+    "deliveryDays": 3,
+    "purchasePriceM2": 245,
+    "supplierId": "floortrade",
+    "supplierSku": "QUA-BASICSPC-DUBPŘÍRODNÍ",
+    "description": "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 385,
+    "pricePerPack": 859,
+    "images": {
+      "card": "/media/products/p_floortrade_qua-basicspc-dubprirodni/card.webp",
+      "hero": "/media/products/p_floortrade_qua-basicspc-dubprirodni/hero.webp",
+      "swatch": "/media/products/p_floortrade_qua-basicspc-dubprirodni/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_qua-basicspc-dubprirodni/hero.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubprirodni/card.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubprirodni/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
+          "transform": {
+            "brightness": 1.1,
+            "saturation": 0.85
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:22:55.468Z",
+    "updatedAt": "2026-09-20T22:22:55.468Z"
+  },
+  {
+    "id": "p_floortrade_qua-basicspc-dubbeleny",
+    "slug": "quaro-basic-spc-4-dub-beleny",
+    "name": "Basic SPC 4 Dub Bělený",
+    "brand": "Quaro",
+    "collection": "Basic SPC 4",
+    "decor": "Dub Bělený",
+    "decorTone": "light-oak",
+    "type": "spc",
+    "thicknessMm": 4,
+    "wearLayerMm": 0.3,
+    "usageClass": 31,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 183,
+    "bevel": false,
+    "m2PerPack": 2.23,
+    "packWeightKg": 26,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 388,
+    "stockM2": 349.2,
+    "deliveryDays": 3,
+    "purchasePriceM2": 245,
+    "supplierId": "floortrade",
+    "supplierSku": "QUA-BASICSPC-DUBBĚLENÝ",
+    "description": "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 385,
+    "pricePerPack": 859,
+    "images": {
+      "card": "/media/products/p_floortrade_qua-basicspc-dubbeleny/card.webp",
+      "hero": "/media/products/p_floortrade_qua-basicspc-dubbeleny/hero.webp",
+      "swatch": "/media/products/p_floortrade_qua-basicspc-dubbeleny/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_qua-basicspc-dubbeleny/hero.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubbeleny/card.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubbeleny/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1.15,
+            "saturation": 0.6
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:22:57.769Z",
+    "updatedAt": "2026-09-20T22:22:57.769Z"
+  },
+  {
+    "id": "p_floortrade_qua-basicspc-dubpopelavy",
+    "slug": "quaro-basic-spc-4-dub-popelavy",
+    "name": "Basic SPC 4 Dub Popelavý",
+    "brand": "Quaro",
+    "collection": "Basic SPC 4",
+    "decor": "Dub Popelavý",
+    "decorTone": "grey",
+    "type": "spc",
+    "thicknessMm": 4,
+    "wearLayerMm": 0.3,
+    "usageClass": 31,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 183,
+    "bevel": false,
+    "m2PerPack": 2.23,
+    "packWeightKg": 26,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 220,
+    "stockM2": 198,
+    "deliveryDays": 3,
+    "purchasePriceM2": 245,
+    "supplierId": "floortrade",
+    "supplierSku": "QUA-BASICSPC-DUBPOPELAVÝ",
+    "description": "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 385,
+    "pricePerPack": 859,
+    "images": {
+      "card": "/media/products/p_floortrade_qua-basicspc-dubpopelavy/card.webp",
+      "hero": "/media/products/p_floortrade_qua-basicspc-dubpopelavy/hero.webp",
+      "swatch": "/media/products/p_floortrade_qua-basicspc-dubpopelavy/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/hero.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/card.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "saturation": 0.2,
+            "brightness": 0.85
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:22:59.580Z",
+    "updatedAt": "2026-09-20T22:22:59.580Z"
+  },
+  {
+    "id": "p_floortrade_qua-basicspc-dubkaramelovy",
+    "slug": "quaro-basic-spc-4-dub-karamelovy",
+    "name": "Basic SPC 4 Dub Karamelový",
+    "brand": "Quaro",
+    "collection": "Basic SPC 4",
+    "decor": "Dub Karamelový",
+    "decorTone": "dark-wood",
+    "type": "spc",
+    "thicknessMm": 4,
+    "wearLayerMm": 0.3,
+    "usageClass": 31,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 183,
+    "bevel": false,
+    "m2PerPack": 2.23,
+    "packWeightKg": 26,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 176,
+    "stockM2": 158.4,
+    "deliveryDays": 3,
+    "purchasePriceM2": 245,
+    "supplierId": "floortrade",
+    "supplierSku": "QUA-BASICSPC-DUBKARAMELOVÝ",
+    "description": "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 385,
+    "pricePerPack": 859,
+    "images": {
+      "card": "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/card.webp",
+      "hero": "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/hero.webp",
+      "swatch": "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/hero.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/card.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg",
+          "transform": {
+            "brightness": 0.85,
+            "saturation": 1.15
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:01.582Z",
+    "updatedAt": "2026-09-20T22:23:01.582Z"
+  },
+  {
+    "id": "p_floortrade_qua-basicspc-betonsvetly",
+    "slug": "quaro-basic-spc-4-beton-svetly",
+    "name": "Basic SPC 4 Beton Světlý",
+    "brand": "Quaro",
+    "collection": "Basic SPC 4",
+    "decor": "Beton Světlý",
+    "decorTone": "stone",
+    "type": "spc",
+    "thicknessMm": 4,
+    "wearLayerMm": 0.3,
+    "usageClass": 31,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 183,
+    "bevel": false,
+    "m2PerPack": 2.23,
+    "packWeightKg": 26,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 44,
+    "stockM2": 39.6,
+    "deliveryDays": 10,
+    "purchasePriceM2": 245,
+    "supplierId": "floortrade",
+    "supplierSku": "QUA-BASICSPC-BETONSVĚTLÝ",
+    "description": "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 385,
+    "pricePerPack": 859,
+    "images": {
+      "card": "/media/products/p_floortrade_qua-basicspc-betonsvetly/card.webp",
+      "hero": "/media/products/p_floortrade_qua-basicspc-betonsvetly/hero.webp",
+      "swatch": "/media/products/p_floortrade_qua-basicspc-betonsvetly/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_qua-basicspc-betonsvetly/hero.webp",
+        "/media/products/p_floortrade_qua-basicspc-betonsvetly/card.webp",
+        "/media/products/p_floortrade_qua-basicspc-betonsvetly/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg",
+          "transform": {
+            "saturation": 0.3,
+            "brightness": 1.05,
+            "crop": "bottom"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:03.374Z",
+    "updatedAt": "2026-09-21T07:03:00.183Z"
+  },
+  {
+    "id": "p_floortrade_cas-composit-dubprovence",
+    "slug": "casale-composite-comfort-6-5-dub-provence",
+    "name": "Composite Comfort 6.5 Dub Provence",
+    "brand": "Casale",
+    "collection": "Composite Comfort 6.5",
+    "decor": "Dub Provence",
+    "decorTone": "light-oak",
+    "type": "vinyl-composite",
+    "thicknessMm": 6.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1500,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.05,
+    "packWeightKg": 19,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 180,
+    "stockM2": 162,
+    "deliveryDays": 4,
+    "purchasePriceM2": 720,
+    "supplierId": "floortrade",
+    "supplierSku": "CAS-COMPOSIT-DUBPROVENCE",
+    "description": "Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 1133,
+    "pricePerPack": 2323,
+    "images": {
+      "card": "/media/products/p_floortrade_cas-composit-dubprovence/card.webp",
+      "hero": "/media/products/p_floortrade_cas-composit-dubprovence/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-composit-dubprovence/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_cas-composit-dubprovence/hero.webp",
+        "/media/products/p_floortrade_cas-composit-dubprovence/card.webp",
+        "/media/products/p_floortrade_cas-composit-dubprovence/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg",
+          "transform": {
+            "brightness": 1,
+            "saturation": 0.9,
+            "hue": -5
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:05.529Z",
+    "updatedAt": "2026-09-20T22:23:05.529Z"
+  },
+  {
+    "id": "p_floortrade_cas-composit-dubkavovy",
+    "slug": "casale-composite-comfort-6-5-dub-kavovy",
+    "name": "Composite Comfort 6.5 Dub Kávový",
+    "brand": "Casale",
+    "collection": "Composite Comfort 6.5",
+    "decor": "Dub Kávový",
+    "decorTone": "dark-wood",
+    "type": "vinyl-composite",
+    "thicknessMm": 6.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1500,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.05,
+    "packWeightKg": 19,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 96,
+    "stockM2": 86.4,
+    "deliveryDays": 4,
+    "purchasePriceM2": 720,
+    "supplierId": "floortrade",
+    "supplierSku": "CAS-COMPOSIT-DUBKÁVOVÝ",
+    "description": "Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 1133,
+    "pricePerPack": 2323,
+    "images": {
+      "card": "/media/products/p_floortrade_cas-composit-dubkavovy/card.webp",
+      "hero": "/media/products/p_floortrade_cas-composit-dubkavovy/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-composit-dubkavovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_cas-composit-dubkavovy/hero.webp",
+        "/media/products/p_floortrade_cas-composit-dubkavovy/card.webp",
+        "/media/products/p_floortrade_cas-composit-dubkavovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
+          "transform": {
+            "brightness": 0.7,
+            "saturation": 0.9
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:07.412Z",
+    "updatedAt": "2026-09-20T22:23:07.412Z"
+  },
+  {
+    "id": "p_floortrade_cas-composit-dubstribrny",
+    "slug": "casale-composite-comfort-6-5-dub-stribrny",
+    "name": "Composite Comfort 6.5 Dub Stříbrný",
+    "brand": "Casale",
+    "collection": "Composite Comfort 6.5",
+    "decor": "Dub Stříbrný",
+    "decorTone": "grey",
+    "type": "vinyl-composite",
+    "thicknessMm": 6.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1500,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.05,
+    "packWeightKg": 19,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 110,
+    "stockM2": 99,
+    "deliveryDays": 4,
+    "purchasePriceM2": 720,
+    "supplierId": "floortrade",
+    "supplierSku": "CAS-COMPOSIT-DUBSTŘÍBRNÝ",
+    "description": "Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 1133,
+    "pricePerPack": 2323,
+    "images": {
+      "card": "/media/products/p_floortrade_cas-composit-dubstribrny/card.webp",
+      "hero": "/media/products/p_floortrade_cas-composit-dubstribrny/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-composit-dubstribrny/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_cas-composit-dubstribrny/hero.webp",
+        "/media/products/p_floortrade_cas-composit-dubstribrny/card.webp",
+        "/media/products/p_floortrade_cas-composit-dubstribrny/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
+          "transform": {
+            "saturation": 0.1,
+            "brightness": 1.05
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:09.268Z",
+    "updatedAt": "2026-09-20T22:23:09.268Z"
+  },
+  {
+    "id": "p_floortrade_cas-composit-terrazzosvetle",
+    "slug": "casale-composite-comfort-6-5-terrazzo-svetle",
+    "name": "Composite Comfort 6.5 Terrazzo Světlé",
+    "brand": "Casale",
+    "collection": "Composite Comfort 6.5",
+    "decor": "Terrazzo Světlé",
+    "decorTone": "stone",
+    "type": "vinyl-composite",
+    "thicknessMm": 6.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1500,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.05,
+    "packWeightKg": 19,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 62,
+    "stockM2": 55.8,
+    "deliveryDays": 8,
+    "purchasePriceM2": 720,
+    "supplierId": "floortrade",
+    "supplierSku": "CAS-COMPOSIT-TERRAZZOSVĚTLÉ",
+    "description": "Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 1133,
+    "pricePerPack": 2323,
+    "images": {
+      "card": "/media/products/p_floortrade_cas-composit-terrazzosvetle/card.webp",
+      "hero": "/media/products/p_floortrade_cas-composit-terrazzosvetle/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-composit-terrazzosvetle/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_cas-composit-terrazzosvetle/hero.webp",
+        "/media/products/p_floortrade_cas-composit-terrazzosvetle/card.webp",
+        "/media/products/p_floortrade_cas-composit-terrazzosvetle/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg",
+          "transform": {
+            "brightness": 1.05,
+            "saturation": 0.5,
+            "crop": "top"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:11.331Z",
+    "updatedAt": "2026-09-20T22:23:11.331Z"
+  },
+  {
+    "id": "p_floortrade_cas-herringb-dubrybikostprirodn",
+    "slug": "casale-herringbone-6-5-dub-rybi-kost-prirodni",
+    "name": "Herringbone 6.5 Dub Rybí kost Přírodní",
+    "brand": "Casale",
+    "collection": "Herringbone 6.5",
+    "decor": "Dub Rybí kost Přírodní",
+    "decorTone": "light-oak",
+    "type": "vinyl-composite",
+    "thicknessMm": 6.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 720,
+    "plankWidthMm": 120,
+    "bevel": true,
+    "m2PerPack": 1.73,
+    "packWeightKg": 16,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 74,
+    "stockM2": 66.6,
+    "deliveryDays": 8,
+    "purchasePriceM2": 810,
+    "supplierId": "floortrade",
+    "supplierSku": "CAS-HERRINGB-DUBRYBÍKOSTPŘÍRODN",
+    "description": "Kratší lamely určené pro pokládku do rybí kosti. Kompozitní jádro s integrovanou podložkou, click zámek pro vzor rybí kost (pravé a levé lamely v balení).",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 1274,
+    "pricePerPack": 2204,
+    "images": {
+      "card": "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/card.webp",
+      "hero": "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/hero.webp",
+        "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/card.webp",
+        "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg",
+          "transform": {
+            "crop": "bottom",
+            "brightness": 1.05
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:14.079Z",
+    "updatedAt": "2026-09-20T22:23:14.079Z"
+  },
+  {
+    "id": "p_floortrade_cas-herringb-dubrybikostkourovy",
+    "slug": "casale-herringbone-6-5-dub-rybi-kost-kourovy",
+    "name": "Herringbone 6.5 Dub Rybí kost Kouřový",
+    "brand": "Casale",
+    "collection": "Herringbone 6.5",
+    "decor": "Dub Rybí kost Kouřový",
+    "decorTone": "dark-wood",
+    "type": "vinyl-composite",
+    "thicknessMm": 6.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 720,
+    "plankWidthMm": 120,
+    "bevel": true,
+    "m2PerPack": 1.73,
+    "packWeightKg": 16,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 41,
+    "stockM2": 36.9,
+    "deliveryDays": 8,
+    "purchasePriceM2": 810,
+    "supplierId": "floortrade",
+    "supplierSku": "CAS-HERRINGB-DUBRYBÍKOSTKOUŘOVÝ",
+    "description": "Kratší lamely určené pro pokládku do rybí kosti. Kompozitní jádro s integrovanou podložkou, click zámek pro vzor rybí kost (pravé a levé lamely v balení).",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 1274,
+    "pricePerPack": 2204,
+    "images": {
+      "card": "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/card.webp",
+      "hero": "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/hero.webp",
+        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/card.webp",
+        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg",
+          "transform": {
+            "crop": "bottom",
+            "brightness": 0.8,
+            "saturation": 0.8
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:16.284Z",
+    "updatedAt": "2026-09-20T22:23:16.284Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-dubskandinavsky",
+    "slug": "terrano-rigid-stone-5-5-dub-skandinavsky",
+    "name": "Rigid Stone 5.5 Dub Skandinávský",
+    "brand": "Terrano",
+    "collection": "Rigid Stone 5.5",
+    "decor": "Dub Skandinávský",
+    "decorTone": "light-oak",
+    "type": "spc",
+    "thicknessMm": 5.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 180,
+    "bevel": true,
+    "m2PerPack": 2.2,
+    "packWeightKg": 30,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 486,
+    "stockM2": 437.4,
+    "deliveryDays": 5,
+    "purchasePriceM2": 520,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-DUBSKANDINÁVSKÝ",
+    "description": "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 799,
+    "pricePerPack": 1758,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1.05,
+            "saturation": 0.8
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:19.140Z",
+    "updatedAt": "2026-09-20T22:23:19.140Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-dubmedovy",
+    "slug": "terrano-rigid-stone-5-5-dub-medovy",
+    "name": "Rigid Stone 5.5 Dub Medový",
+    "brand": "Terrano",
+    "collection": "Rigid Stone 5.5",
+    "decor": "Dub Medový",
+    "decorTone": "light-oak",
+    "type": "spc",
+    "thicknessMm": 5.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 180,
+    "bevel": true,
+    "m2PerPack": 2.2,
+    "packWeightKg": 30,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 312,
+    "stockM2": 280.8,
+    "deliveryDays": 5,
+    "purchasePriceM2": 520,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-DUBMEDOVÝ",
+    "description": "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 799,
+    "pricePerPack": 1758,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-dubmedovy/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-dubmedovy/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-dubmedovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg"
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:21.096Z",
+    "updatedAt": "2026-09-21T07:03:00.202Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-dubkourovy",
+    "slug": "terrano-rigid-stone-5-5-dub-kourovy",
+    "name": "Rigid Stone 5.5 Dub Kouřový",
+    "brand": "Terrano",
+    "collection": "Rigid Stone 5.5",
+    "decor": "Dub Kouřový",
+    "decorTone": "dark-wood",
+    "type": "spc",
+    "thicknessMm": 5.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 180,
+    "bevel": true,
+    "m2PerPack": 2.2,
+    "packWeightKg": 30,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 198,
+    "stockM2": 178.2,
+    "deliveryDays": 5,
+    "purchasePriceM2": 520,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-DUBKOUŘOVÝ",
+    "description": "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 799,
+    "pricePerPack": 1758,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-dubkourovy/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-dubkourovy/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-dubkourovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-dubkourovy/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubkourovy/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubkourovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
+          "transform": {
+            "brightness": 0.8,
+            "saturation": 0.7
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:22.721Z",
+    "updatedAt": "2026-09-20T22:23:22.721Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-orechtmavy",
+    "slug": "terrano-rigid-stone-5-5-orech-tmavy",
+    "name": "Rigid Stone 5.5 Ořech Tmavý",
+    "brand": "Terrano",
+    "collection": "Rigid Stone 5.5",
+    "decor": "Ořech Tmavý",
+    "decorTone": "dark-wood",
+    "type": "spc",
+    "thicknessMm": 5.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 180,
+    "bevel": true,
+    "m2PerPack": 2.2,
+    "packWeightKg": 30,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 92,
+    "stockM2": 82.8,
+    "deliveryDays": 7,
+    "purchasePriceM2": 520,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-OŘECHTMAVÝ",
+    "description": "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 799,
+    "pricePerPack": 1758,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-orechtmavy/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-orechtmavy/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-orechtmavy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
+          "transform": {
+            "brightness": 0.9,
+            "saturation": 1.3,
+            "hue": 15
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:24.778Z",
+    "updatedAt": "2026-09-20T22:23:24.778Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-dubsedy",
+    "slug": "terrano-rigid-stone-5-5-dub-sedy",
+    "name": "Rigid Stone 5.5 Dub Šedý",
+    "brand": "Terrano",
+    "collection": "Rigid Stone 5.5",
+    "decor": "Dub Šedý",
+    "decorTone": "grey",
+    "type": "spc",
+    "thicknessMm": 5.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 180,
+    "bevel": true,
+    "m2PerPack": 2.2,
+    "packWeightKg": 30,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 264,
+    "stockM2": 237.6,
+    "deliveryDays": 5,
+    "purchasePriceM2": 520,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-DUBŠEDÝ",
+    "description": "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 799,
+    "pricePerPack": 1758,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-dubsedy/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-dubsedy/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-dubsedy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-dubsedy/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubsedy/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubsedy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "saturation": 0.15,
+            "brightness": 0.9
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:26.595Z",
+    "updatedAt": "2026-09-20T22:23:26.595Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-betonsedy",
+    "slug": "terrano-rigid-stone-5-5-beton-sedy",
+    "name": "Rigid Stone 5.5 Beton Šedý",
+    "brand": "Terrano",
+    "collection": "Rigid Stone 5.5",
+    "decor": "Beton Šedý",
+    "decorTone": "stone",
+    "type": "spc",
+    "thicknessMm": 5.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "click",
+    "plankLengthMm": 1220,
+    "plankWidthMm": 180,
+    "bevel": true,
+    "m2PerPack": 2.2,
+    "packWeightKg": 30,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 140,
+    "stockM2": 126,
+    "deliveryDays": 7,
+    "purchasePriceM2": 520,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-BETONŠEDÝ",
+    "description": "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 799,
+    "pricePerPack": 1758,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-betonsedy/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-betonsedy/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-betonsedy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-betonsedy/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-betonsedy/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-betonsedy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg",
+          "transform": {
+            "saturation": 0.4,
+            "crop": "bottom"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:28.598Z",
+    "updatedAt": "2026-09-20T22:23:28.598Z"
+  },
+  {
+    "id": "p_vinylia_lum-gluedown-dubvanilkovy",
+    "slug": "lumea-glue-down-2-5-dub-vanilkovy",
+    "name": "Glue Down 2.5 Dub Vanilkový",
+    "brand": "Lumea",
+    "collection": "Glue Down 2.5",
+    "decor": "Dub Vanilkový",
+    "decorTone": "light-oak",
+    "type": "vinyl-glue",
+    "thicknessMm": 2.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "glue",
+    "plankLengthMm": 1219,
+    "plankWidthMm": 184,
+    "bevel": false,
+    "m2PerPack": 3.37,
+    "packWeightKg": 15,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 320,
+    "stockM2": 288,
+    "deliveryDays": 5,
+    "purchasePriceM2": 390,
+    "supplierId": "vinylia",
+    "supplierSku": "LUM-GLUEDOWN-DUBVANILKOVÝ",
+    "description": "Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 599,
+    "pricePerPack": 2019,
+    "images": {
+      "card": "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/card.webp",
+      "hero": "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/hero.webp",
+      "swatch": "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/hero.webp",
+        "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/card.webp",
+        "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1.08,
+            "saturation": 0.75
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:30.648Z",
+    "updatedAt": "2026-09-20T22:23:30.648Z"
+  },
+  {
+    "id": "p_vinylia_lum-gluedown-dubuhlovy",
+    "slug": "lumea-glue-down-2-5-dub-uhlovy",
+    "name": "Glue Down 2.5 Dub Uhlový",
+    "brand": "Lumea",
+    "collection": "Glue Down 2.5",
+    "decor": "Dub Uhlový",
+    "decorTone": "dark-wood",
+    "type": "vinyl-glue",
+    "thicknessMm": 2.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "glue",
+    "plankLengthMm": 1219,
+    "plankWidthMm": 184,
+    "bevel": false,
+    "m2PerPack": 3.37,
+    "packWeightKg": 15,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 145,
+    "stockM2": 130.5,
+    "deliveryDays": 5,
+    "purchasePriceM2": 390,
+    "supplierId": "vinylia",
+    "supplierSku": "LUM-GLUEDOWN-DUBUHLOVÝ",
+    "description": "Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 599,
+    "pricePerPack": 2019,
+    "images": {
+      "card": "/media/products/p_vinylia_lum-gluedown-dubuhlovy/card.webp",
+      "hero": "/media/products/p_vinylia_lum-gluedown-dubuhlovy/hero.webp",
+      "swatch": "/media/products/p_vinylia_lum-gluedown-dubuhlovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_lum-gluedown-dubuhlovy/hero.webp",
+        "/media/products/p_vinylia_lum-gluedown-dubuhlovy/card.webp",
+        "/media/products/p_vinylia_lum-gluedown-dubuhlovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
+          "transform": {
+            "brightness": 0.75,
+            "saturation": 0.5
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:32.484Z",
+    "updatedAt": "2026-09-20T22:23:32.484Z"
+  },
+  {
+    "id": "p_vinylia_lum-gluedown-dubgrafit",
+    "slug": "lumea-glue-down-2-5-dub-grafit",
+    "name": "Glue Down 2.5 Dub Grafit",
+    "brand": "Lumea",
+    "collection": "Glue Down 2.5",
+    "decor": "Dub Grafit",
+    "decorTone": "grey",
+    "type": "vinyl-glue",
+    "thicknessMm": 2.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "glue",
+    "plankLengthMm": 1219,
+    "plankWidthMm": 184,
+    "bevel": false,
+    "m2PerPack": 3.37,
+    "packWeightKg": 15,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 200,
+    "stockM2": 180,
+    "deliveryDays": 5,
+    "purchasePriceM2": 390,
+    "supplierId": "vinylia",
+    "supplierSku": "LUM-GLUEDOWN-DUBGRAFIT",
+    "description": "Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 599,
+    "pricePerPack": 2019,
+    "images": {
+      "card": "/media/products/p_vinylia_lum-gluedown-dubgrafit/card.webp",
+      "hero": "/media/products/p_vinylia_lum-gluedown-dubgrafit/hero.webp",
+      "swatch": "/media/products/p_vinylia_lum-gluedown-dubgrafit/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_lum-gluedown-dubgrafit/hero.webp",
+        "/media/products/p_vinylia_lum-gluedown-dubgrafit/card.webp",
+        "/media/products/p_vinylia_lum-gluedown-dubgrafit/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
+          "transform": {
+            "saturation": 0.05,
+            "brightness": 0.95
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:34.158Z",
+    "updatedAt": "2026-09-20T22:23:34.158Z"
+  },
+  {
+    "id": "p_vinylia_lum-gluedown-travertinbezovy",
+    "slug": "lumea-glue-down-2-5-travertin-bezovy",
+    "name": "Glue Down 2.5 Travertin Béžový",
+    "brand": "Lumea",
+    "collection": "Glue Down 2.5",
+    "decor": "Travertin Béžový",
+    "decorTone": "stone",
+    "type": "vinyl-glue",
+    "thicknessMm": 2.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "glue",
+    "plankLengthMm": 1219,
+    "plankWidthMm": 184,
+    "bevel": false,
+    "m2PerPack": 3.37,
+    "packWeightKg": 15,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 260,
+    "stockM2": 234,
+    "deliveryDays": 5,
+    "purchasePriceM2": 390,
+    "supplierId": "vinylia",
+    "supplierSku": "LUM-GLUEDOWN-TRAVERTINBÉŽOVÝ",
+    "description": "Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 599,
+    "pricePerPack": 2019,
+    "images": {
+      "card": "/media/products/p_vinylia_lum-gluedown-travertinbezovy/card.webp",
+      "hero": "/media/products/p_vinylia_lum-gluedown-travertinbezovy/hero.webp",
+      "swatch": "/media/products/p_vinylia_lum-gluedown-travertinbezovy/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_lum-gluedown-travertinbezovy/hero.webp",
+        "/media/products/p_vinylia_lum-gluedown-travertinbezovy/card.webp",
+        "/media/products/p_vinylia_lum-gluedown-travertinbezovy/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg",
+          "transform": {
+            "crop": "bottom",
+            "saturation": 0.8
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:36.057Z",
+    "updatedAt": "2026-09-20T22:23:36.057Z"
+  },
+  {
+    "id": "p_vinylia_lum-gluedown-mramorbily",
+    "slug": "lumea-glue-down-2-5-mramor-bily",
+    "name": "Glue Down 2.5 Mramor Bílý",
+    "brand": "Lumea",
+    "collection": "Glue Down 2.5",
+    "decor": "Mramor Bílý",
+    "decorTone": "stone",
+    "type": "vinyl-glue",
+    "thicknessMm": 2.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "glue",
+    "plankLengthMm": 1219,
+    "plankWidthMm": 184,
+    "bevel": false,
+    "m2PerPack": 3.37,
+    "packWeightKg": 15,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 88,
+    "stockM2": 79.2,
+    "deliveryDays": 9,
+    "purchasePriceM2": 390,
+    "supplierId": "vinylia",
+    "supplierSku": "LUM-GLUEDOWN-MRAMORBÍLÝ",
+    "description": "Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 599,
+    "pricePerPack": 2019,
+    "images": {
+      "card": "/media/products/p_vinylia_lum-gluedown-mramorbily/card.webp",
+      "hero": "/media/products/p_vinylia_lum-gluedown-mramorbily/hero.webp",
+      "swatch": "/media/products/p_vinylia_lum-gluedown-mramorbily/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_lum-gluedown-mramorbily/hero.webp",
+        "/media/products/p_vinylia_lum-gluedown-mramorbily/card.webp",
+        "/media/products/p_vinylia_lum-gluedown-mramorbily/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg",
+          "transform": {
+            "brightness": 1.1,
+            "saturation": 0.3,
+            "crop": "bottom"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:38.044Z",
+    "updatedAt": "2026-09-20T22:23:38.044Z"
+  },
+  {
+    "id": "p_vinylia_lum-gluedown-bridlicetmava",
+    "slug": "lumea-glue-down-2-5-bridlice-tmava",
+    "name": "Glue Down 2.5 Břidlice Tmavá",
+    "brand": "Lumea",
+    "collection": "Glue Down 2.5",
+    "decor": "Břidlice Tmavá",
+    "decorTone": "stone",
+    "type": "vinyl-glue",
+    "thicknessMm": 2.5,
+    "wearLayerMm": 0.55,
+    "usageClass": 33,
+    "lock": "glue",
+    "plankLengthMm": 1219,
+    "plankWidthMm": 184,
+    "bevel": false,
+    "m2PerPack": 3.37,
+    "packWeightKg": 15,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 132,
+    "stockM2": 118.8,
+    "deliveryDays": 7,
+    "purchasePriceM2": 390,
+    "supplierId": "vinylia",
+    "supplierSku": "LUM-GLUEDOWN-BŘIDLICETMAVÁ",
+    "description": "Lepené vinylové dílce (LVT) s nášlapem 0,55 mm. Nejnižší konstrukční výška, ideální na podlahové topení a do rekonstrukcí s omezenou výškou. Vyžaduje rovný podklad a disperzní lepidlo.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 599,
+    "pricePerPack": 2019,
+    "images": {
+      "card": "/media/products/p_vinylia_lum-gluedown-bridlicetmava/card.webp",
+      "hero": "/media/products/p_vinylia_lum-gluedown-bridlicetmava/hero.webp",
+      "swatch": "/media/products/p_vinylia_lum-gluedown-bridlicetmava/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_lum-gluedown-bridlicetmava/hero.webp",
+        "/media/products/p_vinylia_lum-gluedown-bridlicetmava/card.webp",
+        "/media/products/p_vinylia_lum-gluedown-bridlicetmava/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg",
+          "transform": {
+            "saturation": 0.3,
+            "brightness": 0.9,
+            "crop": "bottom"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:40.004Z",
+    "updatedAt": "2026-09-20T22:23:40.004Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-dubpisecny",
+    "slug": "terrano-rigid-stone-xl-commercial-dub-pisecny",
+    "name": "Rigid Stone XL Commercial Dub Písečný",
+    "brand": "Terrano",
+    "collection": "Rigid Stone XL Commercial",
+    "decor": "Dub Písečný",
+    "decorTone": "light-oak",
+    "type": "spc",
+    "thicknessMm": 6,
+    "wearLayerMm": 0.55,
+    "usageClass": 42,
+    "lock": "click",
+    "plankLengthMm": 1800,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.46,
+    "packWeightKg": 34,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 520,
+    "stockM2": 468,
+    "deliveryDays": 6,
+    "purchasePriceM2": 620,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-DUBPÍSEČNÝ",
+    "description": "Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 953,
+    "pricePerPack": 2344,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-dubpisecny/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-dubpisecny/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-dubpisecny/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-dubpisecny/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubpisecny/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubpisecny/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1.02,
+            "saturation": 0.7,
+            "hue": 10
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:41.895Z",
+    "updatedAt": "2026-09-20T22:23:41.895Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-wenge",
+    "slug": "terrano-rigid-stone-xl-commercial-wenge",
+    "name": "Rigid Stone XL Commercial Wenge",
+    "brand": "Terrano",
+    "collection": "Rigid Stone XL Commercial",
+    "decor": "Wenge",
+    "decorTone": "dark-wood",
+    "type": "spc",
+    "thicknessMm": 6,
+    "wearLayerMm": 0.55,
+    "usageClass": 42,
+    "lock": "click",
+    "plankLengthMm": 1800,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.46,
+    "packWeightKg": 34,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 240,
+    "stockM2": 216,
+    "deliveryDays": 6,
+    "purchasePriceM2": 620,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-WENGE",
+    "description": "Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 953,
+    "pricePerPack": 2344,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-wenge/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-wenge/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-wenge/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-wenge/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-wenge/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-wenge/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
+          "transform": {
+            "brightness": 0.8,
+            "saturation": 0.9,
+            "hue": 10
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:43.692Z",
+    "updatedAt": "2026-09-20T22:23:43.692Z"
+  },
+  {
+    "id": "p_vinylia_ter-rigidsto-kamenantracit",
+    "slug": "terrano-rigid-stone-xl-commercial-kamen-antracit",
+    "name": "Rigid Stone XL Commercial Kámen Antracit",
+    "brand": "Terrano",
+    "collection": "Rigid Stone XL Commercial",
+    "decor": "Kámen Antracit",
+    "decorTone": "stone",
+    "type": "spc",
+    "thicknessMm": 6,
+    "wearLayerMm": 0.55,
+    "usageClass": 42,
+    "lock": "click",
+    "plankLengthMm": 1800,
+    "plankWidthMm": 228,
+    "bevel": true,
+    "m2PerPack": 2.46,
+    "packWeightKg": 34,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": true,
+    "waterproof": true,
+    "stockM2Raw": 310,
+    "stockM2": 279,
+    "deliveryDays": 6,
+    "purchasePriceM2": 620,
+    "supplierId": "vinylia",
+    "supplierSku": "TER-RIGIDSTO-KÁMENANTRACIT",
+    "description": "Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.",
+    "marginOverridePct": null,
+    "marginPct": 27,
+    "pricePerM2": 953,
+    "pricePerPack": 2344,
+    "images": {
+      "card": "/media/products/p_vinylia_ter-rigidsto-kamenantracit/card.webp",
+      "hero": "/media/products/p_vinylia_ter-rigidsto-kamenantracit/hero.webp",
+      "swatch": "/media/products/p_vinylia_ter-rigidsto-kamenantracit/swatch.webp",
+      "gallery": [
+        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/hero.webp",
+        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/card.webp",
+        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg",
+          "transform": {
+            "saturation": 0.2,
+            "brightness": 0.8,
+            "crop": "bottom"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:45.368Z",
+    "updatedAt": "2026-09-20T22:23:45.368Z"
+  },
+  {
+    "id": "p_nordic_nor-naturehd-dubalpsky",
+    "slug": "nordwood-nature-hdf-9-dub-alpsky",
+    "name": "Nature HDF 9 Dub Alpský",
+    "brand": "Nordwood",
+    "collection": "Nature HDF 9",
+    "decor": "Dub Alpský",
+    "decorTone": "light-oak",
+    "type": "vinyl-hdf",
+    "thicknessMm": 9.5,
+    "wearLayerMm": 0.4,
+    "usageClass": 32,
+    "lock": "click",
+    "plankLengthMm": 1210,
+    "plankWidthMm": 190,
+    "bevel": true,
+    "m2PerPack": 1.84,
+    "packWeightKg": 18,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": false,
+    "stockM2Raw": 210,
+    "stockM2": 189,
+    "deliveryDays": 6,
+    "purchasePriceM2": 440,
+    "supplierId": "nordic",
+    "supplierSku": "NOR-NATUREHD-DUBALPSKÝ",
+    "description": "Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 692,
+    "pricePerPack": 1273,
+    "images": {
+      "card": "/media/products/p_nordic_nor-naturehd-dubalpsky/card.webp",
+      "hero": "/media/products/p_nordic_nor-naturehd-dubalpsky/hero.webp",
+      "swatch": "/media/products/p_nordic_nor-naturehd-dubalpsky/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_nor-naturehd-dubalpsky/hero.webp",
+        "/media/products/p_nordic_nor-naturehd-dubalpsky/card.webp",
+        "/media/products/p_nordic_nor-naturehd-dubalpsky/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1,
+            "saturation": 0.9
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:48.386Z",
+    "updatedAt": "2026-09-21T07:03:00.214Z"
+  },
+  {
+    "id": "p_nordic_nor-naturehd-dublatte",
+    "slug": "nordwood-nature-hdf-9-dub-latte",
+    "name": "Nature HDF 9 Dub Latte",
+    "brand": "Nordwood",
+    "collection": "Nature HDF 9",
+    "decor": "Dub Latte",
+    "decorTone": "light-oak",
+    "type": "vinyl-hdf",
+    "thicknessMm": 9.5,
+    "wearLayerMm": 0.4,
+    "usageClass": 32,
+    "lock": "click",
+    "plankLengthMm": 1210,
+    "plankWidthMm": 190,
+    "bevel": true,
+    "m2PerPack": 1.84,
+    "packWeightKg": 18,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": false,
+    "stockM2Raw": 155,
+    "stockM2": 139.5,
+    "deliveryDays": 6,
+    "purchasePriceM2": 440,
+    "supplierId": "nordic",
+    "supplierSku": "NOR-NATUREHD-DUBLATTE",
+    "description": "Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 692,
+    "pricePerPack": 1273,
+    "images": {
+      "card": "/media/products/p_nordic_nor-naturehd-dublatte/card.webp",
+      "hero": "/media/products/p_nordic_nor-naturehd-dublatte/hero.webp",
+      "swatch": "/media/products/p_nordic_nor-naturehd-dublatte/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_nor-naturehd-dublatte/hero.webp",
+        "/media/products/p_nordic_nor-naturehd-dublatte/card.webp",
+        "/media/products/p_nordic_nor-naturehd-dublatte/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg",
+          "transform": {
+            "brightness": 1.05,
+            "saturation": 0.7
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:50.107Z",
+    "updatedAt": "2026-09-20T22:23:50.107Z"
+  },
+  {
+    "id": "p_nordic_nor-naturehd-jasansvetly",
+    "slug": "nordwood-nature-hdf-9-jasan-svetly",
+    "name": "Nature HDF 9 Jasan Světlý",
+    "brand": "Nordwood",
+    "collection": "Nature HDF 9",
+    "decor": "Jasan Světlý",
+    "decorTone": "light-oak",
+    "type": "vinyl-hdf",
+    "thicknessMm": 9.5,
+    "wearLayerMm": 0.4,
+    "usageClass": 32,
+    "lock": "click",
+    "plankLengthMm": 1210,
+    "plankWidthMm": 190,
+    "bevel": true,
+    "m2PerPack": 1.84,
+    "packWeightKg": 17.5,
+    "weightEstimated": true,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": false,
+    "stockM2Raw": 98,
+    "stockM2": 88.2,
+    "deliveryDays": 8,
+    "purchasePriceM2": 440,
+    "supplierId": "nordic",
+    "supplierSku": "NOR-NATUREHD-JASANSVĚTLÝ",
+    "description": "Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 692,
+    "pricePerPack": 1273,
+    "images": {
+      "card": "/media/products/p_nordic_nor-naturehd-jasansvetly/card.webp",
+      "hero": "/media/products/p_nordic_nor-naturehd-jasansvetly/hero.webp",
+      "swatch": "/media/products/p_nordic_nor-naturehd-jasansvetly/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_nor-naturehd-jasansvetly/hero.webp",
+        "/media/products/p_nordic_nor-naturehd-jasansvetly/card.webp",
+        "/media/products/p_nordic_nor-naturehd-jasansvetly/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1.1,
+            "saturation": 0.5
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:51.863Z",
+    "updatedAt": "2026-09-20T22:23:51.863Z"
+  },
+  {
+    "id": "p_nordic_nor-naturehd-dubantik",
+    "slug": "nordwood-nature-hdf-9-dub-antik",
+    "name": "Nature HDF 9 Dub Antik",
+    "brand": "Nordwood",
+    "collection": "Nature HDF 9",
+    "decor": "Dub Antik",
+    "decorTone": "dark-wood",
+    "type": "vinyl-hdf",
+    "thicknessMm": 9.5,
+    "wearLayerMm": 0.4,
+    "usageClass": 32,
+    "lock": "click",
+    "plankLengthMm": 1210,
+    "plankWidthMm": 190,
+    "bevel": true,
+    "m2PerPack": 1.84,
+    "packWeightKg": 18,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": false,
+    "stockM2Raw": 120,
+    "stockM2": 108,
+    "deliveryDays": 6,
+    "purchasePriceM2": 440,
+    "supplierId": "nordic",
+    "supplierSku": "NOR-NATUREHD-DUBANTIK",
+    "description": "Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 692,
+    "pricePerPack": 1273,
+    "images": {
+      "card": "/media/products/p_nordic_nor-naturehd-dubantik/card.webp",
+      "hero": "/media/products/p_nordic_nor-naturehd-dubantik/hero.webp",
+      "swatch": "/media/products/p_nordic_nor-naturehd-dubantik/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_nor-naturehd-dubantik/hero.webp",
+        "/media/products/p_nordic_nor-naturehd-dubantik/card.webp",
+        "/media/products/p_nordic_nor-naturehd-dubantik/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg",
+          "transform": {
+            "brightness": 0.85,
+            "crop": "bottom"
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:53.895Z",
+    "updatedAt": "2026-09-20T22:23:53.895Z"
+  },
+  {
+    "id": "p_nordic_nor-naturehd-boroviceseda",
+    "slug": "nordwood-nature-hdf-9-borovice-seda",
+    "name": "Nature HDF 9 Borovice Šedá",
+    "brand": "Nordwood",
+    "collection": "Nature HDF 9",
+    "decor": "Borovice Šedá",
+    "decorTone": "grey",
+    "type": "vinyl-hdf",
+    "thicknessMm": 9.5,
+    "wearLayerMm": 0.4,
+    "usageClass": 32,
+    "lock": "click",
+    "plankLengthMm": 1210,
+    "plankWidthMm": 190,
+    "bevel": true,
+    "m2PerPack": 1.84,
+    "packWeightKg": 18,
+    "weightEstimated": false,
+    "floorHeating": true,
+    "integratedUnderlay": false,
+    "waterproof": false,
+    "stockM2Raw": 67,
+    "stockM2": 60.3,
+    "deliveryDays": 8,
+    "purchasePriceM2": 440,
+    "supplierId": "nordic",
+    "supplierSku": "NOR-NATUREHD-BOROVICEŠEDÁ",
+    "description": "Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 692,
+    "pricePerPack": 1273,
+    "images": {
+      "card": "/media/products/p_nordic_nor-naturehd-boroviceseda/card.webp",
+      "hero": "/media/products/p_nordic_nor-naturehd-boroviceseda/hero.webp",
+      "swatch": "/media/products/p_nordic_nor-naturehd-boroviceseda/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_nor-naturehd-boroviceseda/hero.webp",
+        "/media/products/p_nordic_nor-naturehd-boroviceseda/card.webp",
+        "/media/products/p_nordic_nor-naturehd-boroviceseda/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
+          "transform": {
+            "saturation": 0.1,
+            "brightness": 1.2
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:55.811Z",
+    "updatedAt": "2026-09-20T22:23:55.811Z"
+  },
+  {
+    "id": "p_nordic_qua-selfstic-dubsvetlybasic",
+    "slug": "quaro-self-stick-2-dub-svetly-basic",
+    "name": "Self-Stick 2 Dub Světlý Basic",
+    "brand": "Quaro",
+    "collection": "Self-Stick 2",
+    "decor": "Dub Světlý Basic",
+    "decorTone": "light-oak",
+    "type": "vinyl-glue",
+    "thicknessMm": 2,
+    "wearLayerMm": 0.3,
+    "usageClass": 23,
+    "lock": "self-adhesive",
+    "plankLengthMm": 914,
+    "plankWidthMm": 152,
+    "bevel": false,
+    "m2PerPack": 2.5,
+    "packWeightKg": 9,
+    "weightEstimated": false,
+    "floorHeating": false,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 900,
+    "stockM2": 810,
+    "deliveryDays": 3,
+    "purchasePriceM2": 190,
+    "supplierId": "nordic",
+    "supplierSku": "QUA-SELFSTIC-DUBSVĚTLÝBASIC",
+    "description": "Samolepicí vinylové lamely pro rychlou renovaci: strhnout fólii, přilepit. Jen do bytových prostor s nízkou zátěží, na hladký a čistý podklad. Není určeno na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 299,
+    "pricePerPack": 748,
+    "images": {
+      "card": "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/card.webp",
+      "hero": "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/hero.webp",
+      "swatch": "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/hero.webp",
+        "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/card.webp",
+        "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
+          "transform": {
+            "brightness": 1.05
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:57.689Z",
+    "updatedAt": "2026-09-20T22:23:57.689Z"
+  },
+  {
+    "id": "p_nordic_qua-selfstic-dubtmavybasic",
+    "slug": "quaro-self-stick-2-dub-tmavy-basic",
+    "name": "Self-Stick 2 Dub Tmavý Basic",
+    "brand": "Quaro",
+    "collection": "Self-Stick 2",
+    "decor": "Dub Tmavý Basic",
+    "decorTone": "dark-wood",
+    "type": "vinyl-glue",
+    "thicknessMm": 2,
+    "wearLayerMm": 0.3,
+    "usageClass": 23,
+    "lock": "self-adhesive",
+    "plankLengthMm": 914,
+    "plankWidthMm": 152,
+    "bevel": false,
+    "m2PerPack": 2.5,
+    "packWeightKg": 9,
+    "weightEstimated": false,
+    "floorHeating": false,
+    "integratedUnderlay": false,
+    "waterproof": true,
+    "stockM2Raw": 450,
+    "stockM2": 405,
+    "deliveryDays": 3,
+    "purchasePriceM2": 190,
+    "supplierId": "nordic",
+    "supplierSku": "QUA-SELFSTIC-DUBTMAVÝBASIC",
+    "description": "Samolepicí vinylové lamely pro rychlou renovaci: strhnout fólii, přilepit. Jen do bytových prostor s nízkou zátěží, na hladký a čistý podklad. Není určeno na podlahové topení.",
+    "marginOverridePct": null,
+    "marginPct": 30,
+    "pricePerM2": 299,
+    "pricePerPack": 748,
+    "images": {
+      "card": "/media/products/p_nordic_qua-selfstic-dubtmavybasic/card.webp",
+      "hero": "/media/products/p_nordic_qua-selfstic-dubtmavybasic/hero.webp",
+      "swatch": "/media/products/p_nordic_qua-selfstic-dubtmavybasic/swatch.webp",
+      "gallery": [
+        "/media/products/p_nordic_qua-selfstic-dubtmavybasic/hero.webp",
+        "/media/products/p_nordic_qua-selfstic-dubtmavybasic/card.webp",
+        "/media/products/p_nordic_qua-selfstic-dubtmavybasic/detail.webp"
+      ],
+      "sources": {
+        "texture": {
+          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
+          "transform": {
+            "brightness": 0.8
+          }
+        },
+        "room": {
+          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+        }
+      }
+    },
+    "status": "active",
+    "pauseReason": null,
+    "isNew": false,
+    "createdAt": "2026-09-20T22:23:59.516Z",
+    "updatedAt": "2026-09-20T22:23:59.516Z"
+  }
+]

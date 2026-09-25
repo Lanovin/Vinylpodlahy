@@ -1,0 +1,30 @@
+[
+  {
+    "id": "pr_global_floor",
+    "supplierId": null,
+    "category": "floor",
+    "marginPct": 30,
+    "note": "Výchozí marže na podlahy"
+  },
+  {
+    "id": "pr_global_acc",
+    "supplierId": null,
+    "category": "accessory",
+    "marginPct": 45,
+    "note": "Výchozí marže na příslušenství (vyšší než podlaha)"
+  },
+  {
+    "id": "pr_vinylia_floor",
+    "supplierId": "vinylia",
+    "category": "floor",
+    "marginPct": 27,
+    "note": "Vinylia má vyšší ceníkové ceny, držíme konkurenceschopnost"
+  },
+  {
+    "id": "pr_nordic_acc",
+    "supplierId": "nordic",
+    "category": "accessory",
+    "marginPct": 50,
+    "note": "Nordic — levný nákup příslušenství"
+  }
+]

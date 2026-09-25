@@ -1,0 +1,46 @@
+{
+  "vatRate": 0.21,
+  "freeShippingFromM2": 25,
+  "stockSafetyPct": 10,
+  "priceJumpAlertPct": 10,
+  "shipping": {
+    "parcelMaxKg": 30,
+    "parcelPrice": 149,
+    "parcelAdditionalPrice": 129,
+    "palletThresholdKg": 100,
+    "palletTiers": [
+      {
+        "maxKg": 400,
+        "price": 1490,
+        "label": "Paleta do 400 kg"
+      },
+      {
+        "maxKg": 800,
+        "price": 1990,
+        "label": "Paleta do 800 kg"
+      },
+      {
+        "maxKg": 1200,
+        "price": 2490,
+        "label": "Paleta do 1 200 kg"
+      },
+      {
+        "maxKg": null,
+        "price": 2990,
+        "label": "Paleta nad 1 200 kg"
+      }
+    ],
+    "carryUpParcelPrice": 290,
+    "carryUpPalletPricePerFloor": 690
+  },
+  "samples": {
+    "min": 1,
+    "max": 5
+  },
+  "weightEstimateKgPerM2": {
+    "spc": 13,
+    "vinyl-hdf": 9.5,
+    "vinyl-composite": 8,
+    "vinyl-glue": 6
+  }
+}

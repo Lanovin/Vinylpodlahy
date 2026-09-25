@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<catalog supplier="Nordic Floors">
+  <item id="NOR-NATUREHD-DUBALPSKÝ" type="floor">
+    <title>Nature HDF 9 Dub Alpský</title>
+    <brand>Nordwood</brand>
+    <series>Nature HDF 9</series>
+    <decor>Dub Alpský</decor>
+    <attrs core="hdf" thickness="9.5" wear="0.4" class="32" install="click" length="1210" width="190" bevel="1" pack_m2="1.84" pack_kg="18" ufh="1" underlay="0" tone="light-oak" />
+    <price net="440" currency="CZK" />
+    <stock unit="m2" qty="210" lead="6" />
+    <images transform="{&quot;brightness&quot;:1,&quot;saturation&quot;:0.9}"><img>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</img><img>file://fotky_podlahy/pexels-designecologist-15226296.jpg</img></images>
+    <description>Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.</description>
+  </item>
+  <item id="NOR-NATUREHD-DUBLATTE" type="floor">
+    <title>Nature HDF 9 Dub Latte</title>
+    <brand>Nordwood</brand>
+    <series>Nature HDF 9</series>
+    <decor>Dub Latte</decor>
+    <attrs core="hdf" thickness="9.5" wear="0.4" class="32" install="click" length="1210" width="190" bevel="1" pack_m2="1.84" pack_kg="18" ufh="1" underlay="0" tone="light-oak" />
+    <price net="440" currency="CZK" />
+    <stock unit="m2" qty="155" lead="6" />
+    <images transform="{&quot;brightness&quot;:1.05,&quot;saturation&quot;:0.7}"><img>file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg</img><img>file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg</img></images>
+    <description>Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.</description>
+  </item>
+  <item id="NOR-NATUREHD-JASANSVĚTLÝ" type="floor">
+    <title>Nature HDF 9 Jasan Světlý</title>
+    <brand>Nordwood</brand>
+    <series>Nature HDF 9</series>
+    <decor>Jasan Světlý</decor>
+    <attrs core="hdf" thickness="9.5" wear="0.4" class="32" install="click" length="1210" width="190" bevel="1" pack_m2="1.84" ufh="1" underlay="0" tone="light-oak" />
+    <price net="440" currency="CZK" />
+    <stock unit="m2" qty="98" lead="8" />
+    <images transform="{&quot;brightness&quot;:1.1,&quot;saturation&quot;:0.5}"><img>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</img><img>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</img></images>
+    <description>Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.</description>
+  </item>
+  <item id="NOR-NATUREHD-DUBANTIK" type="floor">
+    <title>Nature HDF 9 Dub Antik</title>
+    <brand>Nordwood</brand>
+    <series>Nature HDF 9</series>
+    <decor>Dub Antik</decor>
+    <attrs core="hdf" thickness="9.5" wear="0.4" class="32" install="click" length="1210" width="190" bevel="1" pack_m2="1.84" pack_kg="18" ufh="1" underlay="0" tone="dark-wood" />
+    <price net="440" currency="CZK" />
+    <stock unit="m2" qty="120" lead="6" />
+    <images transform="{&quot;brightness&quot;:0.85,&quot;crop&quot;:&quot;bottom&quot;}"><img>file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg</img><img>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</img></images>
+    <description>Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.</description>
+  </item>
+  <item id="NOR-NATUREHD-BOROVICEŠEDÁ" type="floor">
+    <title>Nature HDF 9 Borovice Šedá</title>
+    <brand>Nordwood</brand>
+    <series>Nature HDF 9</series>
+    <decor>Borovice Šedá</decor>
+    <attrs core="hdf" thickness="9.5" wear="0.4" class="32" install="click" length="1210" width="190" bevel="1" pack_m2="1.84" pack_kg="18" ufh="1" underlay="0" tone="grey" />
+    <price net="440" currency="CZK" />
+    <stock unit="m2" qty="67" lead="8" />
+    <images transform="{&quot;saturation&quot;:0.1,&quot;brightness&quot;:1.2}"><img>file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg</img><img>file://fotky_podlahy/pexels-designecologist-15226296.jpg</img></images>
+    <description>Vinyl na HDF desce: teplý a tichý došlap, autentická struktura dřeva s V-fázou. Do suchých místností — obývací pokoje, ložnice, pracovny. Není vhodný do koupelny.</description>
+  </item>
+  <item id="QUA-SELFSTIC-DUBSVĚTLÝBASIC" type="floor">
+    <title>Self-Stick 2 Dub Světlý Basic</title>
+    <brand>Quaro</brand>
+    <series>Self-Stick 2</series>
+    <decor>Dub Světlý Basic</decor>
+    <attrs core="lvt" thickness="2" wear="0.3" class="23" install="self-adhesive" length="914" width="152" bevel="0" pack_m2="2.5" pack_kg="9" ufh="0" underlay="0" tone="light-oak" />
+    <price net="190" currency="CZK" />
+    <stock unit="m2" qty="900" lead="3" />
+    <images transform="{&quot;brightness&quot;:1.05}"><img>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</img><img>file://fotky_podlahy/pexels-designecologist-15226296.jpg</img></images>
+    <description>Samolepicí vinylové lamely pro rychlou renovaci: strhnout fólii, přilepit. Jen do bytových prostor s nízkou zátěží, na hladký a čistý podklad. Není určeno na podlahové topení.</description>
+  </item>
+  <item id="QUA-SELFSTIC-DUBTMAVÝBASIC" type="floor">
+    <title>Self-Stick 2 Dub Tmavý Basic</title>
+    <brand>Quaro</brand>
+    <series>Self-Stick 2</series>
+    <decor>Dub Tmavý Basic</decor>
+    <attrs core="lvt" thickness="2" wear="0.3" class="23" install="self-adhesive" length="914" width="152" bevel="0" pack_m2="2.5" pack_kg="9" ufh="0" underlay="0" tone="dark-wood" />
+    <price net="190" currency="CZK" />
+    <stock unit="m2" qty="450" lead="3" />
+    <images transform="{&quot;brightness&quot;:0.8}"><img>file://fotky_podlahy/pexels-digitalbuggu-314073.jpg</img><img>file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg</img></images>
+    <description>Samolepicí vinylové lamely pro rychlou renovaci: strhnout fólii, přilepit. Jen do bytových prostor s nízkou zátěží, na hladký a čistý podklad. Není určeno na podlahové topení.</description>
+  </item>
+  <item id="NF-TRN-90-SILVER" type="accessory">
+    <title>Přechodová lišta samolepicí 90 cm — stříbrná</title>
+    <attrs kind="transition" unit="ks" coverage="1" coverage_label="1 ks / dveře" kg="0.3" tones="grey,stone" ufh="0" />
+    <price net="120" currency="CZK" />
+    <stock unit="ks" qty="400" lead="4" />
+    <images><img>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</img></images>
+    <description>Hliníková samolepicí přechodová lišta 38 mm pro spojení podlah ve stejné výšce.</description>
+  </item>
+  <item id="NF-TRN-90-OAK" type="accessory">
+    <title>Přechodová lišta samolepicí 90 cm — dub</title>
+    <attrs kind="transition" unit="ks" coverage="1" coverage_label="1 ks / dveře" kg="0.3" tones="light-oak,dark-wood" ufh="0" />
+    <price net="135" currency="CZK" />
+    <stock unit="ks" qty="260" lead="4" />
+    <images><img>file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg</img></images>
+    <description>Hliníková samolepicí přechodová lišta 38 mm s dřevodekorem.</description>
+  </item>
+  <item id="NF-CLEAN-SET" type="accessory">
+    <title>Čisticí sada na vinylové podlahy</title>
+    <attrs kind="cleaning" unit="balení" coverage="1" coverage_label="1 sada" kg="1.2" tones="" ufh="0" />
+    <price net="320" currency="CZK" />
+    <stock unit="balení" qty="150" lead="4" />
+    
+    <description>Mop s mikrovláknem, rozprašovač a 1 l neutrálního čističe na vinyl a SPC.</description>
+  </item>
+</catalog>

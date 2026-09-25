@@ -1,0 +1,131 @@
+[
+  {
+    "id": "c_mubogeps8mod6w",
+    "createdAt": "2026-09-21T20:08:04.480Z",
+    "productId": "p_floortrade_qua-basicspc-dubkaramelovy",
+    "rooms": [
+      {
+        "id": "r1",
+        "name": "Obývák",
+        "mode": "dims",
+        "lengthM": 5.2,
+        "widthM": 3.8,
+        "areaM2": null,
+        "perimeterM": null,
+        "layout": "straight",
+        "doors": 1,
+        "floorHeating": true
+      }
+    ],
+    "options": {
+      "reservePack": true,
+      "includeUnderlay": true,
+      "includeSkirting": true,
+      "includeTransitions": true
+    },
+    "answers": {
+      "roomKinds": [
+        "living",
+        "kitchen"
+      ],
+      "budget": "400-700",
+      "style": "light-oak",
+      "floorHeating": true,
+      "kidsPets": true,
+      "integratedUnderlay": false,
+      "diyClick": true
+    },
+    "result": {
+      "rooms": [
+        {
+          "id": "r1",
+          "name": "Obývák",
+          "areaM2": 19.76,
+          "perimeterM": 18,
+          "perimeterEstimated": false,
+          "wastePct": 5,
+          "areaWithWasteM2": 20.75,
+          "doors": 1
+        }
+      ],
+      "totalAreaM2": 19.76,
+      "totalAreaWithWasteM2": 20.75,
+      "totalPerimeterM": 18,
+      "totalDoors": 1,
+      "packs": 11,
+      "packsWithoutReserve": 10,
+      "coveredAreaM2": 24.53,
+      "anyFloorHeating": true,
+      "lines": [
+        {
+          "kind": "product",
+          "refId": "p_floortrade_qua-basicspc-dubkaramelovy",
+          "name": "Basic SPC 4 Dub Karamelový",
+          "detail": "11 × 2,23 m² = 24,53 m² (vč. 1 balení rezervy)",
+          "qty": 11,
+          "unit": "balení",
+          "unitPrice": 859,
+          "lineTotal": 9449
+        },
+        {
+          "kind": "accessory",
+          "refId": "a_floortrade_acc-und-thermo12",
+          "name": "Podložka Thermo 1,2 mm pod podlahové topení (15 m²)",
+          "detail": "2 × 15 m²/role pro 19,76 m² · vhodná pod topení",
+          "qty": 2,
+          "unit": "role",
+          "unitPrice": 465,
+          "lineTotal": 930
+        },
+        {
+          "kind": "accessory",
+          "refId": "a_vinylia_vn-skt-60-dark",
+          "name": "Soklová lišta MDF 60 mm — Dub tmavý (2,4 m)",
+          "detail": "8 × 2,4 m na obvod 18,00 m",
+          "qty": 8,
+          "unit": "ks",
+          "unitPrice": 149,
+          "lineTotal": 1192
+        },
+        {
+          "kind": "accessory",
+          "refId": "a_floortrade_acc-glue-skt300",
+          "name": "Montážní lepidlo na lišty 300 ml",
+          "detail": "1 ks — 1 ks na každých 20 m lišt",
+          "qty": 1,
+          "unit": "ks",
+          "unitPrice": 167,
+          "lineTotal": 167
+        },
+        {
+          "kind": "accessory",
+          "refId": "a_floortrade_acc-sil-310",
+          "name": "Akrylový tmel na lišty 310 ml — bílý",
+          "detail": "2 ks — 1 ks na každých 15 m lišt",
+          "qty": 2,
+          "unit": "ks",
+          "unitPrice": 123,
+          "lineTotal": 246
+        },
+        {
+          "kind": "accessory",
+          "refId": "a_nordic_nf-trn-90-oak",
+          "name": "Přechodová lišta samolepicí 90 cm — dub",
+          "detail": "1 ks — 1 ks na každé dveře",
+          "qty": 1,
+          "unit": "ks",
+          "unitPrice": 245,
+          "lineTotal": 245
+        }
+      ],
+      "total": 12229,
+      "warnings": []
+    },
+    "productSnapshot": {
+      "name": "Quaro Basic SPC 4 Dub Karamelový",
+      "pricePerM2": 385,
+      "pricePerPack": 859,
+      "m2PerPack": 2.23
+    }
+  }
+]
