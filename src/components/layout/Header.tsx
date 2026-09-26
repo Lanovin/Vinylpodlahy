@@ -10,6 +10,7 @@ import { LANDINGS } from "@/lib/catalog";
 
 const NAV = [
   { href: "/kalkulacka", label: "Kalkulačka" },
+  { href: "/vizualizace", label: "Vizualizace" },
   { href: "/vzorky", label: "Vzorky zdarma" },
   { href: "/montaz", label: "Pokládka" },
   { href: "/kontakt", label: "Kontakt" },
@@ -42,6 +43,7 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
   const light = overlay && !scrolled && !open;
 
   return (
+    <>
     <header className={clsx("z-50 top-0 left-0 right-0 transition-colors duration-300", overlay ? "fixed" : "sticky", light ? "text-white" : "text-ink bg-bg/95 backdrop-blur border-b border-line")}>
       <div className="container flex items-center justify-between h-16 md:h-20">
         <Logo light={light} />
@@ -64,17 +66,17 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
           ))}
         </nav>
-        <div className="flex items-center gap-1 md:gap-2">
-          <button className="p-2 hover:opacity-70" aria-label="Hledat" onClick={() => setSearchOpen((v) => !v)}><Search className="h-5 w-5" /></button>
-          <Link href="/vzorky" className="relative p-2 hover:opacity-70" aria-label="Vzorky zdarma">
+        <div className="flex items-center md:gap-2">
+          <button className="p-1.5 sm:p-2 hover:opacity-70" aria-label="Hledat" onClick={() => setSearchOpen((v) => !v)}><Search className="h-5 w-5" /></button>
+          <Link href="/vzorky" className="relative p-1.5 sm:p-2 hover:opacity-70" aria-label="Vzorky zdarma">
             <Swatch className="h-5 w-5" />
             {sampleCount > 0 && <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-sage text-white text-[10px] leading-4 text-center">{sampleCount}</span>}
           </Link>
-          <Link href="/kosik" className="relative p-2 hover:opacity-70" aria-label="Košík">
+          <Link href="/kosik" className="relative p-1.5 sm:p-2 hover:opacity-70" aria-label="Košík">
             <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-accent text-white text-[10px] leading-4 text-center">{cartCount}</span>}
           </Link>
-          <button className="p-2 lg:hidden hover:opacity-70" aria-label="Menu" onClick={() => setOpen(true)}><Menu className="h-6 w-6" /></button>
+          <button className="p-1.5 sm:p-2 lg:hidden hover:opacity-70" aria-label="Menu" onClick={() => setOpen(true)}><Menu className="h-6 w-6" /></button>
         </div>
       </div>
 
@@ -87,7 +89,10 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
         </div>
       )}
 
-      {/* Mobilní menu */}
+    </header>
+
+      {/* Mobilní menu — mimo <header>: jeho backdrop-blur by pro fixed prvky vytvořil vlastní kontejner
+          (menu by bylo jen v pruhu hlavičky a vysunutý panel by rozšířil stránku na mobilu). */}
       <div className={clsx("fixed inset-0 z-[60] lg:hidden transition", open ? "visible" : "invisible")}>
         <div className={clsx("absolute inset-0 bg-ink/40 transition-opacity", open ? "opacity-100" : "opacity-0")} onClick={() => setOpen(false)} />
         <div className={clsx("absolute top-0 right-0 h-full w-[88%] max-w-sm bg-bg text-ink shadow-2xl transition-transform duration-300 flex flex-col", open ? "translate-x-0" : "translate-x-full")}>
@@ -107,6 +112,6 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

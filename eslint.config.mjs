@@ -17,6 +17,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Ověřovací buildy (NEXT_DIST_DIR=.next-verify, viz CLAUDE.md).
+    ".next-verify/**",
   ]),
 ]);
 

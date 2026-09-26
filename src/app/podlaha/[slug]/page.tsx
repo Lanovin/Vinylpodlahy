@@ -5,6 +5,7 @@ import { Site } from "@/components/layout/Site";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { BuyBox } from "@/components/product/BuyBox";
 import { ProductCard } from "@/components/product/ProductCard";
+import { TryInRoom } from "@/components/visualizer/TryInRoom";
 import { products, settings as settingsRepo } from "@/lib/db/repos";
 import { toPublicProduct, toPublicSettings } from "@/lib/public";
 import { DECOR_TONE_LABEL, FLOOR_TYPE_LABEL, LOCK_LABEL } from "@/lib/types";
@@ -28,6 +29,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const p = toPublicProduct(raw);
   const related = products.visible().filter((x) => x.id !== p.id && (x.collection === p.collection || x.decorTone === p.decorTone)).slice(0, 4).map(toPublicProduct);
   const paused = raw.status === "paused";
+  // Do vizualizace: tento dekor, jeho kolekce a stejný odstín — ať jde porovnat „vedle sebe“.
+  const tryList = [p, ...products.visible().filter((x) => x.id !== p.id && x.stockM2 > 0)
+    .sort((a, b) => Number(b.collection === p.collection) - Number(a.collection === p.collection) || Number(b.decorTone === p.decorTone) - Number(a.decorTone === p.decorTone) || a.pricePerM2 - b.pricePerM2)
+    .slice(0, 11).map(toPublicProduct)];
 
   const specs: [string, React.ReactNode][] = [
     ["Typ podlahy", FLOOR_TYPE_LABEL[p.type]],
@@ -54,8 +59,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <nav className="text-xs text-muted mb-4"><Link href="/" className="hover:text-ink">Domů</Link> / <Link href="/podlahy" className="hover:text-ink">Podlahy</Link> / <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="hover:text-ink">{p.collection}</Link> / <span className="text-ink">{p.decor}</span></nav>
         {paused && <div className="notice notice-warn mb-6">Tento produkt je dočasně pozastaven — dodavatel změnil cenu a čekáme na její potvrzení. Nechte si poslat vzorek, nebo se podívejte na podobné dekory níže.</div>}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 relative">
             <ProductGallery images={[p.images.hero ?? "", p.images.card ?? "", ...(p.images.gallery.filter((g) => g !== p.images.hero && g !== p.images.card))]} alt={`${p.brand} ${p.name}`} />
+            {!paused && <TryInRoom product={p} products={tryList} sampleMax={cfg.samples.max} className="absolute left-3 top-3" />}
           </div>
           <div className="lg:col-span-5">
             <p className="eyebrow">{p.brand} · {p.collection}</p>

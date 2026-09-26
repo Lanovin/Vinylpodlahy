@@ -37,7 +37,7 @@ export function ProductCard({ p, sampleMax, reason }: { p: PublicProduct; sample
           </div>
         </div>
         <div className="mt-3">
-          <SampleButton productId={p.id} max={sampleMax} size="sm" />
+          <SampleButton productId={p.id} max={sampleMax} size="sm" compact />
         </div>
       </div>
     </article>

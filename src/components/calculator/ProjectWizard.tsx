@@ -16,7 +16,9 @@ import { fmtCzk, fmtNum2 } from "@/lib/format";
 import { useCart } from "@/store/cart";
 import { CalcResultView } from "./CalcResultView";
 import { SampleButton } from "@/components/product/SampleButton";
-import { ArrowRight, Check, ChevronRight, Copy, Plus, Share, Trash } from "@/components/ui/icons";
+import { ArrowRight, Check, ChevronRight, Copy, Cube, Plus, Share, Trash } from "@/components/ui/icons";
+import { preloadVisualizer, VisualizerDialog } from "@/components/visualizer/VisualizerDialog";
+import { VIEW_FOR_ROOM } from "@/components/visualizer/decor";
 
 export interface WizardInitial {
   rooms?: RoomInput[];
@@ -178,7 +180,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
             rec={rec} answers={answers} projectFor={projectFor} selected={selected} selectedResult={selectedResult} setSelectedId={(id) => { setShareUrl(null); setSelectedId(id); }}
             options={options} setOptions={(o) => { setShareUrl(null); setOptions(o); }} settings={settings} hasArea={hasArea} totalArea={totalArea}
             saving={saving} shareUrl={shareUrl} copied={copied} onShare={onShare} onAddToCart={onAddToCart} onCopy={async () => { if (shareUrl) { await navigator.clipboard.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 1500); } }}
-            goTo={go} reset={reset} locked={!!locked}
+            goTo={go} reset={reset} locked={!!locked} layout={rooms[0]?.layout ?? "straight"}
           />
         )}
       </div>
@@ -395,10 +397,12 @@ interface ResultProps {
   selected: PublicProduct | null; selectedResult: ReturnType<typeof calculateProject> | null; setSelectedId: (id: string) => void;
   options: CalcOptions; setOptions: (o: CalcOptions) => void; settings: PublicSettings; hasArea: boolean; totalArea: number;
   saving: "idle" | "saving" | "cart"; shareUrl: string | null; copied: boolean; onShare: () => void; onAddToCart: () => void; onCopy: () => void;
-  goTo: (s: number) => void; reset: () => void; locked: boolean;
+  goTo: (s: number) => void; reset: () => void; locked: boolean; layout: LayoutMode;
 }
 function StepResult(p: ResultProps) {
-  const { rec, answers, projectFor, selected, selectedResult, setSelectedId, options, setOptions, settings, hasArea, saving, shareUrl, copied, onShare, onAddToCart, onCopy, goTo, reset, locked } = p;
+  const { rec, answers, projectFor, selected, selectedResult, setSelectedId, options, setOptions, settings, hasArea, saving, shareUrl, copied, onShare, onAddToCart, onCopy, goTo, reset, locked, layout } = p;
+  // Vizualizace v modelovém bytě: dekory z nabídky vedle sebe, s cenou celého projektu.
+  const [vizFor, setVizFor] = useState<string | null>(null);
   const rules = describeRules(answers);
   const [bmin, bmax] = budgetRange(answers.budget);
   const wet = answers.roomKinds.includes("bathroom") || answers.roomKinds.includes("kitchen");
@@ -429,6 +433,13 @@ function StepResult(p: ResultProps) {
             <button type="button" className="tag hover:border-ink" onClick={() => goTo(3)}>Požadavky: {[answers.floorHeating && "topení", answers.kidsPets && "děti/zvířata", answers.integratedUnderlay && "podložka", answers.diyClick && "svépomoc"].filter(Boolean).join(", ") || "žádné"}</button>
             <button type="button" className="tag hover:border-ink" onClick={() => goTo(4)}>Barva: {answers.style ? DECOR_TONE_LABEL[answers.style] : "libovolná"}</button>
           </div>}
+          {rec.results.length > 0 && (
+            <button type="button" onClick={() => setVizFor(selected?.id ?? rec.results[0].product.id)} onMouseEnter={preloadVisualizer} className="mt-5 w-full sm:w-auto flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3 text-left hover:border-ink transition-colors">
+              <Cube className="h-6 w-6 shrink-0 text-accent" />
+              <span><span className="block">Porovnat dekory v interiéru</span><span className="block text-xs text-muted">Modelový byt ve 3D — {answers.roomKinds.length ? `začneme v místnosti ${ROOM_LABEL[answers.roomKinds[0]]}` : "obývák, kuchyň, ložnice, koupelna"}</span></span>
+              <ArrowRight className="h-4 w-4 ml-auto shrink-0" />
+            </button>
+          )}
         </div>
 
         {rec.results.length === 0 ? (
@@ -466,6 +477,7 @@ function StepResult(p: ResultProps) {
                   <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex items-center justify-between gap-2">
                     <span className={clsx("text-xs", enough ? "text-ok" : "text-warn")}>{enough ? `${fmtNum2(r.product.stockM2)} m² dostupných · dodání ${r.product.deliveryDays} dní` : `Dostupných jen ${fmtNum2(r.product.stockM2)} m² — zbytek doobjednáme`}</span>
                     <div className="flex gap-2">
+                      <button type="button" className="btn btn-ghost btn-sm !px-2.5" onClick={() => setVizFor(r.product.id)} onMouseEnter={preloadVisualizer} title="Zobrazit v interiéru" aria-label={`Zobrazit ${r.product.decor} v interiéru`}><Cube className="h-4 w-4" /><span className="hidden md:inline">V interiéru</span></button>
                       <SampleButton productId={r.product.id} max={settings.samples.max} size="sm" />
                       <button type="button" className={clsx("btn btn-sm", on ? "btn-primary" : "btn-outline")} onClick={() => setSelectedId(r.product.id)}>{on ? <><Check className="h-4 w-4" /> Vybráno</> : "Vybrat"}</button>
                     </div>
@@ -515,6 +527,21 @@ function StepResult(p: ResultProps) {
           )}
         </div>
       </aside>
+      <VisualizerDialog
+        open={vizFor !== null}
+        onClose={() => setVizFor(null)}
+        title="Porovnání v interiéru"
+        subtitle={`${rec.results.length} dekorů z vaší nabídky · ceny za celý projekt`}
+        products={rec.results.map((r) => r.product)}
+        initialProductId={vizFor}
+        initialView={answers.roomKinds.length ? VIEW_FOR_ROOM[answers.roomKinds[0]] : "living"}
+        initialLayout={layout}
+        sampleMax={settings.samples.max}
+        priceLabel={(prod) => { const pr = projectFor.get(prod.id); return pr ? `${fmtCzk(pr.total)} celý projekt` : `${fmtCzk(prod.pricePerM2)}/m²`; }}
+        renderActions={(prod) => prod.id === selected?.id
+          ? <button type="button" className="btn btn-primary btn-sm" onClick={() => setVizFor(null)}><Check className="h-4 w-4" /> Vybráno — zpět na rozpis</button>
+          : <button type="button" className="btn btn-accent btn-sm" onClick={() => { setSelectedId(prod.id); setVizFor(null); }}>Vybrat tuto podlahu</button>}
+      />
     </div>
   );
 }

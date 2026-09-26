@@ -90,6 +90,27 @@ export default function HomePage() {
         </div>
       </Section>
 
+      {/* VIZUALIZACE */}
+      <Section className="pt-0">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <Link href="/vizualizace" className="lg:col-span-7 group relative block aspect-[16/10] overflow-hidden rounded-md bg-line">
+            <Image src="/media/inspiration/vizualizace.webp" alt="3D vizualizace obývacího pokoje s vinylovou podlahou v rybí kosti" fill sizes="(max-width: 1024px) 100vw, 58vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            <span className="absolute left-3 top-3 tag bg-white/95">3D náhled</span>
+          </Link>
+          <div className="lg:col-span-5">
+            <p className="eyebrow mb-3">Vizualizace interiéru</p>
+            <h2 className="h2">Uvidíte podlahu dřív, než ji koupíte.</h2>
+            <p className="lead mt-4">Modelový byt 2+kk ve 3D — obývák s kuchyní, ložnice, koupelna i předsíň. Přepínejte dekory, způsob kladení a barvu stěn a projděte se bytem ve dne i večer.</p>
+            <ul className="mt-6 space-y-2 text-ink-soft">
+              <li className="flex gap-3"><span className="text-accent">01</span>Lamely ve skutečném rozměru, s V-drážkou a posunem spojů</li>
+              <li className="flex gap-3"><span className="text-accent">02</span>Rovně, diagonálně i rybí kost</li>
+              <li className="flex gap-3"><span className="text-accent">03</span>V kalkulačce porovnáte nabídku rovnou s cenou projektu</li>
+            </ul>
+            <Link href="/vizualizace" className="btn btn-primary btn-lg mt-8">Otevřít vizualizaci</Link>
+          </div>
+        </div>
+      </Section>
+
       {/* ORIENTAČNÍ CENY */}
       <Section className="bg-surface border-y border-line">
         <div className="grid lg:grid-cols-12 gap-10 items-start">

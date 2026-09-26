@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCart, useHydrated } from "@/store/cart";
 import { Check, Swatch } from "@/components/ui/icons";
 
-export function SampleButton({ productId, max, size = "md", className }: { productId: string; max: number; size?: "sm" | "md" | "lg"; className?: string }) {
+export function SampleButton({ productId, max, size = "md", className, compact = false }: { productId: string; max: number; size?: "sm" | "md" | "lg"; className?: string; /** Kratší popisek pro úzké karty (2 sloupce na mobilu). */ compact?: boolean }) {
   const hydrated = useHydrated();
   const samples = useCart((s) => s.samples);
   const toggle = useCart((s) => s.toggleSample);
@@ -24,7 +24,7 @@ export function SampleButton({ productId, max, size = "md", className }: { produ
         aria-pressed={active}
       >
         {active ? <Check className="h-4 w-4" /> : <Swatch className="h-4 w-4" />}
-        {active ? "Vzorek vybrán" : "Objednat vzorek zdarma"}
+        {active ? "Vzorek vybrán" : compact ? "Vzorek zdarma" : "Objednat vzorek zdarma"}
       </button>
       {msg && <span className="text-xs text-warn mt-1">{msg}</span>}
     </div>
