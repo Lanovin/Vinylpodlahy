@@ -1,10 +1,14 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { buildApartment, type CameraPreset, type RoomInfo, type ViewId } from "./apartment";
+import { applyBake, createBakeUniforms, disposeBake, fetchBake, patchBakeMaterial, prepareBake, type BakeSet } from "./bake";
 import { buildFloorTile, type DecorSpec, type FloorTile } from "./floorTile";
+import { EXTERIOR, SUN_COLOR, SUN_DIR, SUN_E, SUN_RADIUS, type LightingMode } from "./lighting";
+import { PhotoPipeline } from "./post";
+import { FloorReflection } from "./reflection";
 
 export type { ViewId } from "./apartment";
-export type Lighting = "day" | "evening";
+export type Lighting = LightingMode;
 export interface FloorInput extends DecorSpec { diagonal: boolean }
 
 export interface ViewerOptions {
@@ -13,6 +17,10 @@ export interface ViewerOptions {
   /** Klik na štítek místnosti v pohledu „celý byt“. */
   onViewChange?: (v: ViewId) => void;
   onReady?: () => void;
+  /** Načítá se světlo pro jiný režim (den / večer). */
+  onBusy?: (busy: boolean) => void;
+  /** Obraz je doostřený (dokončené průměrování snímků). */
+  onSettled?: () => void;
   formatLabel?: (room: RoomInfo) => { title: string; sub: string };
 }
 
@@ -28,16 +36,41 @@ export interface Viewer {
   dispose(): void;
 }
 
-interface CamState { pos: THREE.Vector3; target: THREE.Vector3; fov: number }
+interface CamState { pos: THREE.Vector3; target: THREE.Vector3; fov: number; level: number }
 
-const SUN_DIR = new THREE.Vector3(-0.45, 0.72, -0.53).normalize();
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const halton = (i: number, b: number) => { let f = 1, r = 0; while (i > 0) { f /= b; r += f * (i % b); i = Math.floor(i / b); } return r; };
+/** Počet snímků, které se v klidu zprůměrují (vyhlazení hran a měkké stíny). */
+const ACCUM_FRAMES = 20;
+const EXPOSURE: Record<LightingMode, number> = { day: 1, evening: 1.15 };
+
+function backdropMaterial(tex: THREE.Texture) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      tExt: { value: tex },
+      uScale: { value: new THREE.Vector3().setScalar(EXTERIOR.display) },
+      uRange: { value: new THREE.Vector4(EXTERIOR.thetaMin, EXTERIOR.thetaMax, EXTERIOR.elevMin, EXTERIOR.elevMax) },
+    },
+    vertexShader: /* glsl */ `varying vec3 vDir; void main() { vec4 w = modelMatrix * vec4( position, 1.0 ); vDir = w.xyz - cameraPosition; gl_Position = projectionMatrix * viewMatrix * w; }`,
+    fragmentShader: /* glsl */ `
+      uniform sampler2D tExt; uniform vec3 uScale; uniform vec4 uRange; varying vec3 vDir;
+      void main() {
+        vec3 d = normalize( vDir );
+        float theta = mod( degrees( atan( d.z, d.x ) ) - uRange.x, 360.0 );
+        float u = clamp( theta / ( uRange.y - uRange.x ), 0.0, 1.0 );
+        float v = clamp( ( degrees( asin( clamp( d.y, -1.0, 1.0 ) ) ) - uRange.z ) / ( uRange.w - uRange.z ), 0.0, 1.0 );
+        vec3 t = min( texture2D( tExt, vec2( u, v ) ).rgb, vec3( 0.985 ) );
+        gl_FragColor = vec4( t / ( 1.0 - t ) * uScale, 1.0 );
+      }`,
+    side: THREE.DoubleSide,
+    toneMapped: false,
+  });
+}
 
 export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, opts: ViewerOptions = {}): Viewer {
   const small = Math.min(window.screen.width, window.screen.height) < 700;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 2 : 1.75));
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.shadowMap.enabled = true;
@@ -46,43 +79,87 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   renderer.shadowMap.needsUpdate = true;
   const maxSide = Math.min(renderer.capabilities.maxTextureSize, small ? 2048 : 2560);
   const aniso = renderer.capabilities.getMaxAnisotropy();
+  const post = new PhotoPipeline(renderer, { bloom: 0.07, vignette: 0.14, samples: small ? 2 : 4 });
+  if (!post.hdr) renderer.toneMapping = THREE.NeutralToneMapping;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf6f3ee);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environment = envTex;
+  const roomEnv = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  let capturedEnv: THREE.Texture | null = null;
+  scene.environment = roomEnv;
   scene.environmentIntensity = 0.55;
 
   const apt = buildApartment();
   scene.add(apt.root);
+  const bakeUniforms = createBakeUniforms();
+  for (const m of apt.layout.lmMeshes) patchBakeMaterial(m.material as THREE.MeshStandardMaterial, "lm", bakeUniforms);
+  for (const m of apt.layout.vtxMeshes) patchBakeMaterial(m.material as THREE.MeshStandardMaterial, "vtx", bakeUniforms);
+  const refl = new FloorReflection(renderer, post.hdr);
+  refl.patch(apt.floorMaterial);
+  // Podlaha se do vlastního odrazu nekreslí (jinak by četla texturu, do které se právě kreslí).
+  const floorMeshes = apt.layout.lmMeshes.filter((m) => m.material === apt.floorMaterial);
+  const overviewHide: THREE.Object3D[] = [], overviewShow: THREE.Object3D[] = [];
+  apt.root.traverse((o) => { if (o.userData.overview === "hide") overviewHide.push(o); else if (o.userData.overview === "show") overviewShow.push(o); });
 
-  const sun = new THREE.DirectionalLight(0xfff0dc, 3);
-  sun.position.copy(apt.center).addScaledVector(SUN_DIR, 22);
+  // Výhled z oken: plochy těsně za okenními otvory, barvu počítá shader podle směru pohledu
+  // (panorama v nekonečnu). Načte se spolu se světlem.
+  const backdrop = new THREE.Group();
+  let backdropMat: THREE.Material = new THREE.MeshBasicMaterial({ color: 0xdfe6ec, side: THREE.DoubleSide });
+  for (const p of apt.portals) {
+    const w = p.u.length() + 0.12, h = p.v.length() + 0.12;
+    const q = new THREE.Mesh(new THREE.PlaneGeometry(w, h), backdropMat);
+    q.position.copy(p.o).addScaledVector(p.u, 0.5).addScaledVector(p.v, 0.5).addScaledVector(p.n, -0.01);
+    q.lookAt(q.position.clone().add(p.n));
+    q.frustumCulled = false;
+    backdrop.add(q);
+  }
+  scene.add(backdrop);
+  overviewHide.push(backdrop);
+  const setBackdropMat = (m: THREE.Material) => { backdropMat.dispose(); backdropMat = m; backdrop.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = m; }); };
+
+  const sunDir = new THREE.Vector3(...SUN_DIR).normalize();
+  const sun = new THREE.DirectionalLight(new THREE.Color().setRGB(...SUN_COLOR), SUN_E);
+  sun.position.copy(apt.center).addScaledVector(sunDir, 22);
   sun.target.position.copy(apt.center);
   sun.castShadow = true;
   sun.shadow.mapSize.set(small ? 1536 : 2048, small ? 1536 : 2048);
   const sc = sun.shadow.camera;
   sc.left = -8.5; sc.right = 8.5; sc.top = 8.5; sc.bottom = -8.5; sc.near = 8; sc.far = 40;
-  sun.shadow.bias = -0.0004;
-  sun.shadow.normalBias = 0.025;
-  sun.shadow.radius = 3;
+  sun.shadow.bias = -0.0003;
+  sun.shadow.normalBias = 0.02;
+  sun.shadow.radius = 2;
   scene.add(sun, sun.target);
-  // Odražené světlo: podlaha a stěny prosvětlí strop a stinné strany (náhrada globálního osvětlení).
+  // Náhradní osvětlení bez předpočítaného světla (pohled „celý byt“, nebo když se soubor nenačte).
   const bounce = new THREE.HemisphereLight(0xffffff, 0xd9c7ae, 0.9);
   scene.add(bounce);
+  const lampLights = apt.emitters.map((e) => {
+    const l = new THREE.PointLight(e.color, 0, 6, 2);
+    l.position.copy(e.pos);
+    scene.add(l);
+    return { l, e };
+  });
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 90);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 150);
   const cutPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1.25);
 
   let view: ViewId = "living";
+  let lighting: LightingMode = "day";
+  let overview = false;
   let yaw = 0, pitch = 0, zoomK = 1;
   let anim: { from: CamState; to: CamState; t0: number; dur: number; next: ViewId } | null = null;
   let dirty = true;
   let ready = false;
+  let disposed = false;
   let raf = 0;
   let visible = true;
-  let cur: CamState = { pos: new THREE.Vector3(), target: new THREE.Vector3(), fov: 50 };
+  let cur: CamState = { pos: new THREE.Vector3(), target: new THREE.Vector3(), fov: 50, level: 1 };
+  let jitter = [0, 0];
+  let lastChange = 0;
+
+  const bakes: Partial<Record<LightingMode, BakeSet>> = {};
+  const bakeLoads: Partial<Record<LightingMode, Promise<BakeSet | null>>> = {};
+  let bakeActive: LightingMode | null = null;
 
   const vfov = (hfov: number) => clamp((2 * Math.atan(Math.tan((hfov * Math.PI) / 360) / camera.aspect) * 180) / Math.PI, 36, 80);
 
@@ -91,32 +168,90 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       const d = p.target.clone().sub(p.pos);
       const dist = d.length();
       const yawF = Math.atan2(d.x, d.z) + y;
-      const pitchF = clamp(Math.asin(d.y / dist) + pt, -1.25, 0.25);
+      const pitchF = clamp(Math.asin(d.y / dist) + pt, -0.7, 0.4);
       const dir = new THREE.Vector3(Math.sin(yawF) * Math.cos(pitchF), Math.sin(pitchF), Math.cos(yawF) * Math.cos(pitchF));
-      return { pos: p.pos.clone(), target: p.pos.clone().addScaledVector(dir, dist), fov: clamp(vfov(p.hfov) / z, 18, 80) };
+      return { pos: p.pos.clone(), target: p.pos.clone().addScaledVector(dir, dist), fov: clamp(vfov(p.hfov) / z, 18, 80), level: 1 };
     }
     const off = p.pos.clone().sub(p.target);
     const r = off.length() / z;
     const az = Math.atan2(off.x, off.z) + y;
     const pol = clamp(Math.acos(off.y / off.length()) + pt, 0.12, 1.2);
     const pos = p.target.clone().add(new THREE.Vector3(Math.sin(pol) * Math.sin(az), Math.cos(pol), Math.sin(pol) * Math.cos(az)).multiplyScalar(r));
-    return { pos, target: p.target.clone(), fov: vfov(p.hfov) };
+    return { pos, target: p.target.clone(), fov: vfov(p.hfov), level: 0 };
   }
 
+  /**
+   * Kamera: u pohledů do místností vodorovná s posunem objektivu (shift) — svislé hrany zůstanou
+   * svislé jako na architektonické fotografii. `level` plynule přechází mezi náklonem a posunem.
+   */
   function apply(s: CamState) {
     camera.position.copy(s.pos);
     camera.fov = s.fov;
     camera.updateProjectionMatrix();
-    camera.lookAt(s.target);
-    cur = { pos: s.pos.clone(), target: s.target.clone(), fov: s.fov };
+    const d = s.target.clone().sub(s.pos);
+    const horiz = Math.hypot(d.x, d.z);
+    const pitchAll = Math.atan2(d.y, horiz);
+    const shiftPart = pitchAll * s.level;
+    const look = s.pos.clone().add(new THREE.Vector3(d.x, Math.tan(pitchAll - shiftPart) * horiz, d.z));
+    camera.lookAt(look);
+    const e = camera.projectionMatrix.elements;
+    e[9] = Math.tan(shiftPart) / Math.tan((s.fov * Math.PI) / 360) + jitter[1];
+    e[8] += jitter[0];
+    camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+    cur = { pos: s.pos.clone(), target: s.target.clone(), fov: s.fov, level: s.level };
+  }
+
+  let wb: [number, number, number] = [1, 1, 1];
+  function lightState() {
+    const baked = !overview && bakeActive !== null;
+    // Vyvážení bílé patří k předpočítanému světlu; pohled „celý byt“ má náhradní neutrální osvětlení.
+    if (baked) post.setWhiteBalance(...wb); else post.setWhiteBalance(1, 1, 1);
+    bakeUniforms.uBakeOn.value = baked ? 1 : 0;
+    if (!baked) bakeUniforms.uBoxOn.value = 0;
+    const eve = lighting === "evening";
+    bounce.intensity = baked ? 0 : eve ? 0.12 : 0.9;
+    scene.environment = baked && capturedEnv ? capturedEnv : roomEnv;
+    scene.environmentIntensity = baked ? (capturedEnv ? 1 : 0.35) : eve ? 0.08 : 0.55;
+    for (const { l, e } of lampLights) l.intensity = !baked && (e.mode === "always" || eve) ? e.intensity : 0;
+    for (const o of overviewHide) o.visible = !overview;
+    // Řez stěn jen v pohledu „celý byt“; měkké stíny pod nábytkem všude, kde chybí předpočítané světlo.
+    for (const o of overviewShow) o.visible = overview || (!!o.userData.blob && !baked);
+    renderer.clippingPlanes = overview ? [cutPlane] : [];
+    // Pozadí „celého bytu“ je o tónovou křivku světlejší, aby po ní vyšlo stejně jako stránka (#f6f3ee).
+    const bg = scene.background as THREE.Color;
+    if (overview) bg.set(0xf6f3ee).multiplyScalar(post.hdr ? 1.34 : 1); else bg.set(0x1d1c1a);
+    post.setVignette(overview ? 0 : 0.14);
+    renderer.shadowMap.needsUpdate = true;
     dirty = true;
   }
 
   function setOverviewMode(on: boolean) {
-    renderer.clippingPlanes = on ? [cutPlane] : [];
-    for (const o of apt.hideInOverview) o.visible = !on;
-    for (const o of apt.showInOverview) o.visible = on;
-    renderer.shadowMap.needsUpdate = true;
+    if (overview === on) return;
+    overview = on;
+    lightState();
+  }
+
+  /* ---------------- odlesky: prostředí nasnímané z místa kamery (s předpočítaným světlem) */
+  const cubeRT = new THREE.WebGLCubeRenderTarget(128, { type: THREE.HalfFloatType });
+  const cubeCam = new THREE.CubeCamera(0.05, 120, cubeRT);
+  function captureEnv() {
+    if (overview || bakeActive === null || disposed) return;
+    scene.environment = capturedEnv ?? roomEnv;
+    const preset = apt.views[view === "overview" ? "living" : view];
+    cubeCam.position.copy(preset.pos);
+    renderer.clippingPlanes = [];
+    bakeUniforms.uBoxOn.value = 0;
+    cubeCam.update(renderer, scene);
+    if (preset.box) {
+      bakeUniforms.uBoxMin.value.copy(preset.box.min);
+      bakeUniforms.uBoxMax.value.copy(preset.box.max);
+      bakeUniforms.uBoxProbe.value.copy(preset.pos);
+      bakeUniforms.uBoxOn.value = 1;
+    }
+    const prev = capturedEnv;
+    capturedEnv = pmrem.fromCubemap(cubeRT.texture).texture;
+    prev?.dispose();
+    lightState();
   }
 
   /* ---------------- štítky místností (pohled „celý byt“) */
@@ -141,24 +276,62 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     }
   }
 
-  /* ---------------- smyčka */
+  /* ---------------- smyčka: změna → nový snímek, v klidu průměrování s posunem o zlomek pixelu */
+  const sunJit = new THREE.Vector3(), su = new THREE.Vector3(), sv = new THREE.Vector3();
+  su.crossVectors(sunDir, new THREE.Vector3(0, 1, 0)).normalize();
+  sv.crossVectors(su, sunDir).normalize();
+  let sunJittered = false;
+  function frame(restart: boolean) {
+    const n = post.frames;
+    if (restart || !post.hdr) {
+      jitter = [0, 0];
+      sunJit.copy(sunDir);
+    } else {
+      const w = Math.max(1, canvas.width), h = Math.max(1, canvas.height);
+      jitter = [((halton(n + 1, 2) - 0.5) * 2) / w, ((halton(n + 1, 3) - 0.5) * 2) / h];
+      // Měkký okraj slunečních skvrn: každý snímek trochu jiný směr v disku slunce.
+      const a = n * 2.399963, rr = SUN_RADIUS * Math.sqrt((n % ACCUM_FRAMES) / ACCUM_FRAMES);
+      sunJit.copy(sunDir).addScaledVector(su, Math.cos(a) * rr).addScaledVector(sv, Math.sin(a) * rr).normalize();
+    }
+    const jit = !restart && post.hdr;
+    if (jit || sunJittered) renderer.shadowMap.needsUpdate = true;
+    sunJittered = jit;
+    sun.position.copy(apt.center).addScaledVector(sunJit, 22);
+    apply(cur);
+    // Zrcadlový obraz pro lesk podlahy stačí jednou na polohu kamery (je rozmazaný).
+    if (restart) {
+      if (overview) refl.uniforms.uReflOn.value = 0;
+      else refl.update(scene, camera, floorMeshes);
+    }
+    post.render(scene, camera, restart);
+  }
+
   function tick(now: number) {
     raf = requestAnimationFrame(tick);
     if (anim) {
       const t = clamp((now - anim.t0) / anim.dur, 0, 1);
       const e = ease(t);
-      apply({ pos: anim.from.pos.clone().lerp(anim.to.pos, e), target: anim.from.target.clone().lerp(anim.to.target, e), fov: anim.from.fov + (anim.to.fov - anim.from.fov) * e });
+      cur = { pos: anim.from.pos.clone().lerp(anim.to.pos, e), target: anim.from.target.clone().lerp(anim.to.target, e), fov: anim.from.fov + (anim.to.fov - anim.from.fov) * e, level: anim.from.level + (anim.to.level - anim.from.level) * e };
+      dirty = true;
       if (t >= 1) {
         const next = anim.next;
         anim = null;
-        if (next !== "overview") setOverviewMode(false);
+        if (next !== "overview") { setOverviewMode(false); captureEnv(); }
       }
     }
-    if (!dirty || !visible) return;
-    dirty = false;
-    renderer.render(scene, camera);
-    updateLabels();
-    if (!ready) { ready = true; opts.onReady?.(); }
+    if (!visible || !ready) return;
+    if (dirty) {
+      dirty = false;
+      lastChange = now;
+      frame(true);
+      updateLabels();
+      return;
+    }
+    // Průměrování až po krátké pauze (při tažení by jen zdržovalo).
+    if (post.hdr && post.frames < ACCUM_FRAMES && now - lastChange > 90) {
+      frame(false);
+      if (post.frames === ACCUM_FRAMES) opts.onSettled?.();
+    }
   }
 
   function setView(v: ViewId, instant = false) {
@@ -171,13 +344,15 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     if (instant || !ready || prev === v) {
       anim = null;
       if (v !== "overview") setOverviewMode(false);
-      apply(target);
+      cur = target;
+      dirty = true;
+      if (ready && v !== "overview") captureEnv();
       return;
     }
     anim = { from: { ...cur, pos: cur.pos.clone(), target: cur.target.clone() }, to: target, t0: performance.now(), dur: prev === "overview" || v === "overview" ? 1100 : 850, next: v };
   }
 
-  const refresh = () => { if (!anim) apply(camFor(apt.views[view], yaw, pitch, zoomK)); };
+  const refresh = () => { if (!anim) { cur = camFor(apt.views[view], yaw, pitch, zoomK); dirty = true; } };
 
   /* ---------------- ovládání: tažení = rozhlížení / otáčení, kolečko a dva prsty = přiblížení */
   const pointers = new Map<number, { x: number; y: number }>();
@@ -203,7 +378,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     const k = 2.4 / Math.max(300, canvas.clientHeight);
     if (apt.views[view].mode === "look") {
       yaw = clamp(yaw + dx * k, -0.8, 0.8);
-      pitch = clamp(pitch + dy * k, -0.45, 0.55);
+      pitch = clamp(pitch + dy * k, -0.4, 0.45);
     } else {
       yaw -= dx * k * 1.3;
       pitch = clamp(pitch - dy * k, -0.6, 0.45);
@@ -229,10 +404,17 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
 
   const ro = new ResizeObserver(() => {
     const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
+    const dpr = window.devicePixelRatio || 1;
+    // Strop počtu pixelů: HDR buffery s vyhlazováním jsou náročné na paměť GPU.
+    const pr = Math.min(dpr, small ? 2 : 1.75, Math.sqrt((small ? 1.4e6 : 2.6e6) / (w * h)));
+    renderer.setPixelRatio(pr);
     renderer.setSize(w, h, false);
+    post.setSize(canvas.width, canvas.height);
+    refl.setSize(canvas.width, canvas.height);
     camera.aspect = w / h;
     if (anim) anim.to = camFor(apt.views[anim.next], 0, 0, 1);
-    else apply(camFor(apt.views[view], yaw, pitch, zoomK));
+    else cur = camFor(apt.views[view], yaw, pitch, zoomK);
+    dirty = true;
   });
   ro.observe(canvas);
   const io = new IntersectionObserver((es) => { visible = es.some((x) => x.isIntersecting); if (visible) dirty = true; });
@@ -270,39 +452,93 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     apt.floorMaterial.bumpMap = e.bump;
     apt.floorMaterial.bumpScale = f.bevel ? 1.6 : 0.7;
     if (first) apt.floorMaterial.needsUpdate = true;
+    // Odražené světlo podle průměrné barvy dekoru (tmavá podlaha = tmavší místnost).
+    const c = new THREE.Color().setRGB(p.base[0] / 255, p.base[1] / 255, p.base[2] / 255, THREE.SRGBColorSpace);
+    bakeUniforms.uFloorD.value.set(c.r - apt.floorAlbedo0[0], c.g - apt.floorAlbedo0[1], c.b - apt.floorAlbedo0[2]);
     dirty = true;
   }
 
-  function setLighting(l: Lighting) {
+  function setWallColor(hex: string) {
+    apt.wallMaterial.color.set(hex);
+    const c = apt.wallMaterial.color;
+    bakeUniforms.uWallD.value.set(c.r - apt.wallAlbedo0[0], c.g - apt.wallAlbedo0[1], c.b - apt.wallAlbedo0[2]);
+    dirty = true;
+  }
+
+  function loadBake(mode: LightingMode) {
+    bakeLoads[mode] ??= fetchBake(mode)
+      .then((d) => (disposed ? null : (bakes[mode] = prepareBake(apt.layout, d))))
+      .catch((err) => { console.warn("[vizualizace] předpočítané světlo nedostupné:", err); return null; });
+    return bakeLoads[mode]!;
+  }
+
+  function applyLighting(l: LightingMode) {
+    const set = bakes[l];
+    if (set) { applyBake(apt.layout, set, bakeUniforms); bakeActive = l; } else bakeActive = null;
     const eve = l === "evening";
-    sun.intensity = eve ? 0 : 3;
-    bounce.intensity = eve ? 0.12 : 0.9;
-    scene.environmentIntensity = eve ? 0.08 : 0.6;
-    apt.sky.color.set(eve ? 0x273142 : 0xffffff);
-    for (const { light, info } of apt.lamps) {
-      const on = info.mode === "always" || eve;
-      light.intensity = on ? info.intensity : 0;
-      for (const s of info.shades) s.emissiveIntensity = on ? 1.3 : 0;
-    }
+    sun.visible = !eve;
+    const bm = backdropMat as THREE.ShaderMaterial;
+    if (bm.isShaderMaterial) bm.uniforms.uScale.value.set(1, 1, 1).multiplyScalar(EXTERIOR.display).multiply(eve ? new THREE.Vector3(...EXTERIOR.evening) : new THREE.Vector3(1, 1, 1));
     for (const g of apt.glowing) g.mat.emissiveIntensity = g.mode === "always" || eve ? g.strength : 0;
-    renderer.toneMappingExposure = eve ? 1.2 : 1;
-    dirty = true;
+    for (const e of apt.emitters) for (const s of e.shades) s.emissiveIntensity = e.mode === "always" || eve ? 1.3 : 0;
+    renderer.toneMappingExposure = EXPOSURE[l];
+    // Vyvážení bílé podle barvy světla na stěnách (ve dne skoro plně, večer méně — zůstane teplá atmosféra).
+    const wl = set?.wallLight;
+    wb = [1, 1, 1];
+    if (wl) {
+      const lum = 0.2126 * wl[0] + 0.7152 * wl[1] + 0.0722 * wl[2];
+      const k = eve ? 0.3 : 0.85;
+      const g = wl.map((c) => 1 + ((lum / Math.max(1e-4, c)) - 1) * k);
+      const gl = 0.2126 * g[0] + 0.7152 * g[1] + 0.0722 * g[2];
+      wb = [g[0] / gl, g[1] / gl, g[2] / gl];
+    }
+    lightState();
+    captureEnv();
   }
 
-  setLighting("day");
-  setView("living", true);
+  function setLighting(l: LightingMode) {
+    lighting = l;
+    if (bakes[l] || !ready) { if (ready) applyLighting(l); return; }
+    opts.onBusy?.(true);
+    loadBake(l).then(() => {
+      if (disposed || lighting !== l) return;
+      opts.onBusy?.(false);
+      applyLighting(l);
+    });
+  }
+
+  // Start: světlo pro den a výhled z oken; do té doby zůstává plátno skryté (indikátor načítání).
+  const extTex = new THREE.TextureLoader().loadAsync(`/visualizer/exterior-${small ? "s" : "l"}.jpg`).then((t) => {
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = Math.min(4, aniso);
+    return t;
+  }).catch(() => null);
+  Promise.all([loadBake("day"), extTex]).then(([, tex]) => {
+    if (disposed) { tex?.dispose(); return; }
+    if (tex) setBackdropMat(backdropMaterial(tex));
+    ready = true;
+    applyLighting(lighting);
+    if (!bakes[lighting]) setLighting(lighting);
+    setView(view, true);
+    dirty = true;
+    opts.onReady?.();
+  });
+
+  lightState();
+  cur = camFor(apt.views[view], 0, 0, 1);
   raf = requestAnimationFrame(tick);
 
   return {
     setView,
     setFloor,
-    setWallColor(hex) { apt.wallMaterial.color.set(hex); dirty = true; },
+    setWallColor,
     setSkirtingColor(hex) { apt.skirtingMaterial.color.set(hex); dirty = true; },
     setLighting,
     zoom,
     resetView,
-    snapshot() { renderer.render(scene, camera); return canvas.toDataURL("image/jpeg", 0.92); },
+    snapshot() { post.present(); return canvas.toDataURL("image/jpeg", 0.92); },
     dispose() {
+      disposed = true;
       cancelAnimationFrame(raf);
       ro.disconnect(); io.disconnect();
       canvas.removeEventListener("pointerdown", onDown);
@@ -314,8 +550,13 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       for (const { el } of labels) el.remove();
       for (const e of tiles.values()) { e.map.dispose(); e.bump.dispose(); }
       tiles.clear();
+      for (const s of Object.values(bakes)) if (s) disposeBake(s);
+      extTex.then((t) => t?.dispose());
       apt.dispose();
-      envTex.dispose(); pmrem.dispose();
+      backdrop.traverse((o) => (o as THREE.Mesh).geometry?.dispose()); backdropMat.dispose();
+      roomEnv.dispose(); capturedEnv?.dispose(); cubeRT.dispose(); pmrem.dispose();
+      post.dispose();
+      refl.dispose();
       renderer.dispose();
       renderer.forceContextLoss();
     },

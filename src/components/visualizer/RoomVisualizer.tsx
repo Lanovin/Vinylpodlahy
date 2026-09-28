@@ -58,6 +58,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
   const [applied, setApplied] = useState<string | null>(null);
   const [floorHex, setFloorHex] = useState<string | null>(null);
   const [interacted, setInteracted] = useState(false);
+  const [lightBusy, setLightBusy] = useState(false);
 
   const selected = products.find((p) => p.id === selectedId) ?? products[0] ?? null;
   const layout: LayoutMode = layoutPick ?? (selected ? defaultLayoutFor(selected) : "straight");
@@ -79,6 +80,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
             wheelZoom: variant === "dialog",
             onReady: () => setEngine("ready"),
             onViewChange: (id) => setView(id),
+            onBusy: setLightBusy,
           });
           viewerRef.current = v;
           setEngineGen((g) => g + 1);
@@ -176,7 +178,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
                 <button type="button" onClick={snapshot} className="h-9 w-9 self-end grid place-items-center rounded-full bg-white/90 shadow-card hover:bg-white" title="Uložit obrázek"><Download className="h-4 w-4" /></button>
               </div>
 
-              {busy && <div className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs shadow-card inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full border-2 border-line-strong border-t-ink animate-spin" />Pokládám podlahu…</div>}
+              {(busy || lightBusy) && <div className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs shadow-card inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full border-2 border-line-strong border-t-ink animate-spin" />{busy ? "Pokládám podlahu…" : "Rozsvěcuji lampy…"}</div>}
               {!interacted && view !== "overview" && <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap">Táhnutím se rozhlédnete · dvojklik vrátí pohled</div>}
               {view === "overview" && <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap">Klikněte na místnost</div>}
 
