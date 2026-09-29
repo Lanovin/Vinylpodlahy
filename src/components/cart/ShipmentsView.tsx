@@ -10,7 +10,7 @@ export function ShipmentsView({ shipments, showCarryUp }: { shipments: Shipment[
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3">
               <span className="h-9 w-9 rounded-full bg-bg grid place-items-center shrink-0">{s.method === "pallet" ? <Truck className="h-5 w-5" /> : <Package className="h-5 w-5" />}</span>
-              <div>
+              <div className="min-w-0">
                 <p className="leading-tight">{shipments.length > 1 && <span className="text-muted">Zásilka {i + 1}/{shipments.length} · </span>}{s.methodLabel}</p>
                 <p className="text-xs text-muted mt-0.5">Odesílá {s.supplierName} ({s.shipsFrom}) · {fmtKg(s.weightKg)}{s.weightEstimated ? " (odhad)" : ""} · dodání {s.deliveryLabel}</p>
               </div>

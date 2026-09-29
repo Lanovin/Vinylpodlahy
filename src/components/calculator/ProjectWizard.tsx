@@ -17,8 +17,9 @@ import { useCart } from "@/store/cart";
 import { CalcResultView } from "./CalcResultView";
 import { SampleButton } from "@/components/product/SampleButton";
 import { ArrowRight, Check, ChevronRight, Copy, Cube, Plus, Share, Trash } from "@/components/ui/icons";
-import { preloadVisualizer, VisualizerDialog } from "@/components/visualizer/VisualizerDialog";
+import { preloadVisualizer, VisualizerDialog, VisualizerEmbed } from "@/components/visualizer/VisualizerDialog";
 import { VIEW_FOR_ROOM } from "@/components/visualizer/decor";
+import type { ViewId } from "@/components/visualizer/engine/views";
 
 export interface WizardInitial {
   rooms?: RoomInput[];
@@ -36,6 +37,8 @@ interface Props {
   /** Produkt z karty („Spočítat s touto podlahou“) — přeskočí otázky, ptá se jen na metry. */
   lockedProductId?: string | null;
   priceGuide: { title: string; rows: { label: string; range: string; note: string }[] };
+  /** Úvodní nadpis stránky — ukáže se jen na prvním kroku, dál by na telefonu zabral celou obrazovku před otázkou. */
+  intro?: React.ReactNode;
 }
 
 const STEPS = ["Metry", "Rozpočet", "Místnost", "Požadavky", "Barva", "Nabídka"] as const;
@@ -58,7 +61,7 @@ export function ProjectWizard(props: Props) {
   return <WizardInner {...props} />;
 }
 
-function WizardInner({ products, accessories, settings, initial, lockedProductId, priceGuide }: Props) {
+function WizardInner({ products, accessories, settings, initial, lockedProductId, priceGuide, intro }: Props) {
   const router = useRouter();
   const addMany = useCart((s) => s.addMany);
   const locked = lockedProductId ? products.find((p) => p.id === lockedProductId) ?? null : null;
@@ -141,8 +144,16 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
 
   return (
     <div className="pb-28 lg:pb-10">
-      {/* Průběh */}
-      <ol className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+      {step === 0 ? intro : <h1 className="sr-only">Kalkulačka projektu</h1>}
+      {/* Průběh: na telefonu úzký pruh (pilulky by se nevešly), od tabletu pilulky s názvy */}
+      <ol className="flex gap-1.5 sm:hidden" aria-label="Průběh">
+        {STEPS.map((label, i) => {
+          if (locked && i > 0 && i < 5) return null;
+          const reachable = i <= maxStep;
+          return <li key={label} className="flex-1"><button type="button" disabled={!reachable} onClick={() => go(i)} aria-label={`${label}${i === step ? " (aktuální krok)" : ""}`} aria-current={i === step ? "step" : undefined} className={clsx("block h-2 w-full rounded-full transition-colors", i === step ? "bg-accent" : reachable ? "bg-ink" : "bg-line-strong/60")} /></li>;
+        })}
+      </ol>
+      <ol className="hidden sm:flex items-center gap-2 text-sm">
         {STEPS.map((label, i) => {
           const hidden = locked && i > 0 && i < 5;
           if (hidden) return null;
@@ -164,7 +175,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
           <StepArea rooms={rooms} update={updateRoom} add={addRoom} remove={(id) => { setShareUrl(null); setRooms((rs) => rs.filter((r) => r.id !== id)); }} totalArea={totalArea} totalWithWaste={totalWithWaste} locked={locked} />
         )}
         {step === 1 && (
-          <StepBudget value={answers.budget} onPick={(b) => { patchAnswers({ budget: b }); go(2); }} areaWithWaste={totalWithWaste} priceGuide={priceGuide} open={guideOpen} setOpen={setGuideOpen} />
+          <StepBudget value={answers.budget} onPick={(b) => patchAnswers({ budget: b })} onSkip={() => { patchAnswers({ budget: null }); go(2); }} areaWithWaste={totalWithWaste} priceGuide={priceGuide} open={guideOpen} setOpen={setGuideOpen} />
         )}
         {step === 2 && (
           <StepRooms value={answers.roomKinds} onChange={(v) => patchAnswers({ roomKinds: v })} />
@@ -173,7 +184,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
           <StepExtras answers={answers} patch={patchAnswers} products={products} />
         )}
         {step === 4 && (
-          <StepStyle value={answers.style} onPick={(s) => { patchAnswers({ style: s }); go(5); }} products={products.filter((p) => p.status === "active" && p.stockM2 > 0 && passesHardRules(p, answers))} />
+          <StepStyle value={answers.style} onPick={(s) => patchAnswers({ style: s })} onSkip={() => { patchAnswers({ style: null }); go(5); }} sampleMax={settings.samples.max} initialView={answers.roomKinds.length ? VIEW_FOR_ROOM[answers.roomKinds[0]] : "living"} layout={rooms[0]?.layout ?? "straight"} products={products.filter((p) => p.status === "active" && p.stockM2 > 0 && passesHardRules(p, answers))} />
         )}
         {step === 5 && (
           <StepResult
@@ -190,12 +201,13 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
         <div className="fixed lg:sticky bottom-0 inset-x-0 lg:inset-x-auto z-40 bg-bg/95 backdrop-blur border-t border-line lg:border lg:rounded-md lg:mt-10 lg:shadow-card">
           <div className="container lg:px-5 py-3 flex items-center gap-3">
             <div className="flex-1 min-w-0 text-sm">
-              {summary.length ? <p className="truncate"><span className="text-muted">Projekt: </span>{summary.join(" · ")}</p> : <p className="text-muted">Zadejte rozměry místností.</p>}
+              {summary.length ? <p className="truncate"><span className="text-muted">Projekt: </span>{summary[0]}<span className="hidden sm:inline">{summary.slice(1).map((x) => ` · ${x}`).join("")}</span></p> : <p className="text-muted">Zadejte rozměry místností.</p>}
               {hasArea && step === 0 && <p className="text-xs text-muted">s prořezem {fmtNum2(totalWithWaste)} m²</p>}
+              {step === 2 && answers.roomKinds.length === 0 && <p className="text-xs text-muted">Vyberte alespoň jednu místnost.</p>}
             </div>
             {step > 0 && <button type="button" className="btn btn-ghost" onClick={back}>Zpět</button>}
             <button type="button" className="btn btn-accent" disabled={!canContinue} onClick={next}>
-              {step === 0 && locked ? "Zobrazit cenu projektu" : step === 4 ? (answers.style ? "Zobrazit nabídku" : "Barva nerozhoduje, zobrazit nabídku") : step === 1 && !answers.budget ? "Bez limitu, pokračovat" : "Pokračovat"} <ArrowRight className="h-4 w-4" />
+              {step === 0 && locked ? "Zobrazit cenu" : step === 4 ? "Zobrazit nabídku" : step === 1 && !answers.budget ? "Přeskočit" : "Pokračovat"} <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -305,7 +317,7 @@ function StepArea({ rooms, update, add, remove, totalArea, totalWithWaste, locke
 }
 
 /* Krok 2 — rozpočet */
-function StepBudget({ value, onPick, areaWithWaste, priceGuide, open, setOpen }: { value: WizardAnswers["budget"]; onPick: (b: WizardAnswers["budget"]) => void; areaWithWaste: number; priceGuide: Props["priceGuide"]; open: boolean; setOpen: (v: boolean) => void }) {
+function StepBudget({ value, onPick, onSkip, areaWithWaste, priceGuide, open, setOpen }: { value: WizardAnswers["budget"]; onPick: (b: WizardAnswers["budget"]) => void; onSkip: () => void; areaWithWaste: number; priceGuide: Props["priceGuide"]; open: boolean; setOpen: (v: boolean) => void }) {
   const est = (min: number, max: number | null) => {
     if (areaWithWaste <= 0) return null;
     const lo = Math.round(min * areaWithWaste), hi = max ? Math.round(max * areaWithWaste) : null;
@@ -313,14 +325,14 @@ function StepBudget({ value, onPick, areaWithWaste, priceGuide, open, setOpen }:
   };
   return (
     <div>
-      <StepHead n={2} title="Jaký máte rozpočet za m²?" text={`Rozpočet jen řadí nabídku — nic nevyřazuje natvrdo. U každého pásma vidíte, co to znamená pro vašich ${fmtNum2(areaWithWaste)} m² s prořezem (bez příslušenství a dopravy).`} />
+      <StepHead n={2} title="Jaký máte rozpočet za m²?" text={`Rozpočet jen řadí nabídku — nic nevyřazuje natvrdo. U každého pásma vidíte, co to znamená pro vašich ${fmtNum2(areaWithWaste)} m² s prořezem (bez příslušenství a dopravy). Vyberte pásmo a pokračujte.`} />
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
         {BUDGET_OPTIONS.map((b) => (
           <OptionCard key={b.value} selected={value === b.value} onClick={() => onPick(b.value)} label={b.label} hint={b.hint} extra={est(b.min, b.max) && <p className="text-sm tabular-nums text-ink">{est(b.min, b.max)}</p>} />
         ))}
       </div>
-      <button type="button" className={clsx("mt-3 text-left w-full card p-4 border-2", value === null ? "border-ink" : "border-line hover:border-line-strong")} onClick={() => onPick(null)}>
-        <p>Nechám si poradit — rozpočet neřeším</p><p className="text-sm text-muted">Seřadíme podle vhodnosti a mírně zvýhodníme levnější.</p>
+      <button type="button" className="mt-3 text-left w-full card p-4 border-2 border-dashed border-line hover:border-ink transition-colors" onClick={onSkip}>
+        <p>Rozpočet neřeším — poraďte mi <ArrowRight className="inline h-4 w-4 ml-1" /></p><p className="text-sm text-muted">Přeskočí krok. Seřadíme podle vhodnosti a mírně zvýhodníme levnější.</p>
       </button>
 
       <div className="mt-10 max-w-3xl">
@@ -373,10 +385,11 @@ function StepExtras({ answers, patch, products }: { answers: WizardAnswers; patc
 }
 
 /* Krok 5 — barva */
-function StepStyle({ value, onPick, products }: { value: WizardAnswers["style"]; onPick: (s: WizardAnswers["style"]) => void; products: PublicProduct[] }) {
+function StepStyle({ value, onPick, onSkip, products, sampleMax, initialView, layout }: { value: WizardAnswers["style"]; onPick: (s: WizardAnswers["style"]) => void; onSkip: () => void; products: PublicProduct[]; sampleMax: number; initialView: ViewId; layout: LayoutMode }) {
+  const [viz, setViz] = useState(false);
   return (
     <div>
-      <StepHead n={5} title="Jaký odstín se vám líbí?" text="Barva nabídku jen seřadí. Vzorky všech dekorů vám pošleme zdarma, rozhodnout se můžete až doma." />
+      <StepHead n={5} title="Jaký odstín se vám líbí?" text="Barva nabídku jen seřadí. Vyberte odstín, nebo si ho nejdřív vyzkoušejte v modelovém bytě. Vzorky všech dekorů vám pošleme zdarma, rozhodnout se můžete až doma." />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
         {STYLE_OPTIONS.map((o) => {
           const sample = products.find((p) => p.decorTone === o.value && p.images.swatch) ?? null;
@@ -384,9 +397,40 @@ function StepStyle({ value, onPick, products }: { value: WizardAnswers["style"];
           return <OptionCard key={o.value} selected={value === o.value} onClick={() => onPick(o.value)} label={o.label} hint={o.hint} image={sample?.images.swatch ?? null} extra={<p className="text-xs text-muted">{n} {n === 1 ? "dekor" : n < 5 ? "dekory" : "dekorů"} v nabídce</p>} />;
         })}
       </div>
-      <button type="button" className={clsx("mt-3 text-left w-full card p-4 border-2", value === null ? "border-ink" : "border-line hover:border-line-strong")} onClick={() => onPick(null)}>
-        <p>Nerozhoduje — ukažte mi vše vhodné</p>
+      <button type="button" className="mt-3 text-left w-full card p-4 border-2 border-dashed border-line hover:border-ink transition-colors" onClick={onSkip}>
+        <p>Barva nerozhoduje — ukažte mi vše vhodné <ArrowRight className="inline h-4 w-4 ml-1" /></p>
       </button>
+
+      {products.length > 0 && (
+        <div className="mt-8 border-t border-line pt-6">
+          {!viz ? (
+            <button type="button" onClick={() => setViz(true)} onMouseEnter={preloadVisualizer} onFocus={preloadVisualizer} className="w-full sm:w-auto flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3 text-left hover:border-ink transition-colors">
+              <Cube className="h-6 w-6 shrink-0 text-accent" />
+              <span><span className="block">Vyzkoušet odstíny v modelovém bytě</span><span className="block text-xs text-muted">3D byt s vašimi požadavky · {products.length} vhodných dekorů · stáhne se až po kliknutí</span></span>
+            </button>
+          ) : (
+            <div>
+              <div className="flex items-baseline justify-between gap-3 mb-3">
+                <p className="text-lg">Odstíny v modelovém bytě</p>
+                <button type="button" className="link text-sm text-muted" onClick={() => setViz(false)}>Skrýt</button>
+              </div>
+              <VisualizerEmbed
+                products={products}
+                initialProductId={value ? products.find((p) => p.decorTone === value)?.id ?? null : null}
+                initialView={initialView}
+                initialLayout={layout}
+                sampleMax={sampleMax}
+                renderActions={(p) => (
+                  <button type="button" className={clsx("btn btn-sm", value === p.decorTone ? "btn-primary" : "btn-accent")} onClick={() => onPick(p.decorTone)}>
+                    {value === p.decorTone ? <><Check className="h-4 w-4" /> Odstín vybrán: {DECOR_TONE_LABEL[p.decorTone].toLowerCase()}</> : <>Líbí se mi odstín: {DECOR_TONE_LABEL[p.decorTone].toLowerCase()}</>}
+                  </button>
+                )}
+              />
+              <p className="text-sm text-muted mt-3">Odstín potvrdíte tlačítkem výše a pak pokračujete dolním tlačítkem „Zobrazit nabídku“.</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -418,8 +462,8 @@ function StepResult(p: ResultProps) {
   }
 
   return (
-    <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
-      <div className="lg:col-span-7">
+    <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-10">
+      <div className="lg:col-span-7 min-w-0">
         <div className="fade-up">
           <p className="eyebrow mb-2">{locked ? "Cena vašeho projektu" : "Vaše nabídka"}</p>
           <h2 className="h2">{rec.results.length > 0 ? `${rec.results.length} ${rec.results.length === 1 ? "podlaha, která dává" : rec.results.length < 5 ? "podlahy, které dávají" : "podlah, které dávají"} smysl.` : "Pro tuto kombinaci nemáme vhodnou podlahu."}</h2>
@@ -464,7 +508,7 @@ function StepResult(p: ResultProps) {
                       <p className="eyebrow truncate">{r.product.brand} · {r.product.collection}</p>
                       <p className="text-lg leading-tight mt-0.5"><Link href={`/podlaha/${r.product.slug}`} className="hover:underline underline-offset-4">{r.product.decor}</Link></p>
                       <p className="text-xs sm:text-sm text-muted mt-0.5">{FLOOR_TYPE_LABEL[r.product.type]} · {String(r.product.thicknessMm).replace(".", ",")} mm · nášlap {String(r.product.wearLayerMm).replace(".", ",")} mm · tř. {r.product.usageClass}{r.product.integratedUnderlay ? " · + podložka" : ""}</p>
-                      <p className="hidden sm:block mt-2 text-sm text-ink-soft leading-snug border-l-2 border-accent pl-2.5">{r.reason}</p>
+                      <p className="mt-2 text-xs sm:text-sm text-ink-soft leading-snug border-l-2 border-accent pl-2.5 line-clamp-2 sm:line-clamp-none">{r.reason}</p>
                       <div className="mt-2 sm:mt-3 flex flex-wrap items-end justify-between gap-2">
                         <div className="text-sm text-muted">{fmtCzk(r.product.pricePerM2)}/m² · {pr ? `${pr.packs} balení` : ""}</div>
                         <div className="text-right">
@@ -474,11 +518,11 @@ function StepResult(p: ResultProps) {
                       </div>
                     </div>
                   </div>
-                  <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex items-center justify-between gap-2">
+                  <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <span className={clsx("text-xs", enough ? "text-ok" : "text-warn")}>{enough ? `${fmtNum2(r.product.stockM2)} m² dostupných · dodání ${r.product.deliveryDays} dní` : `Dostupných jen ${fmtNum2(r.product.stockM2)} m² — zbytek doobjednáme`}</span>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2 sm:justify-end">
                       <button type="button" className="btn btn-ghost btn-sm !px-2.5" onClick={() => setVizFor(r.product.id)} onMouseEnter={preloadVisualizer} title="Zobrazit v interiéru" aria-label={`Zobrazit ${r.product.decor} v interiéru`}><Cube className="h-4 w-4" /><span className="hidden md:inline">V interiéru</span></button>
-                      <SampleButton productId={r.product.id} max={settings.samples.max} size="sm" />
+                      <SampleButton productId={r.product.id} max={settings.samples.max} size="sm" compact />
                       <button type="button" className={clsx("btn btn-sm", on ? "btn-primary" : "btn-outline")} onClick={() => setSelectedId(r.product.id)}>{on ? <><Check className="h-4 w-4" /> Vybráno</> : "Vybrat"}</button>
                     </div>
                   </div>
@@ -493,8 +537,8 @@ function StepResult(p: ResultProps) {
         </div>
       </div>
 
-      <aside className="lg:col-span-5">
-        <div className="panel lg:sticky lg:top-24 fade-up">
+      <aside className="lg:col-span-5 min-w-0">
+        <div id="rozpis" className="panel lg:sticky lg:top-24 fade-up scroll-mt-20">
           <p className="eyebrow">Rozpis projektu</p>
           {!selected || !selectedResult ? (
             <p className="text-muted mt-3">Vyberte podlahu z nabídky — rozpis se objeví tady.</p>
@@ -527,6 +571,18 @@ function StepResult(p: ResultProps) {
           )}
         </div>
       </aside>
+      {selected && selectedResult && rec.results.length > 0 && (
+        <div className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-bg/95 backdrop-blur border-t border-line">
+          <div className="container py-2.5 flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted truncate">Vybráno: {selected.decor}</p>
+              <p className="text-lg leading-tight tabular-nums">{fmtCzk(selectedResult.total)} <span className="text-xs text-muted">celý projekt</span></p>
+            </div>
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => document.getElementById("rozpis")?.scrollIntoView({ behavior: "smooth" })}>Rozpis</button>
+            <button type="button" className="btn btn-accent btn-sm" disabled={saving !== "idle"} onClick={onAddToCart}>{saving === "cart" ? "Ukládám…" : "Do košíku"}</button>
+          </div>
+        </div>
+      )}
       <VisualizerDialog
         open={vizFor !== null}
         onClose={() => setVizFor(null)}

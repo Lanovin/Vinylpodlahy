@@ -38,11 +38,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
   return (
     <Site>
       <div className="container py-8 md:py-12">
-        <div className="max-w-2xl mb-8">
-          <h1 className="h2">{lockedProduct ? "Cena celého projektu s vybranou podlahou" : "Přijďte s místností. Odejděte s cenou celého projektu."}</h1>
-          <p className="text-ink-soft mt-3">{lockedProduct ? "Zadejte metry — spočítáme balení s prořezem, podložku, lišty i dopravu." : "Metry, rozpočet, místnost, požadavky, barva. Pět kroků a vidíte konkrétní podlahy s cenou včetně příslušenství — a jedním tlačítkem vše do košíku."}</p>
-        </div>
-        <ProjectWizard products={list} accessories={acc} settings={cfg} initial={initial} lockedProductId={lockedProduct?.id ?? null} priceGuide={{ title: c.priceGuide.title, rows: c.priceGuide.rows }} />
+        <ProjectWizard intro={
+          <div className="max-w-2xl mb-8">
+            <h1 className="h2">{lockedProduct ? "Cena celého projektu s vybranou podlahou" : "Přijďte s místností. Odejděte s cenou celého projektu."}</h1>
+            <p className="text-ink-soft mt-3">{lockedProduct ? "Zadejte metry — spočítáme balení s prořezem, podložku, lišty i dopravu." : "Metry, rozpočet, místnost, požadavky, barva. Pět kroků a vidíte konkrétní podlahy s cenou včetně příslušenství — a jedním tlačítkem vše do košíku."}</p>
+          </div>
+        } products={list} accessories={acc} settings={cfg} initial={initial} lockedProductId={lockedProduct?.id ?? null} priceGuide={{ title: c.priceGuide.title, rows: c.priceGuide.rows }} />
       </div>
     </Site>
   );

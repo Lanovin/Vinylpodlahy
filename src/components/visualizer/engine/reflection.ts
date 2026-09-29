@@ -32,7 +32,7 @@ export class FloorReflection {
   private qScene = new THREE.Scene();
   private qCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-  constructor(private renderer: THREE.WebGLRenderer, hdr: boolean) {
+  constructor(private renderer: THREE.WebGLRenderer, hdr: boolean, private div = 2) {
     const o = { type: hdr ? THREE.HalfFloatType : THREE.UnsignedByteType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false } as const;
     this.rt = new THREE.WebGLRenderTarget(1, 1, { ...o, depthBuffer: true });
     this.a = new THREE.WebGLRenderTarget(1, 1, o);
@@ -44,7 +44,7 @@ export class FloorReflection {
   }
 
   setSize(w: number, h: number) {
-    const rw = Math.max(2, Math.round(w / 2)), rh = Math.max(2, Math.round(h / 2));
+    const rw = Math.max(2, Math.round(w / this.div)), rh = Math.max(2, Math.round(h / this.div));
     this.rt.setSize(rw, rh);
     this.a.setSize(Math.max(2, Math.round(rw / 2)), Math.max(2, Math.round(rh / 2)));
     this.b.setSize(this.a.width, this.a.height);
@@ -68,15 +68,16 @@ export class FloorReflection {
     this.cam.projectionMatrixInverse.copy(camera.projectionMatrixInverse);
     this.uniforms.uReflMatrix.value.set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1).multiply(this.cam.projectionMatrix).multiply(this.cam.matrixWorldInverse);
 
+    // Vše pod podlahou se odřízne šikmou přední rovinou kamery (žádné „clipping planes“ — ty by
+    // pro každý materiál znamenaly další variantu shaderu, tedy delší start).
+    this.obliqueNear(0.001);
+
     const vis = hidden.map((o) => o.visible);
     for (const o of hidden) o.visible = false;
     const prevTarget = r.getRenderTarget();
-    const clip = r.clippingPlanes;
-    r.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.001)];
     r.setRenderTarget(this.rt);
     r.clear();
     r.render(scene, this.cam);
-    r.clippingPlanes = clip;
     hidden.forEach((o, i) => (o.visible = vis[i]));
     // Rozmazání (lesk vinylu je hedvábný, ne zrcadlový): dvakrát oddělitelný Gauss ve čtvrtinovém rozlišení.
     const pass = (src: THREE.Texture, dst: THREE.WebGLRenderTarget, dx: number, dy: number) => {
@@ -92,6 +93,18 @@ export class FloorReflection {
     pass(this.b.texture, this.a, 0, 2 / h);
     r.setRenderTarget(prevTarget);
     this.uniforms.uReflOn.value = 1;
+  }
+
+  /** Přední rovina projekce splyne s rovinou y = h (nad ní se kreslí, pod ní ne). Lengyel, „oblique near-plane clipping“. */
+  private obliqueNear(h: number) {
+    const cam = this.cam;
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -h).applyMatrix4(cam.matrixWorldInverse);
+    const clip = new THREE.Vector4(plane.normal.x, plane.normal.y, plane.normal.z, plane.constant);
+    const e = cam.projectionMatrix.elements;
+    const q = new THREE.Vector4((Math.sign(clip.x) + e[8]) / e[0], (Math.sign(clip.y) + e[9]) / e[5], -1, (1 + e[10]) / e[14]);
+    clip.multiplyScalar(2 / clip.dot(q));
+    e[2] = clip.x; e[6] = clip.y; e[10] = clip.z + 1; e[14] = clip.w;
+    cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();
   }
 
   /** Podlahový materiál bere lesk ze zrcadlového obrazu místo z prostředí. */

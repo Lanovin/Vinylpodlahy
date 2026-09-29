@@ -31,8 +31,8 @@ export function Checkout() {
   }
 
   return (
-    <form onSubmit={submit} className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-      <div className="lg:col-span-7 space-y-8">
+    <form onSubmit={submit} className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-12">
+      <div className="lg:col-span-7 space-y-8 min-w-0">
         <section className="panel space-y-4">
           <h2 className="h3">Dodací údaje</h2>
           <div><label className="label" htmlFor="c-name">Jméno a příjmení / firma</label><input id="c-name" className="input" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} autoComplete="name" /></div>

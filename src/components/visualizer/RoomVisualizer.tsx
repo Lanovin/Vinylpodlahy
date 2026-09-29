@@ -2,13 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PublicProduct } from "@/lib/public";
 import { DECOR_TONE_LABEL, LAYOUT_LABEL, type DecorTone, type LayoutMode } from "@/lib/types";
 import { fmtCzk } from "@/lib/format";
 import { SampleButton } from "@/components/product/SampleButton";
-import { Download, Minus, Moon, Plus, Refresh, Sun } from "@/components/ui/icons";
+import { Download, Minus, Moon, Plus, Refresh, Sun, X } from "@/components/ui/icons";
 import { FALLBACK_PALETTE, paletteFromImage, toHex, tunePalette } from "./engine/palette";
+import { LEVEL_LABEL, lowerLevel, type Detection, type QualityChoice, type QualityLevel } from "./engine/quality";
 import type { Lighting, Viewer } from "./engine/viewer";
 import { VIEW_OPTIONS, viewSlug, type ViewId } from "./engine/views";
 import { decorKindFor, defaultLayoutFor, LAYOUT_SLUG } from "./decor";
@@ -39,6 +40,14 @@ const WALLS = [
 const LAYOUTS: LayoutMode[] = ["straight", "diagonal", "herringbone"];
 const SKIRTING_WHITE = "#f4f2ee";
 
+const QUALITY_KEY = "vp-viz-quality";
+const CHOICES: { id: QualityChoice; label: string }[] = [{ id: "auto", label: "Auto" }, { id: "high", label: LEVEL_LABEL.high }, { id: "medium", label: LEVEL_LABEL.medium }, { id: "low", label: LEVEL_LABEL.low }];
+const loadChoice = (): QualityChoice => {
+  try { const v = localStorage.getItem(QUALITY_KEY); if (v === "high" || v === "medium" || v === "low") return v; } catch { /* ignore */ }
+  return "auto";
+};
+const saveChoice = (c: QualityChoice) => { try { if (c === "auto") localStorage.removeItem(QUALITY_KEY); else localStorage.setItem(QUALITY_KEY, c); } catch { /* ignore */ } };
+
 const darken = (hex: string, k: number) => "#" + [1, 3, 5].map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * k).toString(16).padStart(2, "0")).join("");
 
 export default function RoomVisualizer({ products, initialProductId, initialView, initialLayout, sampleMax, priceLabel, renderActions, variant, syncUrl }: RoomVisualizerProps) {
@@ -55,6 +64,12 @@ export default function RoomVisualizer({ products, initialProductId, initialView
   const [tone, setTone] = useState<DecorTone | "all">("all");
   const [engine, setEngine] = useState<"loading" | "ready" | "error">("loading");
   const [engineGen, setEngineGen] = useState(0);
+  const [qualityPick, setQualityPick] = useState<QualityChoice>(loadChoice);
+  const [detected, setDetected] = useState<Detection | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  // Nové plátno pro nový 3D kontext (po zrušeném kontextu nejde na stejném plátně vytvořit další).
+  const [canvasKey, setCanvasKey] = useState(0);
+  const qualityRef = useRef<QualityLevel>("high");
   const [applied, setApplied] = useState<string | null>(null);
   const [floorHex, setFloorHex] = useState<string | null>(null);
   const [interacted, setInteracted] = useState(false);
@@ -68,6 +83,21 @@ export default function RoomVisualizer({ products, initialProductId, initialView
   const tones = useMemo(() => [...new Set(products.map((p) => p.decorTone))], [products]);
   const listed = tone === "all" ? products : products.filter((p) => p.decorTone === tone);
 
+  /** Ruční nebo automatická změna náročnosti: 3D se spustí znovu na novém plátně. */
+  const changeQuality = useCallback((choice: QualityChoice) => {
+    setEngine("loading");
+    setQualityPick(choice);
+  }, []);
+
+  /** Přepne na nižší stupeň (pomalé tažení, ztráta grafického kontextu) a řekne to uživateli. */
+  const stepDown = useCallback((why: string) => {
+    const next = lowerLevel(qualityRef.current);
+    if (!next) { setEngine("error"); return; }
+    setNotice(`${why} Přepnuto na režim „${LEVEL_LABEL[next]}“ — při dokreslení je obraz stejný, jen při pohybu méně detailní.`);
+    saveChoice(next);
+    changeQuality(next);
+  }, [changeQuality]);
+
   // Engine (three.js) se načítá až tady — zbytek webu ho nestahuje.
   useEffect(() => {
     let disposed = false;
@@ -78,9 +108,13 @@ export default function RoomVisualizer({ products, initialProductId, initialView
         try {
           v = createViewer(canvasRef.current, overlayRef.current, {
             wheelZoom: variant === "dialog",
+            quality: qualityPick,
+            onQuality: (d) => { qualityRef.current = d.level; setDetected(d); },
             onReady: () => setEngine("ready"),
             onViewChange: (id) => setView(id),
             onBusy: setLightBusy,
+            onSlow: () => stepDown("Zobrazení se při tažení zasekává."),
+            onLost: () => stepDown("Prohlížeč přerušil 3D (málo paměti grafiky)."),
           });
           viewerRef.current = v;
           setEngineGen((g) => g + 1);
@@ -90,7 +124,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
       })
       .catch(() => setEngine("error"));
     return () => { disposed = true; v?.dispose(); viewerRef.current = null; };
-  }, [variant]);
+  }, [variant, qualityPick, canvasKey, stepDown]);
 
   useEffect(() => {
     const v = viewerRef.current;
@@ -115,6 +149,13 @@ export default function RoomVisualizer({ products, initialProductId, initialView
     });
     return () => { cancelled = true; };
   }, [engineGen, selected, floorKey, layout]);
+
+  // Oznámení o změně režimu zmizí samo.
+  useEffect(() => {
+    if (!notice) return;
+    const t = setTimeout(() => setNotice(null), 9000);
+    return () => clearTimeout(t);
+  }, [notice]);
 
   useEffect(() => { viewerRef.current?.setView(view); }, [engineGen, view]);
   useEffect(() => { viewerRef.current?.setWallColor(wall); }, [engineGen, wall]);
@@ -150,15 +191,29 @@ export default function RoomVisualizer({ products, initialProductId, initialView
         </div>
 
         <div className={clsx("relative w-full overflow-hidden rounded-lg bg-line select-none", stageH, dialog && "lg:flex-1 lg:min-h-0")} onPointerDown={() => setInteracted(true)}>
-          <canvas ref={canvasRef} className={clsx("absolute inset-0 h-full w-full transition-opacity duration-500", engine === "ready" ? "opacity-100" : "opacity-0", dialog ? "touch-none" : "touch-pan-y")} aria-label="3D náhled bytu s vybranou podlahou" />
+          <canvas key={`${qualityPick}-${canvasKey}`} ref={canvasRef} className={clsx("absolute inset-0 h-full w-full transition-opacity duration-500", engine === "ready" ? "opacity-100" : "opacity-0", dialog ? "touch-none" : "touch-pan-y")} aria-label="3D náhled bytu s vybranou podlahou" />
           <div ref={overlayRef} className="pointer-events-none absolute inset-0" />
 
           {engine !== "ready" && (
             <div className="absolute inset-0 grid place-items-center text-center p-6">
               {engine === "error" ? (
-                <p className="text-ink-soft max-w-sm">Váš prohlížeč nepodporuje 3D náhled (WebGL). Zkuste jiný prohlížeč, nebo si objednejte vzorek zdarma.</p>
+                <>
+                  {selected?.images.card && <Image src={selected.images.card} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover opacity-40" />}
+                  <div className="relative max-w-sm rounded-md bg-white/95 p-5 shadow-card">
+                    <p>3D náhled se na tomto zařízení nepodařilo spustit.</p>
+                    <p className="text-sm text-muted mt-2 leading-snug">Nejčastěji chybí paměť grafiky nebo má prohlížeč vypnuté hardwarové zrychlení. Dekor si prohlédněte na fotografii a vzorek vám pošleme zdarma.</p>
+                    <div className="mt-4 flex flex-wrap justify-center gap-2">
+                      <button type="button" className="btn btn-primary btn-sm" onClick={() => { setCanvasKey((k) => k + 1); changeQuality("low"); }}>Zkusit úsporný režim</button>
+                      {selected && <Link href={`/podlaha/${selected.slug}`} className="btn btn-outline btn-sm">Detail podlahy</Link>}
+                    </div>
+                  </div>
+                </>
               ) : (
-                <div className="flex flex-col items-center gap-3 text-muted"><span className="h-8 w-8 rounded-full border-2 border-line-strong border-t-ink animate-spin" /><span className="text-sm">Připravuji modelový byt…</span></div>
+                <div className="flex flex-col items-center gap-3 text-muted">
+                  <span className="h-8 w-8 rounded-full border-2 border-line-strong border-t-ink animate-spin" />
+                  <span className="text-sm">Připravuji modelový byt…</span>
+                  {detected?.level === "low" && <span className="text-xs max-w-[16rem] leading-snug">Používám úsporný režim ({detected.reason}) — obraz vypadá stejně, jen se dokresluje rychleji.</span>}
+                </div>
               )}
             </div>
           )}
@@ -179,7 +234,13 @@ export default function RoomVisualizer({ products, initialProductId, initialView
               </div>
 
               {(busy || lightBusy) && <div className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs shadow-card inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full border-2 border-line-strong border-t-ink animate-spin" />{busy ? "Pokládám podlahu…" : "Rozsvěcuji lampy…"}</div>}
-              {!interacted && view !== "overview" && <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap">Táhnutím se rozhlédnete · dvojklik vrátí pohled</div>}
+              {notice && (
+                <div className="absolute inset-x-2 bottom-2 flex items-start gap-2 rounded-md bg-ink/85 px-3 py-2 text-xs text-white shadow-card" role="status">
+                  <span className="flex-1 leading-snug">{notice}</span>
+                  <button type="button" className="shrink-0 -mr-1 p-0.5 hover:opacity-70" onClick={() => setNotice(null)} aria-label="Zavřít oznámení"><X className="h-4 w-4" /></button>
+                </div>
+              )}
+              {!notice && !interacted && view !== "overview" && <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap">Táhnutím se rozhlédnete · dvojklik vrátí pohled</div>}
               {view === "overview" && <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap">Klikněte na místnost</div>}
 
               {selected && (
@@ -246,6 +307,19 @@ export default function RoomVisualizer({ products, initialProductId, initialView
               <button key={s} type="button" onClick={() => setSkirting(s)} aria-pressed={skirting === s} className={clsx("px-2.5 py-1.5", skirting === s ? "bg-ink text-white" : "bg-white hover:bg-bg")}>{s === "white" ? "Bílé" : "Jako podlaha"}</button>
             ))}
           </div>
+        </div>
+
+        <div>
+          <p className="label">Náročnost 3D</p>
+          <div className="grid grid-cols-4 gap-1" role="group" aria-label="Náročnost 3D zobrazení">
+            {CHOICES.map((c) => (
+              <button key={c.id} type="button" aria-pressed={qualityPick === c.id} onClick={() => { saveChoice(c.id); setNotice(null); changeQuality(c.id); }} className={clsx("rounded-sm border px-1 py-1.5 text-xs", qualityPick === c.id ? "border-ink bg-ink text-white" : "border-line-strong bg-white hover:border-ink")}>{c.label}</button>
+            ))}
+          </div>
+          <p className="text-[0.7rem] text-muted mt-1.5 leading-snug">
+            {qualityPick === "auto" && detected ? `Zvoleno automaticky: ${LEVEL_LABEL[detected.level]} (${detected.reason}). ` : ""}
+            Úspornější režim šetří baterii a paměť; po dokreslení vypadá byt stejně.
+          </p>
         </div>
 
         {selected && (

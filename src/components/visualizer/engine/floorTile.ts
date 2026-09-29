@@ -33,6 +33,9 @@ const TILE_TARGET_M = 4.6;
 const BOARD_COUNT = 16;
 const BOARD_PPM_MAX = 520;
 
+/** Uvolní hlavní vlákno, aby se mezi kroky generování stihlo překreslit a reagovat na dotyk. */
+const nextTask = () => new Promise<void>((r) => setTimeout(r, 0));
+
 const mixc = (a: RGB, b: RGB, t: number): RGB => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
 const rgba = (c: RGB, k: number, a: number) => `rgba(${Math.round(c[0] * k)},${Math.round(c[1] * k)},${Math.round(c[2] * k)},${a})`;
 
@@ -106,7 +109,7 @@ function stoneField(kind: DecorKind, seed: number): Field {
   }
 }
 
-function makeBoards(spec: DecorSpec, ppm: number): HTMLCanvasElement[] {
+async function makeBoards(spec: DecorSpec, ppm: number): Promise<HTMLCanvasElement[]> {
   const { plankL: L, plankW: W, palette } = spec;
   const pw = Math.max(8, Math.round(L * ppm)), ph = Math.max(4, Math.round(W * ppm));
   const seed = hashString(spec.seedKey);
@@ -130,13 +133,15 @@ function makeBoards(spec: DecorSpec, ppm: number): HTMLCanvasElement[] {
     // Průměr jen z řídkého vzorku (stačí pro korekci).
     for (let i = 0; i < arr.length; i += 7) { const c = toColor(arr[i]); sum[0] += c[0]; sum[1] += c[1]; sum[2] += c[2]; }
     fields.push(arr);
+    await nextTask();
   }
   const samples = fields.reduce((n, a) => n + Math.ceil(a.length / 7), 0);
   const corr = [0, 1, 2].map((i) => Math.min(1.35, Math.max(0.75, palette.base[i] / Math.max(1, sum[i] / samples))));
 
   // 2. průchod: zápis pixelů.
   const R = rng(seed ^ 0xabcdef);
-  return fields.map((arr) => {
+  const boards: HTMLCanvasElement[] = [];
+  for (const arr of fields) {
     const c = createCanvas(pw, ph);
     const ctx = c.getContext("2d")!;
     const img = ctx.createImageData(pw, ph);
@@ -163,8 +168,10 @@ function makeBoards(spec: DecorSpec, ppm: number): HTMLCanvasElement[] {
         ctx.fill();
       }
     }
-    return c;
-  });
+    boards.push(c);
+    await nextTask();
+  }
+  return boards;
 }
 
 interface Placement { x: number; y: number; vertical: boolean; board: number; fu: boolean; fv: boolean }
@@ -183,7 +190,7 @@ function assignTable(count: number, R: () => number) {
 
 const mod = (a: number, n: number) => ((a % n) + n) % n;
 
-export function buildFloorTile(spec: DecorSpec, maxSide: number): FloorTile {
+export async function buildFloorTile(spec: DecorSpec, maxSide: number, boardPpmMax = BOARD_PPM_MAX): Promise<FloorTile> {
   const L = spec.plankL, W = spec.plankW;
   const R = rng(hashString(spec.seedKey + "|layout|" + spec.pattern));
   const planks: Placement[] = [];
@@ -239,7 +246,7 @@ export function buildFloorTile(spec: DecorSpec, maxSide: number): FloorTile {
 
   const ppm = maxSide / Math.max(tileW, tileH);
   const pw = Math.round(tileW * ppm), ph = Math.round(tileH * ppm);
-  const boards = makeBoards(spec, Math.min(ppm, BOARD_PPM_MAX));
+  const boards = await makeBoards(spec, Math.min(ppm, boardPpmMax));
   const seam = spec.palette.dark;
 
   const map = createCanvas(pw, ph);
@@ -291,6 +298,7 @@ export function buildFloorTile(spec: DecorSpec, maxSide: number): FloorTile {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
   };
   drawAll(mctx, pw, ph, false);
+  await nextTask();
   drawAll(bctx, bw, bh, true);
   for (const b of boards) { b.width = 0; b.height = 0; }
   return { map, bump, tileW, tileH };

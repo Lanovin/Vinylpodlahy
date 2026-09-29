@@ -64,6 +64,8 @@ export class PhotoPipeline {
   private qScene = new THREE.Scene();
   private qCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   private rtScene!: THREE.WebGLRenderTarget;
+  /** Bez vyhlazování hran: snímky, které se průměrují, si vystačí s posunem o zlomek pixelu (vzniká vyhlazení lepší než MSAA). */
+  private rtPlain: THREE.WebGLRenderTarget | null = null;
   private acc!: [THREE.WebGLRenderTarget, THREE.WebGLRenderTarget];
   private bloomA!: THREE.WebGLRenderTarget;
   private bloomB!: THREE.WebGLRenderTarget;
@@ -95,6 +97,7 @@ export class PhotoPipeline {
     this.dispose(true);
     const o = { type: THREE.HalfFloatType, format: THREE.RGBAFormat, depthBuffer: false, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter } as const;
     this.rtScene = new THREE.WebGLRenderTarget(w, h, { ...o, depthBuffer: true, samples: this.opts.samples });
+    this.rtPlain = null;
     this.acc = [new THREE.WebGLRenderTarget(w, h, o), new THREE.WebGLRenderTarget(w, h, o)];
     const bw = Math.max(1, Math.round(w / 4)), bh = Math.max(1, Math.round(h / 4));
     this.bloomA = new THREE.WebGLRenderTarget(bw, bh, o);
@@ -122,8 +125,21 @@ export class PhotoPipeline {
     this.renderer.render(this.qScene, this.qCam);
   }
 
-  /** Vykreslí snímek; weight = 1 začne nové průměrování. */
-  render(scene: THREE.Scene, camera: THREE.Camera, restart: boolean) {
+  /**
+   * Předkompiluje shadery scény pro vykreslování do HDR bufferu (paralelně, bez zablokování stránky).
+   * Program závisí i na cíli vykreslení, proto se cíl na dobu volání nastaví.
+   */
+  compile(scene: THREE.Scene, camera: THREE.Camera): Promise<void> {
+    const r = this.renderer;
+    const prev = r.getRenderTarget();
+    if (this.hdr) r.setRenderTarget(this.rtScene);
+    const done = r.compileAsync(scene, camera).then(() => undefined);
+    r.setRenderTarget(prev);
+    return done;
+  }
+
+  /** Vykreslí snímek; restart začne nové průměrování, present = přenést výsledek na obrazovku. */
+  render(scene: THREE.Scene, camera: THREE.Camera, restart: boolean, present = true) {
     const r = this.renderer;
     if (!this.hdr) {
       r.setRenderTarget(null);
@@ -132,16 +148,21 @@ export class PhotoPipeline {
       return;
     }
     if (restart) this.frames = 0;
-    r.setRenderTarget(this.rtScene);
+    let target = this.rtScene;
+    if (!restart && this.opts.samples > 0) {
+      this.rtPlain ??= new THREE.WebGLRenderTarget(this.w, this.h, { type: THREE.HalfFloatType, format: THREE.RGBAFormat, depthBuffer: true, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter });
+      target = this.rtPlain;
+    }
+    r.setRenderTarget(target);
     r.render(scene, camera);
     const prev = this.acc[this.cur], next = this.acc[this.cur ^ 1];
-    this.mAccum.uniforms.tNew.value = this.rtScene.texture;
+    this.mAccum.uniforms.tNew.value = target.texture;
     this.mAccum.uniforms.tPrev.value = prev.texture;
     this.mAccum.uniforms.uWeight.value = 1 / (this.frames + 1);
     this.blit(this.mAccum, next);
     this.cur ^= 1;
     this.frames++;
-    this.present();
+    if (present) this.present();
   }
 
   /** Záře a výstup na obrazovku z aktuálního průměru. */
@@ -167,7 +188,7 @@ export class PhotoPipeline {
   }
 
   dispose(keepMaterials = false) {
-    for (const rt of [this.rtScene, ...(this.acc ?? []), this.bloomA, this.bloomB, this.bloomC, this.bloomD]) rt?.dispose();
+    for (const rt of [this.rtScene, this.rtPlain, ...(this.acc ?? []), this.bloomA, this.bloomB, this.bloomC, this.bloomD]) rt?.dispose();
     if (!keepMaterials) {
       for (const m of [this.mAccum, this.mBright, this.mBlur, this.mFinal]) m.dispose();
       this.quad.geometry.dispose();

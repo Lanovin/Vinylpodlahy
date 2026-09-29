@@ -5,6 +5,7 @@ import { applyBake, createBakeUniforms, disposeBake, fetchBake, patchBakeMateria
 import { buildFloorTile, type DecorSpec, type FloorTile } from "./floorTile";
 import { EXTERIOR, SUN_COLOR, SUN_DIR, SUN_E, SUN_RADIUS, type LightingMode } from "./lighting";
 import { PhotoPipeline } from "./post";
+import { detectQuality, QUALITY, type Detection, type Quality, type QualityChoice } from "./quality";
 import { FloorReflection } from "./reflection";
 
 export type { ViewId } from "./apartment";
@@ -22,11 +23,20 @@ export interface ViewerOptions {
   /** Obraz je doostřený (dokončené průměrování snímků). */
   onSettled?: () => void;
   formatLabel?: (room: RoomInfo) => { title: string; sub: string };
+  /** Náročnost zobrazení: stupeň, „auto“ (podle zařízení), nebo přímo sada parametrů (testy). */
+  quality?: QualityChoice | Quality;
+  /** Zvolený stupeň a důvod (u „auto“ odhad podle zařízení). */
+  onQuality?: (d: Detection) => void;
+  /** Tažení je trvale pomalé — zařízení na tento stupeň nestačí. */
+  onSlow?: () => void;
+  /** Prohlížeč vzal grafický kontext (nedostatek paměti GPU, přepnutí grafiky). */
+  onLost?: () => void;
 }
 
 export interface Viewer {
   setView(v: ViewId, instant?: boolean): void;
-  setFloor(f: FloorInput): void;
+  /** Podlaha se generuje po částech, aby stránka během toho reagovala; vyřeší se po položení. */
+  setFloor(f: FloorInput): Promise<void>;
   setWallColor(hex: string): void;
   setSkirtingColor(hex: string): void;
   setLighting(l: Lighting): void;
@@ -41,8 +51,9 @@ interface CamState { pos: THREE.Vector3; target: THREE.Vector3; fov: number; lev
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const halton = (i: number, b: number) => { let f = 1, r = 0; while (i > 0) { f /= b; r += f * (i % b); i = Math.floor(i / b); } return r; };
-/** Počet snímků, které se v klidu zprůměrují (vyhlazení hran a měkké stíny). */
-const ACCUM_FRAMES = 20;
+/** Kolik po sobě jdoucích pomalých snímků při tažení znamená, že zařízení na daný stupeň nestačí. */
+const SLOW_FRAMES = 10;
+const SLOW_MS = 70;
 const EXPOSURE: Record<LightingMode, number> = { day: 1, evening: 1.15 };
 
 function backdropMaterial(tex: THREE.Texture) {
@@ -69,23 +80,28 @@ function backdropMaterial(tex: THREE.Texture) {
 }
 
 export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, opts: ViewerOptions = {}): Viewer {
-  const small = Math.min(window.screen.width, window.screen.height) < 700;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
+  const chosen = opts.quality ?? "auto";
+  const detection: Detection = typeof chosen === "object" ? { level: chosen.level, reason: "vlastní nastavení" } : chosen === "auto" ? detectQuality(renderer) : { level: chosen, reason: "ruční volba" };
+  const Q: Quality = typeof chosen === "object" ? chosen : QUALITY[detection.level];
+  opts.onQuality?.(detection);
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
   renderer.shadowMap.needsUpdate = true;
-  const maxSide = Math.min(renderer.capabilities.maxTextureSize, small ? 2048 : 2560);
-  const aniso = renderer.capabilities.getMaxAnisotropy();
-  const post = new PhotoPipeline(renderer, { bloom: 0.07, vignette: 0.14, samples: small ? 2 : 4 });
+  const maxSide = Math.min(renderer.capabilities.maxTextureSize, Q.floorSide);
+  const aniso = Math.min(Q.aniso, renderer.capabilities.getMaxAnisotropy());
+  const post = new PhotoPipeline(renderer, { bloom: 0.07, vignette: 0.14, samples: Q.msaa });
   if (!post.hdr) renderer.toneMapping = THREE.NeutralToneMapping;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf6f3ee);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const roomEnv = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  // Stejná velikost jako u prostředí nasnímaného z pokoje (cubeRT níže): shadery se pak sdílejí a nekompilují dvakrát.
+  const ENV_SIZE = 128;
+  const roomEnv = pmrem.fromScene(new RoomEnvironment(), 0.04, 0.1, 100, { size: ENV_SIZE }).texture;
   let capturedEnv: THREE.Texture | null = null;
   scene.environment = roomEnv;
   scene.environmentIntensity = 0.55;
@@ -95,7 +111,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   const bakeUniforms = createBakeUniforms();
   for (const m of apt.layout.lmMeshes) patchBakeMaterial(m.material as THREE.MeshStandardMaterial, "lm", bakeUniforms);
   for (const m of apt.layout.vtxMeshes) patchBakeMaterial(m.material as THREE.MeshStandardMaterial, "vtx", bakeUniforms);
-  const refl = new FloorReflection(renderer, post.hdr);
+  const refl = new FloorReflection(renderer, post.hdr, Q.reflDiv);
   refl.patch(apt.floorMaterial);
   // Podlaha se do vlastního odrazu nekreslí (jinak by četla texturu, do které se právě kreslí).
   const floorMeshes = apt.layout.lmMeshes.filter((m) => m.material === apt.floorMaterial);
@@ -123,7 +139,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   sun.position.copy(apt.center).addScaledVector(sunDir, 22);
   sun.target.position.copy(apt.center);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(small ? 1536 : 2048, small ? 1536 : 2048);
+  sun.shadow.mapSize.set(Q.shadowSize, Q.shadowSize);
   const sc = sun.shadow.camera;
   sc.left = -8.5; sc.right = 8.5; sc.top = 8.5; sc.bottom = -8.5; sc.near = 8; sc.far = 40;
   sun.shadow.bias = -0.0003;
@@ -156,6 +172,11 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   let cur: CamState = { pos: new THREE.Vector3(), target: new THREE.Vector3(), fov: 50, level: 1 };
   let jitter = [0, 0];
   let lastChange = 0;
+  /** Probíhá kompilace shaderů — nekreslí se (jinak by se stránka zasekla). */
+  let compiling = 0;
+  let readyAt = 0;
+  let slow = 0, slowFired = false, lastDragT = 0;
+  let lost = false;
 
   const bakes: Partial<Record<LightingMode, BakeSet>> = {};
   const bakeLoads: Partial<Record<LightingMode, Promise<BakeSet | null>>> = {};
@@ -229,10 +250,12 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     if (overview === on) return;
     overview = on;
     lightState();
+    // Řez stěn (clipping plane) je jiná varianta shaderů — poprvé se kompiluje za běhu.
+    if (ready && on) void prewarm();
   }
 
   /* ---------------- odlesky: prostředí nasnímané z místa kamery (s předpočítaným světlem) */
-  const cubeRT = new THREE.WebGLCubeRenderTarget(128, { type: THREE.HalfFloatType });
+  const cubeRT = new THREE.WebGLCubeRenderTarget(ENV_SIZE, { type: THREE.HalfFloatType });
   const cubeCam = new THREE.CubeCamera(0.05, 120, cubeRT);
   function captureEnv() {
     if (overview || bakeActive === null || disposed) return;
@@ -290,7 +313,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       const w = Math.max(1, canvas.width), h = Math.max(1, canvas.height);
       jitter = [((halton(n + 1, 2) - 0.5) * 2) / w, ((halton(n + 1, 3) - 0.5) * 2) / h];
       // Měkký okraj slunečních skvrn: každý snímek trochu jiný směr v disku slunce.
-      const a = n * 2.399963, rr = SUN_RADIUS * Math.sqrt((n % ACCUM_FRAMES) / ACCUM_FRAMES);
+      const a = n * 2.399963, rr = SUN_RADIUS * Math.sqrt((n % Q.accum) / Q.accum);
       sunJit.copy(sunDir).addScaledVector(su, Math.cos(a) * rr).addScaledVector(sv, Math.sin(a) * rr).normalize();
     }
     const jit = !restart && post.hdr;
@@ -303,7 +326,8 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       if (overview) refl.uniforms.uReflOn.value = 0;
       else refl.update(scene, camera, floorMeshes);
     }
-    post.render(scene, camera, restart);
+    // Mezilehlé průměrované snímky se na obrazovku nevykreslují (záře + výstup stojí jako další průchod).
+    post.render(scene, camera, restart, restart || post.frames + 1 >= Q.accum || (post.frames + 1) % 3 === 0);
   }
 
   function tick(now: number) {
@@ -319,19 +343,35 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
         if (next !== "overview") { setOverviewMode(false); captureEnv(); }
       }
     }
-    if (!visible || !ready) return;
+    if (!visible || !ready || compiling > 0 || lost) return;
     if (dirty) {
       dirty = false;
       lastChange = now;
       frame(true);
       updateLabels();
+      watchSpeed(now);
       return;
     }
     // Průměrování až po krátké pauze (při tažení by jen zdržovalo).
-    if (post.hdr && post.frames < ACCUM_FRAMES && now - lastChange > 90) {
+    if (post.hdr && post.frames < Q.accum && now - lastChange > 90) {
       frame(false);
-      if (post.frames === ACCUM_FRAMES) opts.onSettled?.();
+      if (post.frames === Q.accum) opts.onSettled?.();
     }
+  }
+
+  /** Při tažení prstem / myší musí být obraz plynulý; když je trvale pomalý, ohlásí se to stránce. */
+  function watchSpeed(now: number) {
+    if (pointers.size === 0 || anim || now - readyAt < 2500) { lastDragT = 0; slow = 0; return; }
+    const dt = now - lastDragT;
+    if (lastDragT && dt < 500) slow = dt > SLOW_MS ? slow + 1 : 0;
+    lastDragT = now;
+    if (slow >= SLOW_FRAMES && !slowFired) { slowFired = true; opts.onSlow?.(); }
+  }
+
+  /** Předkompiluje shadery pro aktuální stav scény bez zablokování stránky (paralelní kompilace). */
+  function prewarm(): Promise<void> {
+    compiling++;
+    return post.compile(scene, camera).catch(() => undefined).then(() => { compiling--; dirty = true; });
   }
 
   function setView(v: ViewId, instant = false) {
@@ -394,6 +434,8 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   canvas.addEventListener("pointercancel", onUp);
   canvas.addEventListener("wheel", onWheel, { passive: false });
   canvas.addEventListener("dblclick", onDbl);
+  const onLostCtx = (e: Event) => { e.preventDefault(); lost = true; if (!disposed) opts.onLost?.(); };
+  canvas.addEventListener("webglcontextlost", onLostCtx);
 
   function zoom(f: number) {
     const [lo, hi] = apt.views[view].mode === "look" ? [0.9, 2.4] : [0.75, 2.2];
@@ -406,7 +448,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
     const dpr = window.devicePixelRatio || 1;
     // Strop počtu pixelů: HDR buffery s vyhlazováním jsou náročné na paměť GPU.
-    const pr = Math.min(dpr, small ? 2 : 1.75, Math.sqrt((small ? 1.4e6 : 2.6e6) / (w * h)));
+    const pr = Math.min(dpr, Q.maxDpr, Math.sqrt(Q.maxPixels / (w * h)));
     renderer.setPixelRatio(pr);
     renderer.setSize(w, h, false);
     post.setSize(canvas.width, canvas.height);
@@ -422,20 +464,29 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
 
   /* ---------------- podlaha */
   const tiles = new Map<string, { tile: FloorTile; map: THREE.CanvasTexture; bump: THREE.CanvasTexture }>();
-  function setFloor(f: FloorInput) {
+  let floorRequest = 0;
+  let resolveFirstFloor!: () => void;
+  const firstFloor = new Promise<void>((r) => (resolveFirstFloor = r));
+  async function setFloor(f: FloorInput) {
+    const my = ++floorRequest;
     const p = f.palette;
     const key = [f.seedKey, f.kind, f.pattern, f.plankL, f.plankW, f.bevel, ...p.dark, ...p.base, ...p.light].map((x) => (typeof x === "number" ? x.toFixed(3) : String(x))).join("|");
     let e = tiles.get(key);
     if (!e) {
-      const tile = buildFloorTile(f, maxSide);
+      // Generování lamel se dělí na kroky, ve kterých stránka dýchá (na telefonu jinak na pár vteřin zamrzne).
+      const tile = await buildFloorTile(f, maxSide, Q.boardPpm);
+      if (disposed || my !== floorRequest) return;
       const map = new THREE.CanvasTexture(tile.map);
       map.colorSpace = THREE.SRGBColorSpace;
       const bump = new THREE.CanvasTexture(tile.bump);
       for (const t of [map, bump]) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; }
+      // Po nahrání do GPU se plátno uvolní (dlaždice má desítky MB; mobilní prohlížeče mají limit na plátna).
+      map.onUpdate = () => { tile.map.width = tile.map.height = 0; };
+      bump.onUpdate = () => { tile.bump.width = tile.bump.height = 0; };
       e = { tile, map, bump };
       tiles.set(key, e);
       // Drží se jen pár posledních dekorů (paměť GPU na mobilech).
-      while (tiles.size > 3) {
+      while (tiles.size > (Q.level === "low" ? 2 : 3)) {
         const [oldKey, old] = tiles.entries().next().value as [string, { map: THREE.Texture; bump: THREE.Texture }];
         if (old.map === apt.floorMaterial.map) break;
         old.map.dispose(); old.bump.dispose();
@@ -446,6 +497,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       tiles.set(key, e);
     }
     const rot = f.diagonal ? Math.PI / 4 : 0;
+    if (disposed || my !== floorRequest) return;
     for (const t of [e.map, e.bump]) { t.repeat.set(1 / e.tile.tileW, 1 / e.tile.tileH); t.rotation = rot; t.center.set(0, 0); }
     const first = !apt.floorMaterial.map;
     apt.floorMaterial.map = e.map;
@@ -456,6 +508,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     const c = new THREE.Color().setRGB(p.base[0] / 255, p.base[1] / 255, p.base[2] / 255, THREE.SRGBColorSpace);
     bakeUniforms.uFloorD.value.set(c.r - apt.floorAlbedo0[0], c.g - apt.floorAlbedo0[1], c.b - apt.floorAlbedo0[2]);
     dirty = true;
+    resolveFirstFloor();
   }
 
   function setWallColor(hex: string) {
@@ -472,7 +525,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     return bakeLoads[mode]!;
   }
 
-  function applyLighting(l: LightingMode) {
+  async function applyLighting(l: LightingMode) {
     const set = bakes[l];
     if (set) { applyBake(apt.layout, set, bakeUniforms); bakeActive = l; } else bakeActive = null;
     const eve = l === "evening";
@@ -493,36 +546,42 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       wb = [g[0] / gl, g[1] / gl, g[2] / gl];
     }
     lightState();
-    captureEnv();
+    // Večer bez slunce = jiné shadery; kompilují se souběžně, dokud se nic nekreslí.
+    if (ready) { await prewarm(); if (!disposed) captureEnv(); }
   }
 
   function setLighting(l: LightingMode) {
     lighting = l;
-    if (bakes[l] || !ready) { if (ready) applyLighting(l); return; }
+    if (bakes[l] || !ready) { if (ready) void applyLighting(l); return; }
     opts.onBusy?.(true);
-    loadBake(l).then(() => {
-      if (disposed || lighting !== l) return;
-      opts.onBusy?.(false);
-      applyLighting(l);
+    loadBake(l).then(async () => {
+      if (disposed || lighting !== l) { if (!disposed) opts.onBusy?.(false); return; }
+      await applyLighting(l);
+      if (!disposed) opts.onBusy?.(false);
     });
   }
 
   // Start: světlo pro den a výhled z oken; do té doby zůstává plátno skryté (indikátor načítání).
-  const extTex = new THREE.TextureLoader().loadAsync(`/visualizer/exterior-${small ? "s" : "l"}.jpg`).then((t) => {
+  const extTex = new THREE.TextureLoader().loadAsync(`/visualizer/exterior-${Q.exterior === "auto" ? (window.innerWidth >= 900 ? "l" : "s") : Q.exterior}.jpg`).then((t) => {
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = Math.min(4, aniso);
     return t;
   }).catch(() => null);
-  Promise.all([loadBake("day"), extTex]).then(([, tex]) => {
+  // První podlaha má být hotová dřív než shadery (materiál podlahy se s texturou překládá).
+  Promise.all([loadBake("day"), extTex, Promise.race([firstFloor, new Promise((r) => setTimeout(r, 6000))])]).then(async ([, tex]) => {
     if (disposed) { tex?.dispose(); return; }
     if (tex) setBackdropMat(backdropMaterial(tex));
+    await applyLighting(lighting);
+    if (disposed) return;
+    await prewarm();
+    if (disposed) return;
     ready = true;
-    applyLighting(lighting);
-    if (!bakes[lighting]) setLighting(lighting);
     setView(view, true);
+    readyAt = performance.now();
     dirty = true;
     opts.onReady?.();
-  });
+    if (!bakes[lighting]) setLighting(lighting);
+  }).catch((err) => { console.warn("[vizualizace] start selhal:", err); if (!disposed) opts.onLost?.(); });
 
   lightState();
   cur = camFor(apt.views[view], 0, 0, 1);
@@ -547,6 +606,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       canvas.removeEventListener("pointercancel", onUp);
       canvas.removeEventListener("wheel", onWheel);
       canvas.removeEventListener("dblclick", onDbl);
+      canvas.removeEventListener("webglcontextlost", onLostCtx);
       for (const { el } of labels) el.remove();
       for (const e of tiles.values()) { e.map.dispose(); e.bump.dispose(); }
       tiles.clear();

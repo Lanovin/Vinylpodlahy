@@ -30,7 +30,7 @@ export function CartView({ freeFromM2, carryUpParcel, carryUpPalletPerFloor }: {
   const anyPallet = quote.shipments.some((s) => s.method === "pallet");
 
   return (
-    <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+    <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-12">
       <div className="lg:col-span-7 space-y-8">
         <ul className="card divide-y divide-line">
           {quote.lines.map((l) => (

@@ -36,7 +36,7 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
   }
 
   return (
-    <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+    <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-12">
       <div className="lg:col-span-6">
         <div className="flex items-baseline justify-between"><h2 className="h3">Vybrané vzorky <span className="text-muted text-base">{chosen.length}/{max}</span></h2>{chosen.length > 0 && <button type="button" className="text-sm text-muted hover:text-ink" onClick={clearSamples}>Vyprázdnit</button>}</div>
         {chosen.length === 0 ? (
