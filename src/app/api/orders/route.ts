@@ -5,7 +5,8 @@ import { newId, nowIso } from "@/lib/db/store";
 import { quoteCart } from "@/lib/shipping";
 
 const Body = z.object({
-  customer: z.object({ name: z.string().min(2).max(160), email: z.string().email(), phone: z.string().min(6).max(30), street: z.string().min(2).max(160), city: z.string().min(2).max(120), zip: z.string().min(5).max(6), note: z.string().max(1000).optional().default(""), terms: z.literal(true) }),
+  // Pořadí polí = pořadí ve formuláři: první chybné pole vracíme klientovi (`field`), ten mu dá focus.
+  customer: z.object({ name: z.string().trim().min(2).max(160), email: z.string().trim().email(), phone: z.string().trim().min(6).max(30), street: z.string().trim().min(2).max(160), zip: z.string().trim().regex(/^\d{3} ?\d{2}$/), city: z.string().trim().min(2).max(120), note: z.string().max(1000).optional().default(""), terms: z.literal(true) }),
   items: z.array(z.object({ kind: z.enum(["product", "accessory"]), id: z.string(), qty: z.number().int().min(1).max(999) })).min(1),
   carryUp: z.object({ enabled: z.boolean(), floor: z.number().int().min(0).max(30), elevator: z.boolean() }),
   installRequested: z.boolean(),
@@ -14,7 +15,11 @@ const Body = z.object({
 
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Zkontrolujte prosím vyplněné údaje." }, { status: 400 });
+  if (!parsed.success) {
+    const path = parsed.error.issues[0]?.path ?? [];
+    const field = String((path[0] === "customer" ? path[1] : path[0]) ?? "");
+    return NextResponse.json({ error: "Zkontrolujte prosím vyplněné údaje.", field }, { status: 400 });
+  }
   const d = parsed.data;
   // Ceny a dopravu počítáme znovu na serveru z aktuálních dat.
   const quote = quoteCart(d.items, d.carryUp, { products: products.all(), accessories: accessories.all(), suppliers: suppliers.all(), settings: settings.get() });

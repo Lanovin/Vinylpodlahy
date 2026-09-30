@@ -9,6 +9,7 @@ const Room = z.object({
   id: z.string(), name: z.string().max(80), mode: z.enum(["dims", "area"]),
   lengthM: z.number().min(0).max(500).nullable(), widthM: z.number().min(0).max(500).nullable(), areaM2: z.number().min(0).max(100000).nullable(), perimeterM: z.number().min(0).max(5000).nullable(),
   layout: z.enum(["straight", "diagonal", "herringbone"]), doors: z.number().int().min(0).max(50), floorHeating: z.boolean(),
+  kind: z.enum(["living", "bedroom", "kitchen", "bathroom", "hallway", "commercial"]).nullable().optional(),
 });
 const Answers = z.object({
   roomKinds: z.array(z.enum(["living", "bedroom", "kitchen", "bathroom", "hallway", "commercial"])).max(6),

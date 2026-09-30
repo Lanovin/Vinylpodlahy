@@ -43,7 +43,7 @@ h1, h2, h3, h4 { font-weight: 400; letter-spacing: -0.01em; text-wrap: balance; 
 .display { font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1.02; letter-spacing: -0.02em; }
 .h2 { font-size: clamp(1.7rem, 3.2vw, 2.5rem); line-height: 1.12; }
 .h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); line-height: 1.2; }
-.eyebrow { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-muted); }
+.eyebrow { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: #6b665d; }
 .lead { font-size: 1.125rem; line-height: 1.55; color: var(--color-ink-soft); }
 .lead-light { color: rgba(255,255,255,.85); }
 
@@ -62,6 +62,8 @@ h1, h2, h3, h4 { font-weight: 400; letter-spacing: -0.01em; text-wrap: balance; 
 .btn-outline-light { border-color: rgba(255,255,255,.85); color: #fff; background: transparent; }
 .btn-outline-light:hover { background: #fff; color: var(--color-ink); }
 .btn-sm { height: 2.3rem; padding: 0 .9rem; font-size: .85rem; }
+/* Na dotykových displejích i malá tlačítka aspoň 44 px */
+@media (pointer: coarse) { .btn-sm { height: 2.75rem; } }
 .btn-lg { height: 3.3rem; padding: 0 1.75rem; font-size: 1.05rem; }
 
 /* Formuláře */

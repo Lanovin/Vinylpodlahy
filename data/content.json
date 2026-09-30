@@ -1,51 +1,51 @@
 {
   "hero": {
     "title": "Podlaha, která sedí.",
-    "subtitle": "Přijďte s místností, odejděte s kompletním košíkem. Spočítáme balení, podložku, lišty i dopravu — přesně na vaše metry.",
-    "ctaPrimary": "Spočítat můj projekt",
+    "subtitle": "Cena celého projektu na vaše metry — za 2 minuty.",
+    "ctaPrimary": "Spočítat cenu",
     "ctaSecondary": "Vzorky zdarma",
-    "ctaTertiary": "Průvodce výběrem",
+    "ctaTertiary": "Byt ve 3D",
     "image": "/media/inspiration/hero.webp"
   },
   "usps": [
     {
-      "title": "Kalkulačka místo odhadu",
-      "text": "Zadáte rozměry, způsob kladení a dveře. Dostanete přesný rozpis balení a příslušenství — a jedním klikem ho vložíte do košíku."
+      "title": "Přesný výpočet",
+      "text": "Balení, podložka, lišty i doprava na vaše metry — jedním klikem v košíku."
     },
     {
-      "title": "Doprava podle hmotnosti",
-      "text": "Žádné překvapení v pokladně. Cenu dopravy vidíte už na kartě produktu, včetně informace, kdy jede paleta."
+      "title": "Doprava podle váhy",
+      "text": "Cenu dopravy vidíte ještě před košíkem, včetně toho, kdy jede paleta."
     },
     {
       "title": "Vzorky zdarma",
-      "text": "Až 5 dekorů domů zdarma. Podlahu vybíráte na vlastní podlaze, ve vlastním světle."
+      "text": "Až 5 dekorů domů, bez platby a bez závazku."
     },
     {
       "title": "Pokládka na přání",
-      "text": "Zaškrtněte „Chci i pokládku“ a ozve se vám ověřený podlahář z vašeho okolí."
+      "text": "Ozve se vám ověřený podlahář z vašeho okolí."
     }
   ],
   "homeIntro": {
-    "title": "Vinyl a SPC podlahy pro domácnost i komerční prostory",
-    "text": "Vinylpodlahy.cz je specializovaný obchod s vinylovými a SPC podlahami. Nesoutěžíme o nejnižší cenu — pomáháme vybrat správně: podle místnosti, zátěže, podlahového topení i rozpočtu. Každý parametr máme ve filtru, každou cenu uvádíme za m² i za balení a dopravu počítáme z reálné hmotnosti."
+    "title": "Vinylové a SPC podlahy pro byt i komerční prostory",
+    "text": "Specializovaný obchod s vinylovými a SPC podlahami. Pomáháme vybrat podle místnosti, zátěže, podlahového topení i rozpočtu. Cenu uvádíme za m² i za balení, dopravu počítáme z reálné hmotnosti."
   },
   "steps": [
     {
       "title": "Změřte místnost",
-      "text": "Stačí délka a šířka. Metr v ruce, telefon ve druhé — kalkulačka je stavěná na mobil."
+      "text": "Stačí délka a šířka, nebo rovnou plocha."
     },
     {
       "title": "Vyberte dekor",
-      "text": "Průvodce vám podle místnosti a rozpočtu doporučí 6–9 dekorů. Nebo si nechte poslat vzorky."
+      "text": "Doporučíme 6–9 podlah a ukážeme je ve 3D bytě."
     },
     {
       "title": "Vložte celý projekt",
-      "text": "Balení s prořezem, podložka, lišty, lepidlo, silikon. Jedním tlačítkem do košíku, včetně dopravy."
+      "text": "Balení, podložka i lišty jedním tlačítkem do košíku."
     }
   ],
   "about": {
-    "title": "Proč jsme jiní",
-    "text": "Nemáme vlastní sklad, a říkáme to na rovinu. Zboží jede přímo od velkoobchodního partnera k vám — proto vidíte reálnou dostupnost v m² a reálný termín dodání ve dnech, ne obecné „skladem“. Naší prací je poradit a spočítat tak, aby vám nic nechybělo a nic nepřebývalo."
+    "title": "Žádný sklad. Přesný výběr a výpočet.",
+    "text": "Zboží jede přímo od velkoobchodního partnera k vám — proto vidíte skutečnou dostupnost v m² a termín ve dnech."
   },
   "contact": {
     "email": "info@vinylpodlahy.cz",
@@ -91,5 +91,5 @@
       "metaDescription": "Vinylové podlahy v dekoru dub. Desítky odstínů, vzorky zdarma, kalkulačka balení a příslušenství."
     }
   },
-  "footerNote": "Ceny včetně DPH 21 %. Dopravu počítáme z hmotnosti objednávky, dovoz je ke krajnici. Zboží odesílají naši velkoobchodní partneři přímo k vám."
+  "footerNote": "Ceny vč. DPH. Doprava podle hmotnosti, dovoz ke krajnici. Zboží posílají partneři přímo k vám."
 }

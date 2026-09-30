@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { Menu, Search, ShoppingBag, Swatch, X, ChevronDown } from "@/components/ui/icons";
+import { Menu, Search, ShoppingBag, Swatch, X, ChevronDown, Cube, Ruler } from "@/components/ui/icons";
 import { Logo } from "./Logo";
 import { useCart, useHydrated } from "@/store/cart";
 import { LANDINGS } from "@/lib/catalog";
@@ -26,7 +26,7 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
   const hydrated = useHydrated();
   const items = useCart((s) => s.items);
   const samples = useCart((s) => s.samples);
-  const cartCount = hydrated ? items.reduce((n, i) => n + i.qty, 0) : 0;
+  const cartCount = hydrated ? items.length : 0; // počet položek, ne balení (24 balení podlahy = 1 položka)
   const sampleCount = hydrated ? samples.length : 0;
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
   if (seenPath !== pathname) { setSeenPath(pathname); setOpen(false); setSearchOpen(false); }
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
 
-  const light = overlay && !scrolled && !open;
+  const light = overlay && !scrolled && !open && !searchOpen;
 
   return (
     <>
@@ -66,24 +66,25 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
           ))}
         </nav>
-        <div className="flex items-center md:gap-2">
-          <button className="p-1.5 sm:p-2 hover:opacity-70" aria-label="Hledat" onClick={() => setSearchOpen((v) => !v)}><Search className="h-5 w-5" /></button>
-          <Link href="/vzorky" className="relative p-1.5 sm:p-2 hover:opacity-70" aria-label="Vzorky zdarma">
+        {/* Na telefonu jen hledání, košík a menu (44 px na palec); vzorky jsou v menu a na kartách */}
+        <div className="flex items-center -mr-2 sm:mr-0 md:gap-1">
+          <button className="h-11 w-10 sm:w-11 grid place-items-center hover:opacity-70" aria-label="Hledat" aria-expanded={searchOpen} onClick={() => setSearchOpen((v) => !v)}><Search className="h-5 w-5" /></button>
+          <Link href="/vzorky" className="relative h-11 w-11 hidden sm:grid place-items-center hover:opacity-70" aria-label="Vzorky zdarma">
             <Swatch className="h-5 w-5" />
-            {sampleCount > 0 && <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-sage text-white text-[10px] leading-4 text-center">{sampleCount}</span>}
+            {sampleCount > 0 && <span className="absolute top-1 right-0.5 h-4 min-w-4 px-1 rounded-full bg-sage text-white text-[10px] leading-4 text-center">{sampleCount}</span>}
           </Link>
-          <Link href="/kosik" className="relative p-1.5 sm:p-2 hover:opacity-70" aria-label="Košík">
+          <Link href="/kosik" className="relative h-11 w-10 sm:w-11 grid place-items-center hover:opacity-70" aria-label="Košík">
             <ShoppingBag className="h-5 w-5" />
-            {cartCount > 0 && <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-accent text-white text-[10px] leading-4 text-center">{cartCount}</span>}
+            {cartCount > 0 && <span className="absolute top-1 right-0 h-4 min-w-4 px-1 rounded-full bg-accent text-white text-[10px] leading-4 text-center">{cartCount}</span>}
           </Link>
-          <button className="p-1.5 sm:p-2 lg:hidden hover:opacity-70" aria-label="Menu" onClick={() => setOpen(true)}><Menu className="h-6 w-6" /></button>
+          <button className="h-11 w-11 grid place-items-center lg:hidden hover:opacity-70" aria-label="Menu" onClick={() => setOpen(true)}><Menu className="h-6 w-6" /></button>
         </div>
       </div>
 
       {searchOpen && (
         <div className="border-t border-line bg-bg text-ink">
           <form className="container py-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); router.push(`/podlahy?q=${encodeURIComponent(q)}`); setSearchOpen(false); }}>
-            <input autoFocus className="input" placeholder="Hledat dekor, kolekci, značku… (např. dub šedý)" value={q} onChange={(e) => setQ(e.target.value)} />
+            <input autoFocus type="search" enterKeyHint="search" className="input" placeholder="Dekor, kolekce, značka…" aria-label="Hledat podlahu" value={q} onChange={(e) => setQ(e.target.value)} />
             <button className="btn btn-primary">Hledat</button>
           </form>
         </div>
@@ -101,15 +102,18 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             <button className="p-2" aria-label="Zavřít" onClick={() => setOpen(false)}><X className="h-6 w-6" /></button>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 py-4 text-lg">
+            {/* Hlavní nástroje jako první — kalkulačka a 3D byt jsou hlavní cesta k nákupu */}
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <Link href="/kalkulacka" className="rounded-md bg-accent text-white p-3.5 flex flex-col gap-2"><Ruler className="h-6 w-6" /><span className="leading-tight">Spočítat cenu<span className="block text-xs text-white/80 mt-0.5">za 2 minuty</span></span></Link>
+              <Link href="/vizualizace" className="rounded-md bg-ink text-white p-3.5 flex flex-col gap-2"><Cube className="h-6 w-6" /><span className="leading-tight">Byt ve 3D<span className="block text-xs text-white/70 mt-0.5">vyzkoušejte dekor</span></span></Link>
+            </div>
             <Link href="/podlahy" className="block py-3 border-b border-line">Všechny podlahy</Link>
             {LANDINGS.map((l) => (<Link key={l.slug} href={`/${l.slug}`} className="block py-2.5 pl-4 text-base text-ink-soft">{l.navLabel}</Link>))}
             <Link href="/prislusenstvi" className="block py-2.5 pl-4 text-base text-ink-soft border-b border-line">Příslušenství</Link>
-            {NAV.map((n) => (<Link key={n.href} href={n.href} className="block py-3 border-b border-line">{n.label}</Link>))}
+            {NAV.filter((n) => n.href !== "/kalkulacka" && n.href !== "/vizualizace").map((n) => (
+              <Link key={n.href} href={n.href} className="flex items-center justify-between py-3 border-b border-line">{n.label}{n.href === "/vzorky" && sampleCount > 0 && <span className="h-5 min-w-5 px-1.5 rounded-full bg-sage text-white text-xs leading-5 text-center">{sampleCount}</span>}</Link>
+            ))}
           </nav>
-          <div className="p-4 grid grid-cols-2 gap-2 border-t border-line">
-            <Link href="/kalkulacka" className="btn btn-primary">Spočítat projekt</Link>
-            <Link href="/vzorky" className="btn btn-outline">Vzorky zdarma</Link>
-          </div>
         </div>
       </div>
     </>

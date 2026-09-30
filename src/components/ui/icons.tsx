@@ -6,7 +6,8 @@ export const Menu = (p: P) => (<svg {...base} {...p}><path d="M4 7h16M4 12h16M4 
 export const X = (p: P) => (<svg {...base} {...p}><path d="M6 6l12 12M18 6L6 18" /></svg>);
 export const Search = (p: P) => (<svg {...base} {...p}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>);
 export const ShoppingBag = (p: P) => (<svg {...base} {...p}><path d="M5 8h14l-1 12H6L5 8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" /></svg>);
-export const Swatch = (p: P) => (<svg {...base} {...p}><rect x="4" y="3" width="8" height="18" rx="1.5" /><path d="M12 8.5 16.5 5 20 9.5 12 18" /><path d="M8 17h.01" /></svg>);
+/** Vzorky: dva překrývající se čtverce s kresbou dřeva. */
+export const Swatch = (p: P) => (<svg {...base} {...p}><rect x="3" y="8" width="13" height="13" rx="1.5" /><path d="M8 8V4.5A1.5 1.5 0 0 1 9.5 3h10A1.5 1.5 0 0 1 21 4.5v10a1.5 1.5 0 0 1-1.5 1.5H16" /><path d="m6 18 7-7M6 14l3-3M10 18l3-3" /></svg>);
 export const ChevronDown = (p: P) => (<svg {...base} {...p}><path d="m6 9 6 6 6-6" /></svg>);
 export const ChevronRight = (p: P) => (<svg {...base} {...p}><path d="m9 6 6 6-6 6" /></svg>);
 export const ArrowRight = (p: P) => (<svg {...base} {...p}><path d="M5 12h14M13 6l6 6-6 6" /></svg>);

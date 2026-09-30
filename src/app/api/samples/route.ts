@@ -4,15 +4,17 @@ import { emailQueue, products, sampleRequests, settings } from "@/lib/db/repos";
 import { newId, nowIso } from "@/lib/db/store";
 import type { EmailQueueItem } from "@/lib/types";
 
+// Pořadí polí = pořadí ve formuláři: první chybné pole vracíme klientovi (`field`), ten mu dá focus.
+// Telefon formulář už neposílá (nepovinný) — pole zůstává kvůli zpětné kompatibilitě.
 const Body = z.object({
-  name: z.string().min(2).max(120), email: z.string().email(), phone: z.string().max(30).optional().default(""),
-  street: z.string().min(2).max(160), city: z.string().min(2).max(120), zip: z.string().min(5).max(6),
+  name: z.string().trim().min(2).max(120), email: z.string().trim().email(), phone: z.string().max(30).optional().default(""),
+  street: z.string().trim().min(2).max(160), zip: z.string().trim().regex(/^\d{3} ?\d{2}$/), city: z.string().trim().min(2).max(120),
   productIds: z.array(z.string()).min(1), calculationId: z.string().nullable().optional(), consent: z.literal(true),
 });
 
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Zkontrolujte prosím vyplněné údaje." }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: "Zkontrolujte prosím vyplněné údaje.", field: String(parsed.error.issues[0]?.path[0] ?? "") }, { status: 400 });
   const cfg = settings.get();
   const ids = [...new Set(parsed.data.productIds)].filter((id) => products.byId(id)).slice(0, cfg.samples.max);
   if (ids.length < cfg.samples.min) return NextResponse.json({ error: `Vyberte alespoň ${cfg.samples.min} vzorek.` }, { status: 400 });

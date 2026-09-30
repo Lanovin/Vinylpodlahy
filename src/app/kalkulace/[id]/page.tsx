@@ -26,12 +26,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   return (
     <Site>
-      <div className="container py-10 md:py-14 grid lg:grid-cols-12 gap-8 lg:gap-12">
+      <div className="container pt-5 pb-10 md:py-14 grid lg:grid-cols-12 gap-6 lg:gap-12">
         <div className="lg:col-span-7">
-          <p className="eyebrow mb-3">Uložená kalkulace · {fmtDate(calc.createdAt)}</p>
-          <h1 className="h2">{calc.productSnapshot.name}</h1>
-          {p?.images.hero && <div className="relative aspect-[16/9] rounded-md overflow-hidden mt-6"><Image src={p.images.hero} alt="" fill sizes="60vw" className="object-cover" /></div>}
-          <h2 className="h3 mt-8 mb-3">Místnosti</h2>
+          <p className="hidden lg:block eyebrow mb-3">Uložená kalkulace · {fmtDate(calc.createdAt)}</p>
+          <h2 className="hidden lg:block h2">{calc.productSnapshot.name}</h2>
+          {p?.images.hero && <div className="hidden sm:block relative aspect-[16/9] rounded-md overflow-hidden mt-6"><Image src={p.images.hero} alt="" fill sizes="60vw" className="object-cover" /></div>}
+          <h2 className="h3 lg:mt-8 mb-3">Místnosti</h2>
           <table className="spec"><thead><tr><th>Místnost</th><th>Plocha</th><th>Kladení</th><th>Dveře</th></tr></thead><tbody>
             {calc.result.rooms.map((r) => { const src = calc.rooms.find((x) => x.id === r.id); return <tr key={r.id}><td>{r.name}{src?.floorHeating && <span className="tag tag-sage ml-2">topení</span>}</td><td>{fmtNum2(r.areaM2)} m² <span className="text-muted text-xs">(+{r.wastePct} % → {fmtNum2(r.areaWithWasteM2)})</span></td><td>{src ? LAYOUT_LABEL[src.layout] : "—"}</td><td>{r.doors}</td></tr>; })}
           </tbody></table>
@@ -41,7 +41,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Link href={`/montaz?calc=${calc.id}&area=${calc.result.totalAreaM2}`} className="btn btn-ghost">Poptat pokládku</Link>
           </div>
         </div>
-        <div className="lg:col-span-5">
+        {/* Na telefonu rozpis s cenou hned pod nadpisem */}
+        <div className="lg:col-span-5 max-lg:order-first max-lg:-mt-2">
+          <p className="lg:hidden eyebrow mb-2">Uložená kalkulace · {fmtDate(calc.createdAt)}</p>
+          <h1 className="lg:hidden h2 mb-4">{calc.productSnapshot.name}</h1>
           <div className="panel">
             <p className="eyebrow">Rozpis</p>
             <div className="mt-4"><CalcResultView result={current ?? calc.result} /></div>

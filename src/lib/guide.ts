@@ -14,6 +14,9 @@ export const EMPTY_ANSWERS: WizardAnswers = {
   diyClick: false,
 };
 
+/** Index kroku „Nabídka“ v průvodci kalkulačky (Metry, Rozpočet, Požadavky, Barva, Nabídka). */
+export const WIZARD_RESULT_STEP = 4;
+
 export const ROOM_OPTIONS: { value: RoomKind; label: string; hint: string }[] = [
   { value: "living", label: "Obývací pokoj", hint: "Střední zátěž, záleží na vzhledu" },
   { value: "bedroom", label: "Ložnice", hint: "Nízká zátěž, teplý a tichý došlap" },
@@ -141,7 +144,7 @@ function reasonFor(p: Product, a: WizardAnswers): string {
   else if (a.roomKinds.includes("commercial")) parts.push(`třída ${p.usageClass} je určená pro komerční provoz`);
   else if (a.roomKinds.includes("hallway")) { parts.push(`třída ${p.usageClass} a nášlap ${dec(p.wearLayerMm)} mm zvládnou písek i boty`); wearMentioned = true; }
   else if (a.roomKinds.includes("bedroom") && !a.roomKinds.includes("living")) parts.push(p.type === "vinyl-hdf" ? "HDF deska je teplá a tichá na došlap" : `${FLOOR_TYPE_LABEL[p.type]} s tichým došlapem`);
-  else { parts.push(`${FLOOR_TYPE_LABEL[p.type]} ${dec(p.thicknessMm)} mm s nášlapem ${dec(p.wearLayerMm)} mm`); wearMentioned = true; }
+  // Jinak typ, tloušťku ani nášlap neopakujeme — jsou v řádku parametrů hned nad důvodem.
   if (a.floorHeating) parts.push("schváleno na podlahové topení");
   if (a.kidsPets && p.wearLayerMm >= 0.55 && !wearMentioned) parts.push("nášlap 0,55 mm odolá drápkům i hračkám");
   else if (a.kidsPets) parts.push("odolnost pro děti i zvířata");
@@ -149,5 +152,5 @@ function reasonFor(p: Product, a: WizardAnswers): string {
   if (a.diyClick && p.lock === "click") parts.push("click zámek zvládnete položit sami");
   if (a.style && p.decorTone === a.style) parts.push(`dekor ${p.decor.toLowerCase()} přesně sedí ke zvolenému stylu`);
   const s = parts.slice(0, 3).join(", ");
-  return s.charAt(0).toUpperCase() + s.slice(1) + ".";
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) + "." : "";
 }

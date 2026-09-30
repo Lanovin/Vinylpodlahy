@@ -1,4 +1,4 @@
-import type { DecorTone, FloorType, LockType, UsageClass, WearLayer } from "./types";
+import { FLOOR_TYPE_LABEL, type DecorTone, type FloorType, type LockType, type UsageClass, type WearLayer } from "./types";
 import type { PublicProduct as Product } from "./public";
 
 export interface CatalogFilters {
@@ -58,7 +58,12 @@ export function parseFilters(sp: SearchParams, preset: Partial<CatalogFilters> =
   return f;
 }
 
+/** Hledání bez ohledu na diakritiku a velikost písmen („sedy“ najde „Šedý“). */
+const norm = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
 export function applyFilters(list: Product[], f: CatalogFilters): Product[] {
+  // Slova hledání v libovolném pořadí — musí sedět všechna („šedý dub“ = „Dub Šedý“).
+  const words = norm(f.q).split(/\s+/).filter(Boolean);
   let out = list.filter((p) => {
     if (f.type.length && !f.type.includes(p.type)) return false;
     if (f.lock.length && !f.lock.includes(p.lock)) return false;
@@ -72,10 +77,9 @@ export function applyFilters(list: Product[], f: CatalogFilters): Product[] {
     if (f.integratedUnderlay !== null && p.integratedUnderlay !== f.integratedUnderlay) return false;
     if (f.waterproof !== null && p.waterproof !== f.waterproof) return false;
     if (f.minStock !== null && p.stockM2 < f.minStock) return false;
-    if (f.q) {
-      const q = f.q.toLowerCase();
-      const hay = `${p.name} ${p.brand} ${p.collection} ${p.decor}`.toLowerCase();
-      if (!hay.includes(q)) return false;
+    if (words.length) {
+      const hay = norm(`${p.name} ${p.brand} ${p.collection} ${p.decor} ${FLOOR_TYPE_LABEL[p.type]}`);
+      if (!words.every((w) => hay.includes(w))) return false;
     }
     return true;
   });
@@ -122,7 +126,8 @@ export const LANDINGS: LandingDef[] = [
   { slug: "vinylove-podlahy-click", preset: { lock: ["click"] }, locked: ["lock"], navLabel: "Click vinyl" },
   { slug: "vinyl-do-koupelny", preset: { waterproof: true }, locked: ["waterproof"], navLabel: "Do koupelny" },
   { slug: "vinyl-na-podlahove-topeni", preset: { floorHeating: true }, locked: ["floorHeating"], navLabel: "Na podlahové topení" },
-  { slug: "vinylove-podlahy-dub", preset: { tone: ["light-oak", "dark-wood"], q: "dub" }, locked: ["tone", "q"], navLabel: "Dekor dub" },
+  // Všechny duby včetně šedých; odstín si zákazník zúží filtrem.
+  { slug: "vinylove-podlahy-dub", preset: { q: "dub" }, locked: ["q"], navLabel: "Dekor dub" },
 ];
 
 export function landingBySlug(slug: string) {

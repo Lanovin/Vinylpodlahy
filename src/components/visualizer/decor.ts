@@ -25,3 +25,11 @@ export const VIEW_FOR_ROOM: Record<RoomKind, ViewId> = {
 
 export const LAYOUT_SLUG: Record<LayoutMode, string> = { straight: "rovne", diagonal: "diagonalne", herringbone: "rybi-kost" };
 export const layoutFromSlug = (s: string | undefined | null): LayoutMode | null => (Object.entries(LAYOUT_SLUG).find(([k, v]) => v === s || k === s)?.[0] as LayoutMode | undefined) ?? null;
+
+/** Podlaha, kladení a plocha → kalkulačka rovnou s touto podlahou (s plochou přeskočí na cenu). */
+export function calcHref(p: Pick<PublicProduct, "slug">, layout?: LayoutMode | null, areaM2?: number | null) {
+  const q = new URLSearchParams({ product: p.slug });
+  if (layout) q.set("klad", LAYOUT_SLUG[layout]);
+  if (areaM2 && areaM2 > 0) q.set("area", String(Math.round(areaM2 * 100) / 100));
+  return `/kalkulacka?${q}`;
+}

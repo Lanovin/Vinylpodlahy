@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 export function Section({ children, className, id }: { children: React.ReactNode; className?: string; id?: string }) {
-  return <section id={id} className={clsx("py-14 md:py-20", className)}><div className="container">{children}</div></section>;
+  return <section id={id} className={clsx("py-10 md:py-20", className)}><div className="container">{children}</div></section>;
 }
 
 export function SectionHead({ eyebrow, title, text, align = "left", className }: { eyebrow?: string; title: string; text?: string; align?: "left" | "center"; className?: string }) {

@@ -31,30 +31,30 @@ export const DEFAULT_SETTINGS: Settings = {
 export const DEFAULT_CONTENT: SiteContent = {
   hero: {
     title: "Podlaha, která sedí.",
-    subtitle: "Přijďte s místností, odejděte s kompletním košíkem. Spočítáme balení, podložku, lišty i dopravu — přesně na vaše metry.",
-    ctaPrimary: "Spočítat můj projekt",
+    subtitle: "Cena celého projektu na vaše metry — za 2 minuty.",
+    ctaPrimary: "Spočítat cenu",
     ctaSecondary: "Vzorky zdarma",
-    ctaTertiary: "Prohlédnout katalog",
+    ctaTertiary: "Byt ve 3D",
     image: "/media/inspiration/hero.webp",
   },
   usps: [
-    { title: "Kalkulačka místo odhadu", text: "Zadáte rozměry, způsob kladení a dveře. Dostanete přesný rozpis balení a příslušenství — a jedním klikem ho vložíte do košíku." },
-    { title: "Doprava podle hmotnosti", text: "Žádné překvapení v pokladně. Cenu dopravy vidíte už na kartě produktu, včetně informace, kdy jede paleta." },
-    { title: "Vzorky zdarma", text: "Až 5 dekorů domů zdarma. Podlahu vybíráte na vlastní podlaze, ve vlastním světle." },
-    { title: "Pokládka na přání", text: "Zaškrtněte „Chci i pokládku“ a ozve se vám ověřený podlahář z vašeho okolí." },
+    { title: "Přesný výpočet", text: "Balení, podložka, lišty i doprava na vaše metry — jedním klikem v košíku." },
+    { title: "Doprava podle váhy", text: "Cenu dopravy vidíte ještě před košíkem, včetně toho, kdy jede paleta." },
+    { title: "Vzorky zdarma", text: "Až 5 dekorů domů, bez platby a bez závazku." },
+    { title: "Pokládka na přání", text: "Ozve se vám ověřený podlahář z vašeho okolí." },
   ],
   homeIntro: {
-    title: "Vinyl a SPC podlahy pro domácnost i komerční prostory",
-    text: "Vinylpodlahy.cz je specializovaný obchod s vinylovými a SPC podlahami. Nesoutěžíme o nejnižší cenu — pomáháme vybrat správně: podle místnosti, zátěže, podlahového topení i rozpočtu. Každý parametr máme ve filtru, každou cenu uvádíme za m² i za balení a dopravu počítáme z reálné hmotnosti.",
+    title: "Vinylové a SPC podlahy pro byt i komerční prostory",
+    text: "Specializovaný obchod s vinylovými a SPC podlahami. Pomáháme vybrat podle místnosti, zátěže, podlahového topení i rozpočtu. Cenu uvádíme za m² i za balení, dopravu počítáme z reálné hmotnosti.",
   },
   steps: [
-    { title: "Zadejte metry", text: "Délka a šířka každé místnosti, nebo rovnou plocha. Metr v ruce, telefon ve druhé — kalkulačka je stavěná na mobil." },
-    { title: "Odpovězte na 4 otázky", text: "Rozpočet, místnost, podlahové topení či děti a zvířata, barva. Podle toho vybereme 6–9 podlah, které dávají smysl." },
-    { title: "Vidíte cenu celého projektu", text: "U každé podlahy rovnou cenu za balení s prořezem, podložku, lišty i lepidlo. Jedním tlačítkem vše do košíku." },
+    { title: "Změřte místnost", text: "Stačí délka a šířka, nebo rovnou plocha." },
+    { title: "Vyberte dekor", text: "Doporučíme 6–9 podlah a ukážeme je ve 3D bytě." },
+    { title: "Vložte celý projekt", text: "Balení, podložka i lišty jedním tlačítkem do košíku." },
   ],
   about: {
-    title: "Proč jsme jiní",
-    text: "Nemáme vlastní sklad, a říkáme to na rovinu. Zboží jede přímo od velkoobchodního partnera k vám — proto vidíte reálnou dostupnost v m² a reálný termín dodání ve dnech, ne obecné „skladem“. Naší prací je poradit a spočítat tak, aby vám nic nechybělo a nic nepřebývalo.",
+    title: "Žádný sklad. Přesný výběr a výpočet.",
+    text: "Zboží jede přímo od velkoobchodního partnera k vám — proto vidíte skutečnou dostupnost v m² a termín ve dnech.",
   },
   contact: {
     email: "info@vinylpodlahy.cz",
@@ -102,7 +102,7 @@ export const DEFAULT_CONTENT: SiteContent = {
   },
   priceGuide: {
     title: "Kolik stojí vinylová podlaha v roce 2026?",
-    text: "Než začnete, mějte měřítko. Toto jsou běžné ceny na českém trhu včetně DPH — naše nabídka se pohybuje ve stejných pásmech, jen k ní navíc dostanete přesný rozpis příslušenství a dopravy.",
+    text: "Běžné ceny na českém trhu vč. DPH.",
     rows: [
       { label: "Lepený vinyl (LVT)", range: "350–900 Kč/m²", note: "Nejlevnější vstup, vyžaduje rovný podklad a lepidlo." },
       { label: "SPC click", range: "500–900 Kč/m²", note: "Nejžádanější typ: voděodolný, na topení, často s podložkou." },
@@ -113,5 +113,5 @@ export const DEFAULT_CONTENT: SiteContent = {
     ],
     source: "Orientační rozpětí podle veřejných ceníků českých prodejců a podlahářů (2026).",
   },
-  footerNote: "Ceny včetně DPH 21 %. Dopravu počítáme z hmotnosti objednávky, dovoz je ke krajnici. Zboží odesílají naši velkoobchodní partneři přímo k vám.",
+  footerNote: "Ceny vč. DPH. Doprava podle hmotnosti, dovoz ke krajnici. Zboží posílají partneři přímo k vám.",
 };

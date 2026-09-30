@@ -209,6 +209,8 @@ export interface RoomInput {
   layout: LayoutMode;
   doors: number;
   floorHeating: boolean;
+  /** Typ místnosti z kalkulačky (čip u rozměrů) — z něj se odvodí pravidla výběru. */
+  kind?: RoomKind | null;
 }
 
 export interface CalcOptions {
