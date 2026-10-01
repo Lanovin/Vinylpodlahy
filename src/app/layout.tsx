@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Jost } from "next/font/google";
 import "./globals.css";
+import { Gtm } from "@/components/layout/Gtm";
+import { CookieBanner } from "@/components/layout/CookieBanner";
 
 const jost = Jost({ subsets: ["latin", "latin-ext"], weight: ["300", "400", "500"], variable: "--font-jost", display: "swap" });
 
@@ -16,7 +18,11 @@ export const viewport: Viewport = { themeColor: "#17150f", width: "device-width"
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="cs" data-scroll-behavior="smooth" className={`${jost.variable} h-full`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <CookieBanner />
+        <Gtm />
+      </body>
     </html>
   );
 }

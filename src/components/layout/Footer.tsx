@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { CookieSettingsButton } from "./CookieBanner";
 import { LANDINGS } from "@/lib/catalog";
 import type { SiteContent } from "@/lib/types";
 
@@ -44,7 +45,7 @@ export function Footer({ content }: { content: SiteContent }) {
       </div>
       <div className="border-t border-white/10">
         <div className="container pt-5 pb-24 lg:pb-5 flex flex-col md:flex-row gap-2 md:items-center justify-between text-xs text-white/50">
-          <span>© {new Date().getFullYear()} vinylpodlahy.cz</span>
+          <span>© {new Date().getFullYear()} vinylpodlahy.cz · <CookieSettingsButton className="hover:text-white underline underline-offset-2" /></span>
           <span>Fotografie interiérů jsou ilustrační (demo dataset). <Link href="/admin" className="hover:text-white">Administrace</Link></span>
         </div>
       </div>
