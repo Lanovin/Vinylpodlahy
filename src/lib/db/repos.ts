@@ -1,6 +1,6 @@
 import type {
   Accessory, Alert, Calculation, EmailQueueItem, FeedRun, InstallLead, Order, PricingRule, Product,
-  SampleRequest, Settings, SiteContent, Supplier,
+  SampleRequest, Settings, SiteContent, Supplier, EmailUnsubscribe,
 } from "@/lib/types";
 import { readCollection, updateCollection, writeCollection } from "./store";
 import { DEFAULT_SETTINGS, DEFAULT_CONTENT } from "@/lib/defaults";
@@ -61,7 +61,7 @@ export const settings = {
 export const content = {
   get(): SiteContent {
     const stored = readCollection<Partial<SiteContent>>("content", {});
-    return { ...DEFAULT_CONTENT, ...stored, landings: { ...DEFAULT_CONTENT.landings, ...(stored.landings ?? {}) } };
+    return { ...DEFAULT_CONTENT, ...stored, landings: { ...DEFAULT_CONTENT.landings, ...(stored.landings ?? {}) }, contact: { ...DEFAULT_CONTENT.contact, ...(stored.contact ?? {}) } };
   },
   save(value: SiteContent) { writeCollection("content", value); },
 };
@@ -89,6 +89,22 @@ export const emailQueue = {
     updateCollection<EmailQueueItem[]>("email-queue", [], (l) =>
       l.map((e) => (e.id === id ? { ...e, sentAt: new Date().toISOString() } : e)));
   },
+  /** Zruší (odebere z fronty) ještě neodeslané e-maily daných typů pro adresu. Vrací počet zrušených. */
+  cancelPending(email: string, types: readonly EmailQueueItem["type"][]) {
+    const to = email.trim().toLowerCase();
+    let n = 0;
+    updateCollection<EmailQueueItem[]>("email-queue", [], (l) => l.filter((e) => {
+      const drop = !e.sentAt && e.to.trim().toLowerCase() === to && types.includes(e.type);
+      if (drop) n++;
+      return !drop;
+    }));
+    return n;
+  },
+};
+
+export const unsubscribes = {
+  all(): EmailUnsubscribe[] { return readCollection<EmailUnsubscribe[]>("unsubscribes", []); },
+  add(u: EmailUnsubscribe) { updateCollection<EmailUnsubscribe[]>("unsubscribes", [], (l) => [u, ...l]); },
 };
 
 // --- Poptávky montáže -------------------------------------------------------

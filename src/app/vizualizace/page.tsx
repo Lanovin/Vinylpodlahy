@@ -11,7 +11,7 @@ import type { DecorTone } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Vizualizace interiéru — vyzkoušejte podlahu ve 3D bytě",
+  title: "Byt ve 3D — vyzkoušejte podlahu v modelovém bytě",
   description: "Modelový byt 2+kk ve 3D: obývák s kuchyní, ložnice, koupelna i předsíň. Přepínejte dekory, způsob kladení a barvu stěn a uvidíte podlahu ve skutečném rozměru lamel, ve dne i večer.",
 };
 
@@ -29,7 +29,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
     <Site>
       <div className="container pt-4 pb-8 md:py-10">
         <div className="max-w-3xl mb-3 md:mb-8">
-          <p className="eyebrow mb-2 hidden sm:block">Vizualizace interiéru</p>
+          <p className="eyebrow mb-2 hidden sm:block">Byt ve 3D</p>
           <h1 className="text-[1.45rem] leading-tight sm:text-[2.2rem] sm:leading-[1.12]">Vyzkoušejte podlahu ve 3D bytě</h1>
           <p className="text-ink-soft mt-3 hidden sm:block">Modelový byt 2+kk (63 m²). Vyberte dekor, kladení a barvu stěn — podlaha se poskládá z lamel ve skutečném rozměru. Přepněte na večer a uvidíte ji i při lampách.</p>
         </div>

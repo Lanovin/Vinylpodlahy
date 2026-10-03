@@ -4,6 +4,7 @@ import type { PublicProduct } from "@/lib/public";
 import type { FloorType } from "@/lib/types";
 import { fmtCzk, fmtInt, fmtMm } from "@/lib/format";
 import { Cube } from "@/components/ui/icons";
+import { USAGE_SHORT } from "@/components/ui/terms";
 import { SampleButton } from "./SampleButton";
 
 /** Krátké popisky typu pro úzkou kartu (2 sloupce na telefonu). */
@@ -22,14 +23,14 @@ export function ProductCard({ p, sampleMax, reason }: { p: PublicProduct; sample
             <div className="absolute inset-0 grid place-items-center text-muted text-sm">Foto se připravuje</div>
           )}
           <div className="absolute top-2 left-2 flex gap-1">
-            {p.isNew && <span className="tag tag-accent">Novinka</span>}
-            {p.integratedUnderlay && <span className="tag bg-white/90">+ podložka</span>}
+            {p.isNew && <span className="tag tag-accent text-xs">Novinka</span>}
+            {p.integratedUnderlay && <span className="tag bg-white/90 text-xs normal-case tracking-normal">Podložka v ceně</span>}
           </div>
           {p.stockM2 <= 0 && <div className="absolute inset-x-0 bottom-0 bg-ink/80 text-white text-xs text-center py-1.5">Dočasně nedostupné</div>}
         </Link>
         {/* Vizualizace nabízí jen dekory skladem. */}
         {p.stockM2 > 0 && (
-          <Link href={`/vizualizace?podlaha=${p.slug}`} aria-label={`Vyzkoušet ${p.decor} ve 3D`} title="Vyzkoušet ve 3D" className="absolute bottom-2 right-2 grid h-10 w-10 place-items-center rounded-full bg-white/85 text-ink shadow-sm transition-colors hover:bg-white">
+          <Link href={`/vizualizace?podlaha=${p.slug}`} aria-label={`${p.decor} — byt ve 3D`} title="Byt ve 3D" className="absolute bottom-2 right-2 grid h-10 w-10 place-items-center rounded-full bg-white/85 text-ink shadow-sm transition-colors hover:bg-white">
             <Cube className="h-5 w-5" />
           </Link>
         )}
@@ -37,7 +38,7 @@ export function ProductCard({ p, sampleMax, reason }: { p: PublicProduct; sample
       <div className="pt-2.5 flex-1 flex flex-col">
         <p className="eyebrow truncate">{p.collection}</p>
         <h3 className="mt-0.5 text-[1.05rem] leading-snug"><Link href={`/podlaha/${p.slug}`} className="hover:underline underline-offset-4">{p.decor}</Link></h3>
-        <p className="text-[0.8rem] sm:text-sm text-muted mt-0.5 truncate">{TYPE_SHORT[p.type]} · {fmtMm(p.thicknessMm)} · tř. {p.usageClass}</p>
+        <p className="text-[0.8rem] sm:text-sm text-muted mt-0.5 truncate">{TYPE_SHORT[p.type]} · {fmtMm(p.thicknessMm)} · {USAGE_SHORT[p.usageClass]}</p>
         {reason && <p className="mt-2 text-sm text-ink-soft leading-snug border-l-2 border-accent pl-2.5">{reason}</p>}
         <p className="mt-2 text-lg leading-none">{fmtCzk(p.pricePerM2)}<span className="text-sm text-muted"> / m²</span></p>
         <p className="text-sm text-muted mt-1">{fmtCzk(p.pricePerPack)} / bal.</p>

@@ -43,7 +43,7 @@ export default function Page() {
         </nav>
         <div className="panel mt-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 bg-accent-soft border-transparent">
           <p className="flex-1 text-ink-soft">Kalkulačka spočítá podložku, lišty i lepidlo na míru.</p>
-          <Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat na můj byt</Link>
+          <Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat cenu</Link>
         </div>
         {kinds.map((kind) => {
           const items = list.filter((a) => a.kind === kind);

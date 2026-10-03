@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import type { PublicProduct } from "@/lib/public";
 import { useCart, useHydrated } from "@/store/cart";
@@ -11,7 +11,7 @@ import { plural } from "@/lib/format";
 import { SampleButton } from "@/components/product/SampleButton";
 import { Cube, Trash } from "@/components/ui/icons";
 
-type Field = "name" | "email" | "street" | "zip" | "city" | "consent" | "productIds";
+type Field = "name" | "email" | "street" | "zip" | "city" | "productIds";
 /** Konkrétní hláška k poli, které API vrátí jako první chybné (`field`). */
 const FIELD_MSG: Record<Field, string> = {
   name: "Vyplňte jméno a příjmení.",
@@ -19,7 +19,6 @@ const FIELD_MSG: Record<Field, string> = {
   street: "Vyplňte ulici a číslo popisné.",
   zip: "Zkontrolujte PSČ (5 číslic).",
   city: "Vyplňte město.",
-  consent: "Potvrďte prosím souhlas se zpracováním údajů.",
   productIds: "Vyberte alespoň jeden vzorek.",
 };
 
@@ -42,17 +41,29 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
   const clearSamples = useCart((s) => s.clearSamples);
   const calculationId = useCart((s) => s.calculationId);
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", street: "", city: "", zip: "", consent: false });
+  const [form, setForm] = useState({ name: "", email: "", street: "", city: "", zip: "", marketing: false });
   const [err, setErr] = useState<string | null>(null);
   const [bad, setBad] = useState<Field | null>(null);
   const [busy, setBusy] = useState(false);
   /** Vybírá z mřížky tipů — mřížka pak zůstane nahoře i s vybranými vzorky, aby stránka neposkočila. */
   const [browsing, setBrowsing] = useState(false);
+  /** Formulář s adresou je na obrazovce — lepivá lišta „Pokračovat“ (telefon) se pak schová. */
+  const [formInView, setFormInView] = useState(false);
   const chosen = samples.map((id) => products.find((p) => p.id === id)).filter(Boolean) as PublicProduct[];
+  const hasChosen = chosen.length > 0;
+
+  useEffect(() => {
+    const el = hydrated && hasChosen ? document.getElementById("adresa") : null;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setFormInView(e.isIntersecting), { rootMargin: "0px 0px -30% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hydrated, hasChosen]);
 
   if (!hydrated) return <div className="panel text-muted">Načítám…</div>;
 
   const tips = chosen.length === 0 || browsing ? picks(products, 8) : [];
+  const stickyBar = tips.length > 0 && hasChosen && !formInView;
   const left = max - chosen.length;
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -60,7 +71,7 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
   };
   const fail = (f: Field) => {
     // Pole mají hlášku pod sebou; souhlas a výběr vzorků ji ukážou u tlačítka.
-    flushSync(() => { setBad(f); setErr(f === "consent" || f === "productIds" ? FIELD_MSG[f] : null); });
+    flushSync(() => { setBad(f); setErr(f === "productIds" ? FIELD_MSG[f] : null); });
     document.getElementById(`s-${f}`)?.focus();
   };
   const inv = (f: Field) => (bad === f ? { "aria-invalid": true, "aria-describedby": `s-${f}-err` } : {});
@@ -69,10 +80,10 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setErr(null); setBad(null);
     if (chosen.length < min) return setErr(`Vyberte alespoň ${vzorku(min)}.`);
-    if (!form.consent) return fail("consent");
     setBusy(true);
-    const res = await fetch("/api/samples", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...form, productIds: chosen.map((p) => p.id), calculationId }) });
+    const res = await fetch("/api/samples", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...form, productIds: chosen.map((p) => p.id), calculationId }) }).catch(() => null);
     setBusy(false);
+    if (!res) return setErr("Odeslání se nepodařilo — zkontrolujte připojení a zkuste to znovu.");
     if (!res.ok) {
       const d = (await res.json().catch(() => ({}))) as { error?: string; field?: string };
       if (d.field && d.field in FIELD_MSG) return fail(d.field as Field);
@@ -83,7 +94,7 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
   }
 
   return (
-    <div className="space-y-10">
+    <div className={`space-y-10 ${stickyBar ? "pb-20 lg:pb-0" : ""}`}>
       {tips.length > 0 && (
         <section>
           <h2 className="h3">Vyberte si dekory {chosen.length > 0 && <span className="text-muted text-base">{chosen.length}/{max}</span>}</h2>
@@ -102,7 +113,7 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
             })}
           </ul>
           {chosen.length === 0 ? (
-            <div className="mt-6 flex flex-wrap gap-3"><Link href="/vizualizace" className="btn btn-accent"><Cube className="h-4 w-4" /> Vybrat ve 3D vizualizaci</Link><Link href="/podlahy" className="btn btn-outline">Katalog</Link></div>
+            <div className="mt-6 flex flex-wrap gap-3"><Link href="/vizualizace" className="btn btn-accent"><Cube className="h-4 w-4" /> Byt ve 3D</Link><Link href="/podlahy" className="btn btn-outline">Katalog</Link></div>
           ) : (
             <a href="#adresa" className="btn btn-accent mt-6">Pokračovat · {vzorku(chosen.length)} ↓</a>
           )}
@@ -138,11 +149,22 @@ export function SamplesForm({ products, min, max }: { products: PublicProduct[];
               <div><label className="label" htmlFor="s-city">Město</label><input id="s-city" className="input" required minLength={2} value={form.city} onChange={(e) => set("city", e.target.value)} autoComplete="address-level2" enterKeyHint="done" {...inv("city")} /></div>
             </div>
             {errFor("zip")}{errFor("city")}
-            <label className="check text-sm items-start py-1"><input id="s-consent" type="checkbox" className="h-5 w-5 shrink-0" checked={form.consent} onChange={(e) => set("consent", e.target.checked)} {...inv("consent")} /><span>Souhlasím se zpracováním údajů pro zaslání vzorků a navazující e-maily s radami k výběru (kdykoliv se lze odhlásit).</span></label>
-            {err && <p id={bad === "consent" ? "s-consent-err" : undefined} className="notice notice-danger text-sm" role="alert">{err}</p>}
+            <label className="check w-full text-sm items-start py-1 min-h-11"><input id="s-marketing" type="checkbox" className="h-5 w-5 shrink-0 mt-0.5" checked={form.marketing} onChange={(e) => set("marketing", e.target.checked)} /><span>Chci e-maily s radami k výběru a slevou <span className="text-muted">(nepovinné, odhlásíte se jedním klikem)</span></span></label>
+            {err && <p id={bad === "productIds" ? "s-productIds-err" : undefined} className="notice notice-danger text-sm" role="alert">{err}</p>}
             <button className="btn btn-accent btn-lg w-full" disabled={busy}>{busy ? "Odesílám…" : `Poslat ${vzorku(chosen.length)} zdarma`}</button>
+            <p className="text-xs text-muted">Adresu a e-mail použijeme k odeslání vzorků{form.marketing ? " a k e-mailům, které jste si zaškrtli" : ""}. Více v <Link href="/ochrana-osobnich-udaju" target="_blank" className="link">zásadách ochrany osobních údajů</Link>.</p>
             {calculationId && <p className="text-xs text-muted">K žádosti přiložíme i vaši uloženou kalkulaci, abyste ji měli po ruce.</p>}
           </form>
+        </div>
+      )}
+
+      {/* Telefon: pokračování k adrese vždy na dosah palce, i když je výběr dekorů dlouhý. */}
+      {stickyBar && (
+        <div className="lg:hidden fixed inset-x-0 bottom-[var(--cookie-h,0px)] z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)]">
+          <div className="container py-2.5 flex items-center gap-3">
+            <p className="flex-1 min-w-0 text-sm text-muted">{chosen.length}/{max} vybráno</p>
+            <a href="#adresa" className="btn btn-accent">Pokračovat · {vzorku(chosen.length)}</a>
+          </div>
         </div>
       )}
     </div>

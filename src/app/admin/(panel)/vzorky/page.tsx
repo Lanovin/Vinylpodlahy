@@ -4,7 +4,7 @@ import { Card, PageHead, Status } from "@/components/admin/ui";
 import { markEmailSentAction, setSampleStatusAction } from "../../actions";
 import { fmtDate } from "@/lib/format";
 
-const EMAIL_LABEL = { "sample-confirm": "D+0 potvrzení", "sample-reminder-calc": "D+3 připomínka + kalkulace", "sample-discount": "D+7 sleva" } as const;
+const EMAIL_LABEL = { "sample-confirm": "D+0 potvrzení", "sample-reminder-calc": "D+3 připomínka + kalkulace", "sample-discount": "D+7 sleva", "calc-share": "Kalkulace na e-mail" } as const;
 
 export default function Page() {
   const reqs = sampleRequests.all();

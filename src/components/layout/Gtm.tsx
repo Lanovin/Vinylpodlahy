@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { CONSENT_COOKIE, CONSENT_VERSION } from "@/lib/consent";
+import { GtmPageViews } from "./GtmPageViews";
 
 /**
  * Google Tag Manager s Consent Mode v2. ID kontejneru se bere z NEXT_PUBLIC_GTM_ID (GTM-XXXXXXX);
@@ -33,5 +34,10 @@ if(location.pathname.indexOf('/admin')!==0){
   })(window,document,'script','dataLayer','${id}');
 }`;
 
-  return <Script id="gtm" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: code }} />;
+  return (
+    <>
+      <Script id="gtm" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: code }} />
+      <GtmPageViews />
+    </>
+  );
 }

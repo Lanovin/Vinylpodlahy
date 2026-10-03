@@ -6,7 +6,7 @@ import { Site } from "@/components/layout/Site";
 import { CalcResultView } from "@/components/calculator/CalcResultView";
 import { SavedCalcActions } from "@/components/calculator/SavedCalcActions";
 import { accessories, calculations, products, settings as settingsRepo } from "@/lib/db/repos";
-import { calculateProject } from "@/lib/calc";
+import { calculateProject, projectTotal } from "@/lib/calc";
 import { toPublicAccessory, toPublicProduct, toPublicSettings } from "@/lib/public";
 import { LAYOUT_LABEL } from "@/lib/types";
 import { fmtCzk, fmtDate, fmtNum2 } from "@/lib/format";
@@ -22,7 +22,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const cfg = settingsRepo.get();
   // Aktuální přepočet: ceny se mohly změnit — ukážeme obojí, prodáváme za aktuální.
   const current = p && p.status === "active" ? calculateProject(toPublicProduct(p), calc.rooms, calc.options, accessories.visible().map(toPublicAccessory), toPublicSettings(cfg)) : null;
-  const priceChanged = current && current.total !== calc.result.total;
+  // Starší uložené kalkulace dopravu neobsahují — porovnáváme pak jen zboží, ať změna dopravy nevypadá jako zdražení.
+  const before = calc.result.shipping ? projectTotal(calc.result) : calc.result.total;
+  const now = current ? (calc.result.shipping ? projectTotal(current) : current.total) : null;
+  const priceChanged = current && now !== null && now !== before;
 
   return (
     <Site>
@@ -48,7 +51,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="panel">
             <p className="eyebrow">Rozpis</p>
             <div className="mt-4"><CalcResultView result={current ?? calc.result} /></div>
-            {priceChanged && <p className="notice notice-info text-sm mt-4">Od uložení se změnily ceny: původně {fmtCzk(calc.result.total)}, nyní {fmtCzk(current.total)}. Do košíku vkládáme aktuální ceny.</p>}
+            {priceChanged && <p className="notice notice-info text-sm mt-4">Od uložení se změnily ceny: původně {fmtCzk(before)}, nyní {fmtCzk(now ?? 0)}{calc.result.shipping ? "" : " (bez dopravy)"}. Do košíku vkládáme aktuální ceny.</p>}
             {!current && <p className="notice notice-warn text-sm mt-4">Tato podlaha je momentálně pozastavena nebo nedostupná. Otevřete kalkulaci a vyberte jiný dekor — rozměry zůstanou.</p>}
             <div className="mt-6"><SavedCalcActions calcId={calc.id} result={current ?? calc.result} disabled={!current} /></div>
           </div>

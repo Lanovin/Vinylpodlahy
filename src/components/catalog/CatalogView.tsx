@@ -2,11 +2,12 @@ import Link from "next/link";
 import clsx from "clsx";
 import { Site } from "@/components/layout/Site";
 import { ProductCard } from "@/components/product/ProductCard";
-import { Cube, Ruler, X } from "@/components/ui/icons";
+import { ChevronDown, Cube, Ruler, X } from "@/components/ui/icons";
 import { FilterPanel, type Facets } from "./FilterPanel";
 import { SortSelect } from "./SortSelect";
+import { ScrollRow } from "./ScrollRow";
 import { activeChips, catalogHref, clearedFilters } from "./activeFilters";
-import { applyFilters, EMPTY_FILTERS, parseFilters, type LandingDef, type SearchParams, LANDINGS } from "@/lib/catalog";
+import { applyFilters, EMPTY_FILTERS, parseFilters, type CatalogFilters, type LandingDef, type SearchParams, LANDINGS } from "@/lib/catalog";
 import { content as contentRepo, products, settings as settingsRepo } from "@/lib/db/repos";
 import { toPublicProduct } from "@/lib/public";
 import { plural } from "@/lib/format";
@@ -30,6 +31,14 @@ function withCalcLink(text: string) {
 
 const chipCls = "tag h-10 shrink-0 px-3.5 text-sm normal-case tracking-normal whitespace-nowrap";
 
+/** Katalog s filtrem, který přesně odpovídá landing page (např. /podlahy?type=spc) — zvýrazníme její čip. */
+function matchesLanding(f: CatalogFilters, l: LandingDef) {
+  const entries = Object.entries(l.preset) as [keyof CatalogFilters, unknown][];
+  const same = entries.every(([k, v]) => JSON.stringify(Array.isArray(v) ? [...v].sort() : v) === JSON.stringify(Array.isArray(f[k]) ? [...(f[k] as unknown[])].sort() : f[k]));
+  const presetCount = entries.reduce((n, [, v]) => n + (Array.isArray(v) ? v.length : 1), 0);
+  return same && activeChips(f, []).length === presetCount;
+}
+
 export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: LandingDef }) {
   const cfg = settingsRepo.get();
   const c = contentRepo.get();
@@ -47,17 +56,18 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
   // „Zrušit vše“ ve štítcích ruší filtry i hledání; na landing page vede na její čistou adresu (řazení zůstává).
   const clearAllHref = catalogHref(path, { ...EMPTY_FILTERS, sort: filters.sort }, locked);
 
-  // Cesta do kalkulačky a 3D: dlaždice za 4. kartou (při menším počtu za poslední).
+  const activeLanding = landing ?? LANDINGS.find((l) => matchesLanding(filters, l)) ?? null;
+  const allOn = !activeLanding && !chips.length;
+
+  // Cesta do kalkulačky a 3D: dlaždice za 4. kartou (při menším počtu za poslední). Bez oranžové —
+  // na telefonu je oranžové „Spočítat cenu“ už ve spodní liště.
   const ctaAt = Math.min(3, list.length - 1);
   const cta = (
-    <div key="cta" className="col-span-2 xl:col-span-3 rounded-lg bg-accent-soft p-5 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-      <div className="flex-1">
-        <h2 className="h3">Spočítejte to na svůj byt</h2>
-        <p className="text-ink-soft mt-1.5">Zadejte metry — spočítáme balení, podložku, lišty i dopravu.</p>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-2 md:shrink-0">
-        <Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat na můj byt</Link>
-        <Link href="/vizualizace" className="btn btn-outline"><Cube className="h-4 w-4" /> Vyzkoušet dekory ve 3D</Link>
+    <div key="cta" className="col-span-2 md:col-span-3 lg:col-span-2 xl:col-span-3 rounded-lg bg-accent-soft p-4 md:p-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-8">
+      <p className="flex-1 text-ink-soft"><span className="block text-lg text-ink">Kolik to bude stát u vás?</span>Balení, podložka, lišty i doprava na vaše metry.</p>
+      <div className="grid grid-cols-2 gap-2 md:flex md:shrink-0">
+        <Link href="/kalkulacka" className="btn btn-primary !px-3">Spočítat cenu</Link>
+        <Link href="/vizualizace" className="btn btn-outline !px-3"><Cube className="h-4 w-4 shrink-0" /> Byt ve 3D</Link>
       </div>
     </div>
   );
@@ -70,11 +80,11 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
           <h1 className="h2 min-w-0 break-words">{title}</h1>
           <span className="text-sm text-muted">{list.length} {plural(list.length, "podlaha", "podlahy", "podlah")}</span>
         </div>
-        {text?.intro && <p className="text-base md:text-lg text-ink-soft mt-2 max-w-2xl">{text.intro}</p>}
-        <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
-          <Link href="/podlahy" className={clsx(chipCls, !landing && !chips.length ? "bg-ink text-white border-ink" : "hover:border-ink")}>Vše</Link>
-          {LANDINGS.map((l) => (<Link key={l.slug} href={`/${l.slug}`} className={clsx(chipCls, landing?.slug === l.slug ? "bg-ink text-white border-ink" : "hover:border-ink")}>{l.navLabel}</Link>))}
-        </div>
+        {text?.intro && <p className="text-ink-soft mt-1.5 max-w-2xl">{text.intro}</p>}
+        <ScrollRow label="Kategorie" className="relative mt-3 md:mt-4 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+          <Link href="/podlahy" aria-current={allOn ? "page" : undefined} className={clsx(chipCls, allOn ? "bg-ink text-white border-ink" : "hover:border-ink")}>Vše</Link>
+          {LANDINGS.map((l) => { const on = activeLanding?.slug === l.slug; return <Link key={l.slug} href={`/${l.slug}`} aria-current={on ? "page" : undefined} className={clsx(chipCls, on ? "bg-ink text-white border-ink" : "hover:border-ink")}>{l.navLabel}</Link>; })}
+        </ScrollRow>
       </div>
       <div className="container pt-3 pb-10 lg:pt-8 lg:grid lg:grid-cols-[260px_1fr] lg:gap-12">
         <FilterPanel filters={filters} facets={facetsOf(base)} locked={locked} total={list.length} />
@@ -98,11 +108,11 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
                 {searching
                   ? <Link href={catalogHref(path, { ...filters, q: "" }, locked)} className="btn btn-outline">Zrušit hledání</Link>
                   : <Link href={catalogHref(path, clearedFilters(filters), locked)} className="btn btn-outline">Zrušit filtry</Link>}
-                <Link href="/kalkulacka" className="btn btn-primary">Poradit v kalkulačce</Link>
+                <Link href="/kalkulacka" className="btn btn-primary"><Ruler className="h-4 w-4" /> Spočítat cenu</Link>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-8 md:gap-y-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-flow-row-dense gap-x-4 gap-y-8 md:gap-y-10">
               {list.flatMap((p, i) => {
                 const card = <ProductCard key={p.id} p={p} sampleMax={cfg.samples.max} />;
                 return i === ctaAt ? [card, cta] : [card];
@@ -111,10 +121,16 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
           )}
         </div>
       </div>
-      {text?.seoText && (
-        <section className="bg-surface border-t border-line"><div className="container py-10 md:py-14 grid md:grid-cols-12 gap-3 md:gap-8">
-          <h2 className="h3 md:col-span-4">{text.h1}: na co si dát pozor</h2>
-          <p className="md:col-span-8 text-ink-soft leading-relaxed max-w-3xl">{withCalcLink(text.seoText)}</p>
+      {/* SEO text až pod výpisem a sbalený — v HTML zůstává celý */}
+      {text?.seoText && landing && (
+        <section className="bg-surface border-t border-line"><div className="container py-2 md:py-4">
+          <details className="group max-w-3xl">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+              <h2 className="text-lg">{landing.seoTitle}</h2>
+              <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" />
+            </summary>
+            <p className="pb-6 text-ink-soft leading-relaxed">{withCalcLink(text.seoText)}</p>
+          </details>
         </div></section>
       )}
     </Site>

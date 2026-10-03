@@ -13,7 +13,7 @@ export default function Page() {
         <span className="mx-auto h-14 w-14 rounded-full bg-sage-soft text-sage grid place-items-center"><Check className="h-7 w-7" /></span>
         <h1 className="h2 mt-6">Vzorky jsou na cestě.</h1>
         <p className="lead mt-4">Dorazí poštou do 3–5 pracovních dnů. Mezitím si podlahu vyzkoušejte ve 3D.</p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3"><Link href="/vizualizace" className="btn btn-accent"><Cube className="h-4 w-4" /> Vyzkoušet ve 3D</Link><Link href="/kalkulacka" className="btn btn-outline"><Ruler className="h-4 w-4" /> Spočítat projekt</Link></div>
+        <div className="mt-8 flex flex-wrap justify-center gap-3"><Link href="/vizualizace" className="btn btn-accent"><Cube className="h-4 w-4" /> Byt ve 3D</Link><Link href="/kalkulacka" className="btn btn-outline"><Ruler className="h-4 w-4" /> Spočítat cenu</Link></div>
       </div>
     </Site>
   );

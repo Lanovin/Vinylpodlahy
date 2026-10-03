@@ -119,15 +119,17 @@ export interface LandingDef {
   /** Které filtry jsou landing page „zamčené“ (v UI se nezobrazují jako změnitelné). */
   locked: (keyof CatalogFilters)[];
   navLabel: string;
+  /** Nadpis sbaleného SEO textu pod výpisem („Proč …“). */
+  seoTitle: string;
 }
 
 export const LANDINGS: LandingDef[] = [
-  { slug: "spc-vinylove-podlahy", preset: { type: ["spc"] }, locked: ["type"], navLabel: "SPC podlahy" },
-  { slug: "vinylove-podlahy-click", preset: { lock: ["click"] }, locked: ["lock"], navLabel: "Click vinyl" },
-  { slug: "vinyl-do-koupelny", preset: { waterproof: true }, locked: ["waterproof"], navLabel: "Do koupelny" },
-  { slug: "vinyl-na-podlahove-topeni", preset: { floorHeating: true }, locked: ["floorHeating"], navLabel: "Na podlahové topení" },
+  { slug: "spc-vinylove-podlahy", preset: { type: ["spc"] }, locked: ["type"], navLabel: "SPC podlahy", seoTitle: "Proč SPC podlaha" },
+  { slug: "vinylove-podlahy-click", preset: { lock: ["click"] }, locked: ["lock"], navLabel: "Click vinyl", seoTitle: "Proč click vinyl" },
+  { slug: "vinyl-do-koupelny", preset: { waterproof: true }, locked: ["waterproof"], navLabel: "Do koupelny", seoTitle: "Jaký vinyl do koupelny" },
+  { slug: "vinyl-na-podlahove-topeni", preset: { floorHeating: true }, locked: ["floorHeating"], navLabel: "Na podlahové topení", seoTitle: "Vinyl a podlahové topení" },
   // Všechny duby včetně šedých; odstín si zákazník zúží filtrem.
-  { slug: "vinylove-podlahy-dub", preset: { q: "dub" }, locked: ["q"], navLabel: "Dekor dub" },
+  { slug: "vinylove-podlahy-dub", preset: { q: "dub" }, locked: ["q"], navLabel: "Dekor dub", seoTitle: "Proč dubový dekor" },
 ];
 
 export function landingBySlug(slug: string) {

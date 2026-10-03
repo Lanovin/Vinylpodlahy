@@ -1,38 +1,11 @@
 [
   {
-    "id": "al_muawestmljpl1r",
-    "createdAt": "2026-09-21T07:03:00.202Z",
-    "acknowledged": true,
-    "type": "price-jump",
-    "supplierId": "vinylia",
-    "productId": "p_vinylia_ter-rigidsto-dubmedovy",
-    "message": "Rigid Stone 5.5 Dub Medový: Nákupní cena změněna o 13.0 % (598 → 520 Kč/m² bez DPH). Čeká na schválení."
-  },
-  {
-    "id": "al_muaedc31pxsshd",
-    "createdAt": "2026-09-20T22:37:58.765Z",
-    "acknowledged": true,
-    "type": "price-jump",
-    "supplierId": "vinylia",
-    "productId": "p_vinylia_ter-rigidsto-dubmedovy",
-    "message": "Rigid Stone 5.5 Dub Medový: Nákupní cena změněna o 15.0 % (520 → 598 Kč/m² bez DPH). Čeká na schválení."
-  },
-  {
-    "id": "al_muaedb9tl20kck",
-    "createdAt": "2026-09-20T22:37:57.713Z",
-    "acknowledged": true,
-    "type": "missing-in-feed",
-    "supplierId": "floortrade",
-    "productId": "p_floortrade_qua-basicspc-betonsvetly",
-    "message": "Basic SPC 4 Beton Světlý zmizel z feedu FloorTrade CZ s.r.o. — pozastaven."
-  },
-  {
-    "id": "al_muadv86f7iuii1",
-    "createdAt": "2026-09-20T22:23:53.895Z",
-    "acknowledged": true,
+    "id": "al_musj0p253otsi0",
+    "createdAt": "2026-10-03T15:07:58.301Z",
+    "acknowledged": false,
     "type": "weight-missing",
     "supplierId": "nordic",
     "productId": "p_nordic_nor-naturehd-jasansvetly",
-    "message": "Nature HDF 9 Jasan Světlý: feed neposlal hmotnost balení, použit odhad 17.5 kg."
+    "message": "Nature HDF 9 Jasan světlý: feed neposlal hmotnost balení, použit odhad 17.5 kg."
   }
 ]

@@ -30,8 +30,9 @@ export default function Page() {
         <h2 className="h3 mt-10 md:mt-12 mb-3">Více dodavatelů = více zásilek</h2>
         <p className="text-ink-soft leading-relaxed">Každý dodavatel posílá ze svého skladu, s vlastní cenou dopravy a termínem. Rozdělení vidíte v košíku ještě před objednáním.</p>
         <h2 className="h3 mt-10 md:mt-12 mb-3">Platba</h2>
-        <p className="text-ink-soft leading-relaxed">Převodem, platební údaje pošleme do 1 pracovního dne. Platbu kartou připravujeme.</p>
-        <div className="mt-10 flex flex-wrap gap-3"><Link href="/kalkulacka" className="btn btn-primary">Spočítat projekt s dopravou</Link><Link href="/kontakt" className="btn btn-outline">Zeptat se</Link></div>
+        <p className="text-ink-soft leading-relaxed">Převodem, platební údaje pošleme do 1 pracovního dne. Zboží objednáme u dodavatele po připsání platby. Platbu kartou připravujeme.</p>
+        <p className="text-sm text-muted mt-3">Podrobnosti v <Link href="/obchodni-podminky#dodani" className="link">obchodních podmínkách</Link>. Vrácení zboží do 14 dnů: <Link href="/odstoupeni-od-smlouvy" className="link">odstoupení od smlouvy</Link>.</p>
+        <div className="mt-10 flex flex-wrap gap-3"><Link href="/kalkulacka" className="btn btn-primary">Spočítat cenu</Link><Link href="/kontakt" className="btn btn-outline">Zeptat se</Link></div>
       </div>
     </Site>
   );

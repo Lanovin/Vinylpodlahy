@@ -8,13 +8,13 @@ import clsx from "clsx";
 import type { PublicAccessory, PublicProduct, PublicSettings } from "@/lib/public";
 import type { CalcOptions, CartItem, LayoutMode, RoomInput, RoomKind, WizardAnswers } from "@/lib/types";
 import { DECOR_TONE_LABEL, FLOOR_TYPE_LABEL, LAYOUT_LABEL, LAYOUT_WASTE } from "@/lib/types";
-import { calculateProject, DEFAULT_OPTIONS, emptyRoom, roomArea } from "@/lib/calc";
-import { BUDGET_OPTIONS, budgetRange, describeRules, EMPTY_ANSWERS, passesHardRules, recommend, ROOM_OPTIONS, STYLE_OPTIONS, WIZARD_RESULT_STEP } from "@/lib/guide";
-import { estimateProductShipping } from "@/lib/shipping";
+import { calculateProject, DEFAULT_OPTIONS, emptyRoom, projectTotal, roomArea, shippingNote, underlayNeed } from "@/lib/calc";
+import { BUDGET_OPTIONS, budgetRange, describeRules, EMPTY_ANSWERS, recommend, ROOM_CHIP, ROOM_OPTIONS, STYLE_OPTIONS, suitableProducts, WIZARD_RESULT_STEP } from "@/lib/guide";
 import { filtersToQuery } from "@/lib/catalog";
 import { fmtCzk, fmtInt, fmtNum2, plural } from "@/lib/format";
 import { useCart } from "@/store/cart";
 import { CalcResultView } from "./CalcResultView";
+import { SendCalcEmail } from "./SavedCalcActions";
 import { SampleButton } from "@/components/product/SampleButton";
 import { ArrowRight, Check, ChevronDown, ChevronRight, Copy, Cube, Plus, Share, Trash } from "@/components/ui/icons";
 import { preloadVisualizer, VisualizerDialog, VisualizerEmbed } from "@/components/visualizer/VisualizerDialog";
@@ -46,14 +46,41 @@ const STEPS = ["Metry", "Rozpočet", "Požadavky", "Barva", "Nabídka"] as const
 const RESULT = WIZARD_RESULT_STEP;
 const QUESTIONS = STEPS.length - 1;
 const STORAGE_KEY = "vp-wizard-v2";
-const num = (v: string) => { const n = parseFloat(v.replace(",", ".")); return Number.isFinite(n) && n >= 0 ? n : null; };
-const str = (v: number | null) => (v === null ? "" : String(v).replace(".", ","));
-const ROOM_CHIP: Record<RoomKind, string> = { living: "Obývák", bedroom: "Ložnice", kitchen: "Kuchyň", bathroom: "Koupelna", hallway: "Chodba", commercial: "Komerční" };
+/** Desetinná čárka i tečka; rozepsané „5,“ = 5. Prázdné / nesmysl = null. */
+const parseDec = (t: string) => { const s = t.trim().replace(",", "."); if (!s || s === ".") return null; const n = Number.parseFloat(s); return Number.isFinite(n) && n >= 0 ? n : null; };
+const parseWhole = (t: string) => { const n = Number.parseInt(t, 10); return Number.isFinite(n) && n >= 0 ? n : null; };
+/** Jen číslice a jeden oddělovač. */
+const cleanDec = (v: string) => v.replace(/[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1");
+const fmtDec = (v: number | null) => (v === null ? "" : String(v).replace(".", ","));
 const ROOM_NAME = Object.fromEntries(ROOM_OPTIONS.map((o) => [o.value, o.label])) as Record<RoomKind, string>;
 const ROOM_HINT = Object.fromEntries(ROOM_OPTIONS.map((o) => [o.value, o.hint])) as Record<RoomKind, string>;
 
+/** Typ místnosti nedomýšlíme (koupelna ≠ obývák) — vybere se čipem u rozměrů. */
 function makeRoom(n: number, from?: RoomInput): RoomInput {
-  return { ...emptyRoom(n), id: `r${n}`, kind: n === 1 ? "living" : null, ...(from ? { mode: from.mode, layout: from.layout } : {}) };
+  return { ...emptyRoom(n), id: `r${n}`, name: `Místnost ${n}`, kind: null, ...(from ? { mode: from.mode, layout: from.layout } : {}) };
+}
+
+type NumberInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "inputMode"> & {
+  value: number | null;
+  onValue: (v: number | null) => void;
+  /** Celá čísla (počet dveří). */
+  whole?: boolean;
+  /** Jaká hodnota odpovídá prázdnému poli (dveře: 0). */
+  emptyAs?: number | null;
+};
+
+/**
+ * Číselné pole, do kterého jde psát desetinná čárka: rozepsaný text („5,“ / „5,0“) drží lokálně,
+ * ven posílá číslo. Když se číslo změní zvenku (reset, 3D byt), ukáže nové — bez efektu, jen odvozením.
+ */
+function NumberInput({ value, onValue, whole, emptyAs = null, className, ...rest }: NumberInputProps) {
+  const parse = whole ? parseWhole : parseDec;
+  const [text, setText] = useState(() => (value === emptyAs ? "" : fmtDec(value)));
+  const shown = (parse(text) ?? emptyAs) === value ? text : fmtDec(value);
+  return (
+    <input {...rest} inputMode={whole ? "numeric" : "decimal"} autoComplete="off" className={clsx("input text-lg placeholder:text-muted/60", className)} value={shown}
+      onChange={(e) => { const t = whole ? e.target.value.replace(/\D/g, "") : cleanDec(e.target.value); setText(t); onValue(parse(t) ?? emptyAs); }} />
+  );
 }
 
 interface Persisted { rooms: RoomInput[]; answers: WizardAnswers; options: CalcOptions; selectedId: string | null; pinnedId?: string | null; step: number }
@@ -84,12 +111,14 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
   const [selectedId, setSelectedId] = useState<string | null>(initial?.productId ?? locked?.id ?? persisted?.selectedId ?? null);
   /** Podlaha vybraná ve 3D bytě — ve výsledku je vždy první, i když by ji rozpočet nebo odstín odsunul. */
   const [pinnedId, setPinnedId] = useState<string | null>(persisted?.pinnedId ?? null);
-  const [saving, setSaving] = useState<"idle" | "saving" | "cart">("idle");
+  const [saving, setSaving] = useState<"idle" | "saving" | "cart" | "install">("idle");
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const roomCounter = useRef(rooms.reduce((m, r) => Math.max(m, parseInt(r.id.replace(/\D/g, ""), 10) || 0), 0) + 1);
   const focusRoom = useRef<string | null>(null);
+  /** Poslední uložená kalkulace — sdílení, e-mail, košík i pokládka ji použijí znovu, dokud se nic nezmění. */
+  const lastSaved = useRef<{ body: string; id: string } | null>(null);
 
   useEffect(() => {
     if (locked) return;
@@ -116,7 +145,25 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
   const totalArea = useMemo(() => rooms.reduce((s, r) => s + roomArea(r), 0), [rooms]);
   const totalWithWaste = useMemo(() => rooms.reduce((s, r) => s + roomArea(r) * (1 + LAYOUT_WASTE[r.layout]), 0), [rooms]);
   const hasArea = totalArea > 0;
-  const suitable = useMemo(() => products.filter((p) => p.status === "active" && p.stockM2 > 0 && passesHardRules(p, eff)), [products, eff]);
+  // „Vyhovuje N podlah“ — jen tvrdá pravidla; stejné N v krocích, ve výsledku i v odkazu do katalogu.
+  const suitable = useMemo(() => suitableProducts(products, eff), [products, eff]);
+  // Krok Rozpočet: odhad celého projektu (podlaha + příslušenství + doprava) z podlah, které v pásmu opravdu máme.
+  const budgetEst = useMemo(() => {
+    const out = new Map<string, BudgetEstimate>();
+    if (step !== 1 || totalArea <= 0) return out;
+    for (const b of BUDGET_OPTIONS) {
+      const max = b.max ?? Number.POSITIVE_INFINITY;
+      let e: BudgetEstimate | null = null;
+      for (const p of suitable) {
+        if (p.pricePerM2 < b.min || p.pricePerM2 >= max) continue;
+        const r = calculateProject(p, roomsForCalc, options, accessories, settings);
+        const total = projectTotal(r), floor = r.lines.find((l) => l.kind === "product")?.lineTotal ?? 0;
+        e = e ? { lo: Math.min(e.lo, total), hi: Math.max(e.hi, total), floorLo: Math.min(e.floorLo, floor), floorHi: Math.max(e.floorHi, floor), n: e.n + 1 } : { lo: total, hi: total, floorLo: floor, floorHi: floor, n: 1 };
+      }
+      if (e) out.set(b.value, e);
+    }
+    return out;
+  }, [step, totalArea, suitable, roomsForCalc, options, accessories, settings]);
 
   const rec = useMemo(() => {
     const r = recommend(products, eff, { needM2: totalWithWaste });
@@ -160,9 +207,13 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
 
   async function save(): Promise<string | null> {
     if (!selected) return null;
-    const res = await fetch("/api/calculations", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ productId: selected.id, rooms: roomsForCalc, options, answers: eff }) });
-    if (!res.ok) return null;
-    return ((await res.json()) as { id: string }).id;
+    const body = JSON.stringify({ productId: selected.id, rooms: roomsForCalc, options, answers: eff });
+    if (lastSaved.current?.body === body) return lastSaved.current.id;
+    const res = await fetch("/api/calculations", { method: "POST", headers: { "content-type": "application/json" }, body }).catch(() => null);
+    if (!res?.ok) return null;
+    const id = ((await res.json()) as { id: string }).id;
+    lastSaved.current = { body, id };
+    return id;
   }
   async function onShare() {
     setSaving("saving");
@@ -181,6 +232,13 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
     const items: CartItem[] = selectedResult.lines.filter((l) => !l.skipped && l.qty > 0).map((l) => ({ kind: l.kind, id: l.refId, qty: l.qty }));
     addMany(items, id);
     router.push("/kosik");
+  }
+  /** Poptávka pokládky s vazbou na uloženou kalkulaci (plocha, podlaha, místnosti). */
+  async function onInstall() {
+    if (!selected || !selectedResult) return;
+    setSaving("install");
+    const id = await save();
+    router.push(id ? `/montaz?calc=${id}` : `/montaz?product=${selected.slug}&area=${selectedResult.totalAreaM2}`);
   }
 
   const canContinue = step === 0 ? hasArea : true;
@@ -211,7 +269,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
           return (
             <li key={label} className="flex items-center gap-1 sm:gap-2 shrink-0">
               <button type="button" disabled={!reachable} onClick={() => reachable && go(i)} className={clsx("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 transition-colors", i === step ? "bg-ink text-white" : reachable ? "bg-surface border border-line hover:border-ink" : "text-muted")}>
-                <span className={clsx("h-5 w-5 rounded-full grid place-items-center text-[0.7rem]", i === step ? "bg-white text-ink" : i < step ? "bg-ink text-white" : "border border-line-strong")}>{i < step ? <Check className="h-3 w-3" /> : i + 1}</span>
+                <span className={clsx("h-5 w-5 rounded-full grid place-items-center text-[0.7rem]", i === step ? "bg-white text-ink" : i < step ? "bg-ink text-white" : "border border-line-strong")}>{i < step ? <Check className="h-3 w-3" /> : locked ? (i === 0 ? 1 : 2) : i + 1}</span>
                 {label}
               </button>
               {i < STEPS.length - 1 && <ChevronRight className="h-3.5 w-3.5 text-line-strong" />}
@@ -222,10 +280,10 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
 
       <div className="mt-5 md:mt-10">
         {step === 0 && (
-          <StepArea rooms={rooms} update={updateRoom} setKind={setKind} add={addRoom} remove={(id) => { setShareUrl(null); setRooms((rs) => rs.filter((r) => r.id !== id)); }} totalArea={totalArea} totalWithWaste={totalWithWaste} locked={locked} onSubmit={() => canContinue && next()} />
+          <StepArea rooms={rooms} update={updateRoom} setKind={setKind} add={addRoom} remove={(id) => { setShareUrl(null); setRooms((rs) => rs.filter((r) => r.id !== id)); }} totalArea={totalArea} totalWithWaste={totalWithWaste} locked={locked} freeFromM2={settings.freeShippingFromM2} onSubmit={() => canContinue && next()} />
         )}
         {step === 1 && (
-          <StepBudget value={answers.budget} onPick={(b) => patchAnswers({ budget: b })} areaWithWaste={totalWithWaste} priceGuide={priceGuide} open={guideOpen} setOpen={setGuideOpen} />
+          <StepBudget value={answers.budget} onPick={(b) => patchAnswers({ budget: b })} totalArea={totalArea} estimates={budgetEst} priceGuide={priceGuide} open={guideOpen} setOpen={setGuideOpen} />
         )}
         {step === 2 && (
           <StepExtras answers={answers} patch={patchAnswers} />
@@ -239,7 +297,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
           <StepResult
             rec={rec} answers={eff} projectFor={projectFor} selected={selected} selectedResult={selectedResult} setSelectedId={(id) => { setShareUrl(null); setSelectedId(id); }}
             options={options} setOptions={(o) => { setShareUrl(null); setOptions(o); }} settings={settings} hasArea={hasArea} totalArea={totalArea}
-            saving={saving} shareUrl={shareUrl} copied={copied} onShare={onShare} onAddToCart={onAddToCart} onCopy={async () => { if (shareUrl) { await navigator.clipboard.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 1500); } }}
+            saving={saving} shareUrl={shareUrl} copied={copied} onShare={onShare} onAddToCart={onAddToCart} onInstall={onInstall} onSave={save} onCopy={async () => { if (shareUrl) { await navigator.clipboard.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 1500); } }}
             goTo={go} reset={reset} locked={locked} pinnedId={pinnedId} layout={rooms[0]?.layout ?? "straight"} onLayout={setLayoutAll}
           />
         )}
@@ -247,16 +305,16 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
 
       {/* Spodní lišta s navigací a souhrnem */}
       {step < RESULT && (
-        <div className="fixed lg:sticky bottom-0 inset-x-0 lg:inset-x-auto z-40 bg-bg/95 backdrop-blur border-t border-line lg:border lg:rounded-md lg:mt-10 lg:shadow-card pb-[env(safe-area-inset-bottom)] lg:pb-0">
+        <div className="fixed lg:sticky bottom-[var(--cookie-h,0px)] inset-x-0 lg:inset-x-auto z-40 bg-bg/95 backdrop-blur border-t border-line lg:border lg:rounded-md lg:mt-10 lg:shadow-card pb-[env(safe-area-inset-bottom)] lg:pb-0">
           <div className="container lg:px-5 py-2.5 flex items-center gap-2 sm:gap-3">
             {step > 0 && <button type="button" className="btn btn-ghost !px-0 w-11 sm:w-auto sm:!px-4 shrink-0" onClick={back} aria-label="Zpět"><ArrowRight className="h-5 w-5 rotate-180 sm:hidden" /><span className="hidden sm:inline">Zpět</span></button>}
             <div className="flex-1 min-w-0 text-sm leading-tight">
               {summary.length ? <p className="truncate">{summary[0]}<span className="hidden sm:inline">{summary.slice(1).map((x) => ` · ${x}`).join("")}</span></p> : <p className="text-muted">Zadejte rozměry.</p>}
-              {hasArea && step === 0 && <p className="text-xs text-muted">s prořezem {fmtNum2(totalWithWaste)} m²</p>}
-              {step === 2 && <p className="text-xs text-muted">Vyhovuje {suitable.length} {plural(suitable.length, "podlaha", "podlahy", "podlah")}</p>}
+              {hasArea && step === 0 && <p className="text-xs text-muted">vč. odřezků {fmtNum2(totalWithWaste)} m²</p>}
+              {step > 0 && !locked && <p className="text-xs text-muted">Vyhovuje {suitable.length} {plural(suitable.length, "podlaha", "podlahy", "podlah")}</p>}
             </div>
             <button type="button" className="btn btn-accent shrink-0" disabled={!canContinue} onClick={next}>
-              {step === 0 && locked ? "Zobrazit cenu" : step === 3 ? "Zobrazit nabídku" : step === 1 && !answers.budget ? "Přeskočit" : step === 2 && !answers.floorHeating && !answers.kidsPets && !answers.integratedUnderlay && !answers.diyClick ? "Nic z toho" : "Pokračovat"} <ArrowRight className="h-4 w-4" />
+              {step === 0 && locked ? "Spočítat cenu" : step === 3 ? "Zobrazit nabídku" : step === 1 && !answers.budget ? "Přeskočit" : step === 2 && !answers.floorHeating && !answers.kidsPets && !answers.integratedUnderlay && !answers.diyClick ? "Nic z toho" : "Pokračovat"} <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -267,10 +325,10 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
 
 /* ---------------------------------------------------------------------------------------------- */
 
-function StepHead({ n, title, text }: { n: number; title: string; text?: string }) {
+function StepHead({ n, title, text }: { n: number | null; title: string; text?: string }) {
   return (
     <div className="max-w-2xl fade-up">
-      <p className="eyebrow mb-1.5 sm:mb-2">Krok {n} z {QUESTIONS}</p>
+      {n !== null && <p className="eyebrow mb-1.5 sm:mb-2">Krok {n} z {QUESTIONS}</p>}
       <h2 className="h2">{title}</h2>
       {text && <p className="text-ink-soft mt-2 sm:lead sm:mt-3">{text}</p>}
     </div>
@@ -299,12 +357,13 @@ function OptionCard({ selected, onClick, label, hint, extra, image, check, badge
 }
 
 /* Krok 1 — metry (a typ každé místnosti) */
-function StepArea({ rooms, update, setKind, add, remove, totalArea, totalWithWaste, locked, onSubmit }: { rooms: RoomInput[]; update: (id: string, p: Partial<RoomInput>) => void; setKind: (id: string, k: RoomKind) => void; add: () => void; remove: (id: string) => void; totalArea: number; totalWithWaste: number; locked: PublicProduct | null; onSubmit: () => void }) {
+function StepArea({ rooms, update, setKind, add, remove, totalArea, totalWithWaste, locked, freeFromM2, onSubmit }: { rooms: RoomInput[]; update: (id: string, p: Partial<RoomInput>) => void; setKind: (id: string, k: RoomKind) => void; add: () => void; remove: (id: string) => void; totalArea: number; totalWithWaste: number; locked: PublicProduct | null; freeFromM2: number; onSubmit: () => void }) {
   return (
     <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
       {/* Enter / „Přejít“ na klávesnici telefonu posune na další krok */}
       <button type="submit" className="sr-only" tabIndex={-1}>Pokračovat</button>
-      <StepHead n={1} title="Kolik metrů potřebujete?" />
+      {/* S podlahou z karty jsou to jen metry → cena; „Krok 1 z 4“ by lhal */}
+      <StepHead n={locked ? null : 1} title="Kolik metrů potřebujete?" />
       {locked && (
         <div className="mt-5 max-w-2xl">
           <div className="card p-3 flex items-center gap-3">
@@ -316,19 +375,19 @@ function StepArea({ rooms, update, setKind, add, remove, totalArea, totalWithWas
       )}
       <div className="mt-5 sm:mt-6 grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-6">
         <div className="lg:col-span-8 min-w-0 space-y-4">
-          {rooms.map((r, idx) => <RoomCard key={r.id} r={r} first={idx === 0} canRemove={rooms.length > 1} update={update} setKind={setKind} remove={remove} />)}
+          {rooms.map((r, idx) => <RoomCard key={r.id} r={r} first={idx === 0} canRemove={rooms.length > 1} askKind={!locked} update={update} setKind={setKind} remove={remove} />)}
           <button type="button" className="btn btn-outline w-full" onClick={add}><Plus className="h-4 w-4" /> Přidat další místnost</button>
         </div>
         <aside className="hidden lg:block lg:col-span-4">
           <div className="panel lg:sticky lg:top-24">
             <p className="eyebrow">Váš projekt</p>
             <p className="text-4xl mt-2 leading-none">{fmtNum2(totalArea)} <span className="text-lg text-muted">m²</span></p>
-            <p className="text-sm text-muted mt-2">s prořezem {fmtNum2(totalWithWaste)} m² · {rooms.length} {plural(rooms.length, "místnost", "místnosti", "místností")} · {rooms.reduce((s, r) => s + r.doors, 0)} dveří</p>
+            <p className="text-sm text-muted mt-2">vč. odřezků {fmtNum2(totalWithWaste)} m² · {rooms.length} {plural(rooms.length, "místnost", "místnosti", "místností")} · dveře: {rooms.reduce((s, r) => s + r.doors, 0)}</p>
             <div className="divider my-4" />
             <ul className="text-sm text-ink-soft space-y-2">
-              <li>Balení zaokrouhlíme nahoru a přidáme 1 do rezervy.</li>
+              <li>Na odřezky přidáme 5 % (diagonálně 10 %, rybí kost 15 %), balení zaokrouhlíme nahoru a 1 přidáme do rezervy.</li>
               <li>Podložku, lišty, lepidlo i tmel spočítáme z obvodu a dveří.</li>
-              <li>Doprava podle hmotnosti — nad {fmtInt(25)} m² podlahy zdarma.</li>
+              <li>Doprava podle hmotnosti — zásilka s podlahou nad {fmtInt(freeFromM2)} m² zdarma.</li>
             </ul>
           </div>
         </aside>
@@ -337,19 +396,21 @@ function StepArea({ rooms, update, setKind, add, remove, totalArea, totalWithWas
   );
 }
 
-function RoomCard({ r, first, canRemove, update, setKind, remove }: { r: RoomInput; first: boolean; canRemove: boolean; update: (id: string, p: Partial<RoomInput>) => void; setKind: (id: string, k: RoomKind) => void; remove: (id: string) => void }) {
+function RoomCard({ r, first, canRemove, askKind, update, setKind, remove }: { r: RoomInput; first: boolean; canRemove: boolean; askKind: boolean; update: (id: string, p: Partial<RoomInput>) => void; setKind: (id: string, k: RoomKind) => void; remove: (id: string) => void }) {
   const [more, setMore] = useState(false);
   const area = roomArea(r);
   const perimeterAuto = r.mode === "dims" && r.lengthM && r.widthM ? fmtNum2(2 * (r.lengthM + r.widthM)) : null;
+  const waste = Math.round(LAYOUT_WASTE[r.layout] * 100);
   return (
     <div id={`room-${r.id}`} className="card p-3.5 md:p-5 fade-up scroll-mt-24">
+      {askKind && !r.kind && <p className="text-sm text-accent-strong mb-2">Jaká je to místnost? Podle toho pohlídáme voděodolnost a odolnost.</p>}
       <div className="flex items-center gap-2">
         <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1" role="group" aria-label="Typ místnosti">
           {ROOM_OPTIONS.map((o) => (
-            <button key={o.value} type="button" aria-pressed={r.kind === o.value} onClick={() => setKind(r.id, o.value)} className={clsx("shrink-0 h-9 rounded-full px-3.5 text-sm border transition-colors", r.kind === o.value ? "bg-ink text-white border-ink" : "bg-white border-line-strong hover:border-ink")}>{ROOM_CHIP[o.value]}</button>
+            <button key={o.value} type="button" aria-pressed={r.kind === o.value} onClick={() => setKind(r.id, o.value)} className={clsx("shrink-0 h-11 rounded-full px-4 text-sm border transition-colors", r.kind === o.value ? "bg-ink text-white border-ink" : "bg-white border-line-strong hover:border-ink")}>{ROOM_CHIP[o.value]}</button>
           ))}
         </div>
-        {canRemove && <button type="button" className="h-10 w-10 grid place-items-center shrink-0 text-muted hover:text-ink" onClick={() => remove(r.id)} aria-label={`Odebrat ${r.name}`}><Trash className="h-4 w-4" /></button>}
+        {canRemove && <button type="button" className="h-11 w-11 grid place-items-center shrink-0 text-muted hover:text-ink" onClick={() => remove(r.id)} aria-label={`Odebrat ${r.name}`}><Trash className="h-4 w-4" /></button>}
       </div>
       {r.kind && (r.kind === "bathroom" || r.kind === "kitchen" || r.kind === "hallway" || r.kind === "commercial") && <p className="text-xs text-muted mt-2">{ROOM_HINT[r.kind]}</p>}
 
@@ -359,14 +420,14 @@ function RoomCard({ r, first, canRemove, update, setKind, remove }: { r: RoomInp
       </div>
       <div className="grid grid-cols-2 gap-3 mt-3">
         {r.mode === "dims" ? (<>
-          <Field label="Délka (m)"><input inputMode="decimal" enterKeyHint="next" className="input text-lg" placeholder="5,2" value={str(r.lengthM)} onChange={(e) => update(r.id, { lengthM: num(e.target.value) })} autoFocus={first} /></Field>
-          <Field label="Šířka (m)"><input inputMode="decimal" enterKeyHint="go" className="input text-lg" placeholder="3,8" value={str(r.widthM)} onChange={(e) => update(r.id, { widthM: num(e.target.value) })} /></Field>
+          <Field label="Délka (m)"><NumberInput enterKeyHint="next" placeholder="např. 5,2" value={r.lengthM} onValue={(v) => update(r.id, { lengthM: v })} autoFocus={first} /></Field>
+          <Field label="Šířka (m)"><NumberInput enterKeyHint="go" placeholder="např. 3,8" value={r.widthM} onValue={(v) => update(r.id, { widthM: v })} /></Field>
         </>) : (
-          <div className="col-span-2"><Field label="Plocha (m²)"><input inputMode="decimal" enterKeyHint="go" className="input text-lg" placeholder="19,76" value={str(r.areaM2)} onChange={(e) => update(r.id, { areaM2: num(e.target.value) })} autoFocus={first} /></Field></div>
+          <div className="col-span-2"><Field label="Plocha (m²)"><NumberInput enterKeyHint="go" placeholder="např. 19,8" value={r.areaM2} onValue={(v) => update(r.id, { areaM2: v })} autoFocus={first} /></Field></div>
         )}
       </div>
       <div className="mt-3">
-        <span className="label">Kladení</span>
+        <span className="label">Kladení <span className="normal-case tracking-normal">(+ % na odřezky)</span></span>
         <div className="grid grid-cols-3 gap-1.5">
           {(Object.keys(LAYOUT_LABEL) as LayoutMode[]).map((m) => (
             <button key={m} type="button" onClick={() => update(r.id, { layout: m })} aria-pressed={r.layout === m} className={clsx("rounded-sm border px-1.5 py-1.5 min-h-11 text-sm leading-tight", r.layout === m ? "border-ink bg-ink text-white" : "border-line-strong bg-white hover:border-ink")}>{LAYOUT_LABEL[m]}<span className={clsx("block text-xs", r.layout === m ? "text-white/70" : "text-muted")}>+{Math.round(LAYOUT_WASTE[m] * 100)} %</span></button>
@@ -375,34 +436,36 @@ function RoomCard({ r, first, canRemove, update, setKind, remove }: { r: RoomInp
       </div>
       {/* Dveře a obvod většinou sedí — schované za jedním řádkem */}
       <button type="button" className="mt-2 w-full flex items-center justify-between gap-2 min-h-11 text-sm text-left" aria-expanded={more} onClick={() => setMore((v) => !v)}>
-        <span className="text-ink-soft">{r.doors} {plural(r.doors, "dveře", "dveře", "dveří")} · obvod {r.perimeterM ? `${fmtNum2(r.perimeterM)} m` : perimeterAuto ? `${perimeterAuto} m` : "dopočítáme"}</span>
-        <span className="inline-flex items-center gap-1 text-muted">Upřesnit <ChevronDown className={clsx("h-4 w-4 transition-transform", more && "rotate-180")} /></span>
+        <span className="text-ink-soft">Dveře: {r.doors} · obvod {r.perimeterM ? `${fmtNum2(r.perimeterM)} m` : perimeterAuto ? `${perimeterAuto} m` : "dopočítáme"} <span className="text-muted">(na soklové lišty)</span></span>
+        <span className="inline-flex items-center gap-1 text-muted shrink-0">Upřesnit <ChevronDown className={clsx("h-4 w-4 transition-transform", more && "rotate-180")} /></span>
       </button>
       {more && (
         <div className="grid grid-cols-2 gap-3 mt-1 fade-up">
-          <Field label="Počet dveří"><input inputMode="numeric" enterKeyHint="next" className="input text-lg" value={r.doors} onChange={(e) => update(r.id, { doors: Math.max(0, parseInt(e.target.value || "0", 10) || 0) })} /></Field>
-          <Field label="Obvod (m)"><input inputMode="decimal" enterKeyHint="go" className="input text-lg" placeholder={perimeterAuto ?? "dopočítáme"} value={str(r.perimeterM)} onChange={(e) => update(r.id, { perimeterM: num(e.target.value) })} /></Field>
+          <Field label="Počet dveří"><NumberInput whole emptyAs={0} enterKeyHint="next" value={r.doors} onValue={(v) => update(r.id, { doors: Math.min(50, v ?? 0) })} /></Field>
+          <Field label="Obvod (m) — na lišty"><NumberInput enterKeyHint="go" placeholder={perimeterAuto ? `${perimeterAuto} (dopočteno)` : "dopočítáme"} value={r.perimeterM} onValue={(v) => update(r.id, { perimeterM: v })} /></Field>
         </div>
       )}
-      {area > 0 && <p className="text-sm text-muted mt-2">{fmtNum2(area)} m² → s prořezem {fmtNum2(area * (1 + LAYOUT_WASTE[r.layout]))} m²</p>}
+      {area > 0 && <p className="text-sm text-muted mt-2">{fmtNum2(area)} m² + {waste} % na odřezky = {fmtNum2(area * (1 + LAYOUT_WASTE[r.layout]))} m²</p>}
     </div>
   );
 }
 
+interface BudgetEstimate { lo: number; hi: number; floorLo: number; floorHi: number; n: number }
+const range = (lo: number, hi: number) => (lo === hi ? fmtCzk(lo) : `${fmtInt(lo)}–${fmtCzk(hi)}`);
+
 /* Krok 2 — rozpočet */
-function StepBudget({ value, onPick, areaWithWaste, priceGuide, open, setOpen }: { value: WizardAnswers["budget"]; onPick: (b: WizardAnswers["budget"]) => void; areaWithWaste: number; priceGuide: Props["priceGuide"]; open: boolean; setOpen: (v: boolean) => void }) {
-  const est = (min: number, max: number | null) => {
-    if (areaWithWaste <= 0) return null;
-    const lo = Math.round(min * areaWithWaste), hi = max ? Math.round(max * areaWithWaste) : null;
-    return hi ? (lo > 0 ? `${fmtInt(lo)}–${fmtCzk(hi)}` : `do ${fmtCzk(hi)}`) : `od ${fmtCzk(lo)}`;
-  };
+function StepBudget({ value, onPick, totalArea, estimates, priceGuide, open, setOpen }: { value: WizardAnswers["budget"]; onPick: (b: WizardAnswers["budget"]) => void; totalArea: number; estimates: Map<string, BudgetEstimate>; priceGuide: Props["priceGuide"]; open: boolean; setOpen: (v: boolean) => void }) {
   return (
     <div>
-      <StepHead n={2} title="Jaký máte rozpočet za m²?" text={areaWithWaste > 0 ? `Odhad jen za podlahu pro ${fmtNum2(areaWithWaste)} m².` : undefined} />
+      <StepHead n={2} title="Jaký máte rozpočet za m²?" text={totalArea > 0 ? `U každého pásma cena celého projektu pro ${fmtNum2(totalArea)} m² — podlaha, podložka, lišty i doprava. Rozpočet jen řadí nabídku.` : undefined} />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mt-5 sm:mt-8">
-        {BUDGET_OPTIONS.map((b) => (
-          <OptionCard key={b.value} selected={value === b.value} onClick={() => onPick(value === b.value ? null : b.value)} label={b.label} badge={b.value === "400-700" ? "Nejčastější výběr" : undefined} extra={est(b.min, b.max) && <p className="text-sm tabular-nums text-ink">{est(b.min, b.max)}</p>} />
-        ))}
+        {BUDGET_OPTIONS.map((b) => {
+          const e = estimates.get(b.value);
+          const extra = totalArea > 0 ? (e
+            ? <><p className="text-sm tabular-nums text-ink">{range(e.lo, e.hi)}</p><p className="text-xs text-muted mt-0.5">z toho podlaha {range(e.floorLo, e.floorHi)}</p></>
+            : <p className="text-xs text-muted">Teď tu nemáme vhodnou podlahu</p>) : null;
+          return <OptionCard key={b.value} selected={value === b.value} onClick={() => onPick(value === b.value ? null : b.value)} label={b.label} badge={b.value === "400-700" ? "Nejčastější výběr" : undefined} extra={extra} />;
+        })}
       </div>
 
       <div className="mt-8 max-w-3xl hidden sm:block">
@@ -422,7 +485,7 @@ function StepExtras({ answers, patch }: { answers: WizardAnswers; patch: (p: Par
   const items: { key: keyof Pick<WizardAnswers, "floorHeating" | "kidsPets" | "integratedUnderlay" | "diyClick">; label: string; hint: string }[] = [
     { key: "floorHeating", label: "Podlahové topení", hint: "Jen podlahy schválené na topení." },
     { key: "kidsPets", label: "Děti nebo zvířata", hint: "Odolnější nášlap, min. 0,4 mm." },
-    { key: "integratedUnderlay", label: "Integrovaná podložka", hint: "Upřednostníme, nevyřadíme." },
+    { key: "integratedUnderlay", label: "Bez kupování podložky", hint: "Podložka už v podlaze, nebo lepená pokládka. Upřednostníme, nevyřadíme." },
     { key: "diyClick", label: "Budu pokládat sám/sama", hint: "Jen click zámek." },
   ];
   return (
@@ -448,7 +511,7 @@ function StepStyle({ value, onPick, onSkip, onChoose, onLayout, products, sample
         {STYLE_OPTIONS.map((o) => {
           const sample = products.find((p) => p.decorTone === o.value && p.images.swatch) ?? null;
           const n = products.filter((p) => p.decorTone === o.value).length;
-          return <OptionCard key={o.value} selected={value === o.value} onClick={() => onPick(value === o.value ? null : o.value)} label={o.label} image={sample?.images.swatch ?? null} extra={<p className="text-xs text-muted">{n} {plural(n, "dekor", "dekory", "dekorů")}</p>} />;
+          return <OptionCard key={o.value} selected={value === o.value} onClick={() => onPick(value === o.value ? null : o.value)} label={o.label} image={sample?.images.swatch ?? null} extra={<p className="text-xs text-muted">{n} z {products.length} {plural(products.length, "podlahy", "podlah", "podlah")}</p>} />;
         })}
       </div>
       <button type="button" className="mt-2.5 sm:mt-3 w-full card min-h-12 px-4 py-3 border-2 border-dashed border-line hover:border-ink transition-colors flex items-center justify-between gap-2 text-left" onClick={onSkip}>
@@ -460,13 +523,13 @@ function StepStyle({ value, onPick, onSkip, onChoose, onLayout, products, sample
           {!viz ? (
             <button type="button" onClick={() => setViz(true)} onMouseEnter={preloadVisualizer} onFocus={preloadVisualizer} onPointerDown={preloadVisualizer} className="w-full sm:w-auto flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3 text-left hover:border-ink transition-colors">
               <Cube className="h-6 w-6 shrink-0 text-accent" />
-              <span className="flex-1"><span className="block">Vyzkoušet odstíny ve 3D bytě</span><span className="block text-xs text-muted">{products.length} {plural(products.length, "vhodný dekor", "vhodné dekory", "vhodných dekorů")}</span></span>
+              <span className="flex-1"><span className="block">Byt ve 3D</span><span className="block text-xs text-muted">Vyzkoušejte odstíny · {products.length} {plural(products.length, "vhodná podlaha", "vhodné podlahy", "vhodných podlah")}</span></span>
               <ArrowRight className="h-4 w-4 shrink-0" />
             </button>
           ) : (
             <div ref={vizRef} className="scroll-mt-20">
               <div className="flex items-center justify-between gap-3 mb-2">
-                <p className="text-lg">Odstíny ve 3D bytě</p>
+                <p className="text-lg">Byt ve 3D</p>
                 <button type="button" className="h-10 px-2 text-sm text-muted hover:text-ink" onClick={() => setViz(false)}>Skrýt</button>
               </div>
               <VisualizerEmbed
@@ -492,61 +555,66 @@ interface ResultProps {
   rec: ReturnType<typeof recommend>; answers: WizardAnswers; projectFor: Map<string, ReturnType<typeof calculateProject>>;
   selected: PublicProduct | null; selectedResult: ReturnType<typeof calculateProject> | null; setSelectedId: (id: string) => void;
   options: CalcOptions; setOptions: (o: CalcOptions) => void; settings: PublicSettings; hasArea: boolean; totalArea: number;
-  saving: "idle" | "saving" | "cart"; shareUrl: string | null; copied: boolean; onShare: () => void; onAddToCart: () => void; onCopy: () => void;
+  saving: "idle" | "saving" | "cart" | "install"; shareUrl: string | null; copied: boolean; onShare: () => void; onAddToCart: () => void; onInstall: () => void; onSave: () => Promise<string | null>; onCopy: () => void;
   goTo: (s: number) => void; reset: () => void; locked: PublicProduct | null; pinnedId: string | null; layout: LayoutMode; onLayout: (l: LayoutMode) => void;
 }
 function StepResult(p: ResultProps) {
-  const { rec, answers, projectFor, selected, selectedResult, setSelectedId, options, setOptions, settings, hasArea, saving, shareUrl, copied, onShare, onAddToCart, onCopy, goTo, reset, locked, pinnedId, layout, onLayout } = p;
+  const { rec, answers, projectFor, selected, selectedResult, setSelectedId, options, setOptions, settings, hasArea, saving, shareUrl, copied, onShare, onAddToCart, onInstall, onSave, onCopy, goTo, reset, locked, pinnedId, layout, onLayout } = p;
   // Vizualizace v modelovém bytě: dekory z nabídky vedle sebe, s cenou celého projektu.
   const [vizFor, setVizFor] = useState<string | null>(null);
+  // Desktop: položky rozpisu sbalené, aby cena a „Vložit do košíku“ byly vidět bez posouvání.
+  const [itemsOpen, setItemsOpen] = useState(false);
   const rules = describeRules(answers);
-  const [bmin, bmax] = budgetRange(answers.budget);
+  const [, bmax] = budgetRange(answers.budget);
   const wet = answers.roomKinds.includes("bathroom") || answers.roomKinds.includes("kitchen");
+  // Odkaz do katalogu = stejná tvrdá pravidla jako „Vyhovuje N podlah“ (rozpočet ani barva nefiltrují, jen řadí).
   const catalogHref = `/podlahy${filtersToQuery({
-    tone: answers.style ? [answers.style] : [], floorHeating: answers.floorHeating ? true : null, waterproof: wet ? true : null, lock: answers.diyClick ? ["click"] : [],
-    priceMin: answers.budget && bmin > 0 ? bmin : null, priceMax: answers.budget && Number.isFinite(bmax) ? bmax : null,
+    floorHeating: answers.floorHeating ? true : null, waterproof: wet ? true : null, lock: answers.diyClick ? ["click"] : [],
     wear: answers.kidsPets ? [0.4, 0.55] : [], usage: answers.roomKinds.includes("commercial") ? [33, 42] : answers.kidsPets || answers.roomKinds.includes("hallway") ? [32, 33, 42] : [],
   })}`;
-  const ship = selected && selectedResult && selectedResult.packs > 0 ? estimateProductShipping(selected, selectedResult.packs, settings) : null;
-  const extras = [answers.floorHeating && "topení", answers.kidsPets && "děti/zvířata", answers.integratedUnderlay && "podložka", answers.diyClick && "svépomoc"].filter(Boolean).join(", ");
+  const extras = [answers.floorHeating && "topení", answers.kidsPets && "děti/zvířata", answers.integratedUnderlay && "bez podložky", answers.diyClick && "svépomoc"].filter(Boolean).join(", ");
+  const n = rec.poolSize;
+  const shown = rec.results.length;
 
   if (!hasArea) {
     return <div className="panel text-center py-12"><p className="lead">Nejdřív potřebujeme rozměry místností.</p><button type="button" className="btn btn-primary mt-5" onClick={() => goTo(0)}>Zadat metry</button></div>;
   }
 
-  const vizButton = rec.results.length > 0 && (
+  const vizButton = shown > 0 && (
     <button type="button" onClick={() => setVizFor(selected?.id ?? rec.results[0].product.id)} onMouseEnter={preloadVisualizer} onPointerDown={preloadVisualizer} className="w-full sm:w-auto flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3 text-left hover:border-ink transition-colors">
       <Cube className="h-6 w-6 shrink-0 text-accent" />
-      <span><span className="block">Porovnat dekory ve 3D bytě</span><span className="block text-xs text-muted">U každého cena za celý projekt</span></span>
+      <span><span className="block">Byt ve 3D</span><span className="block text-xs text-muted">Porovnejte dekory — u každého cena celého projektu</span></span>
       <ArrowRight className="h-4 w-4 ml-auto shrink-0" />
     </button>
   );
+  const noUnderlay = selected ? underlayNeed(selected) !== "needed" : false;
+  const itemCount = selectedResult ? selectedResult.lines.filter((l) => !l.skipped).length : 0;
 
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-10">
       <div className="lg:col-span-7 min-w-0">
         <div className="fade-up">
-          <p className="eyebrow mb-1.5 sm:mb-2">{locked ? "Cena vašeho projektu" : "Vaše nabídka"}</p>
-          <h2 className="h2">{locked ? `Cena s podlahou ${locked.decor}` : rec.results.length > 0 ? `${rec.results.length} ${plural(rec.results.length, "podlaha, která dává", "podlahy, které dávají", "podlah, které dávají")} smysl.` : "Pro tuto kombinaci nemáme vhodnou podlahu."}</h2>
-          {!locked && (rules.length > 0 || answers.style) && (
-            <p className="hidden sm:block text-sm text-ink-soft mt-3 max-w-2xl">{rules.join(" ")}{answers.style ? ` Řazeno podle odstínu: ${DECOR_TONE_LABEL[answers.style].toLowerCase()}.` : ""}</p>
+          <p className="eyebrow mb-1.5 sm:mb-2">{locked ? "Cena vašeho projektu" : `Vyhovuje ${n} ${plural(n, "podlaha", "podlahy", "podlah")}`}</p>
+          <h2 className="h2">{locked ? `Cena s podlahou ${locked.decor}` : shown === 0 ? "Pro tuto kombinaci nemáme vhodnou podlahu." : shown < n ? `Ukazujeme ${shown} nejlepších z ${n}.` : `${shown} ${plural(shown, "podlaha, která dává", "podlahy, které dávají", "podlah, které dávají")} smysl.`}</h2>
+          {!locked && (rules.length > 0 || answers.style || answers.budget) && (
+            <p className="hidden sm:block text-sm text-ink-soft mt-3 max-w-2xl">{rules.join(" ")}{answers.budget || answers.style ? ` Řazeno podle ${[answers.budget && "rozpočtu", answers.style && `odstínu (${DECOR_TONE_LABEL[answers.style].toLowerCase()})`].filter(Boolean).join(" a ")}.` : ""}</p>
           )}
           {rec.relaxed.map((r) => <p key={r} className="notice notice-info text-sm mt-3 inline-block">{r}</p>)}
           {!locked && <div className="mt-3 sm:mt-4 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap text-sm">
             {[
               { s: 1, t: answers.budget ? BUDGET_OPTIONS.find((b) => b.value === answers.budget)?.label : "Rozpočet bez limitu" },
-              { s: 0, t: answers.roomKinds.map((k) => ROOM_CHIP[k]).join(", ") || "Místnost" },
+              { s: 0, t: answers.roomKinds.map((k) => ROOM_CHIP[k]).join(", ") || "Typ místnosti" },
               { s: 2, t: extras ? `Požadavky: ${extras}` : "Bez požadavků" },
               { s: 3, t: answers.style ? DECOR_TONE_LABEL[answers.style] : "Barva libovolná" },
-            ].map((x) => <button key={x.s} type="button" className="tag shrink-0 h-9 !px-3 !normal-case !tracking-normal !text-sm hover:border-ink whitespace-nowrap" onClick={() => goTo(x.s)}>{x.t}</button>)}
+            ].map((x) => <button key={x.s} type="button" className="tag shrink-0 h-11 !px-3.5 !normal-case !tracking-normal !text-sm hover:border-ink whitespace-nowrap" onClick={() => goTo(x.s)}>{x.t}</button>)}
           </div>}
           <div className="hidden lg:block mt-5">{vizButton}</div>
         </div>
 
-        {rec.results.length === 0 ? (
+        {shown === 0 ? (
           <div className="panel mt-8">
-            <p className="text-ink-soft">Zkuste uvolnit některý požadavek — nejčastěji pomůže vypnout „Budu pokládat sám“ nebo rozšířit rozpočet.</p>
-            <div className="mt-4 flex flex-wrap gap-2"><button type="button" className="btn btn-outline" onClick={() => goTo(2)}>Upravit požadavky</button><button type="button" className="btn btn-outline" onClick={() => goTo(1)}>Upravit rozpočet</button><Link href="/podlahy" className="btn btn-ghost">Celý katalog</Link></div>
+            <p className="text-ink-soft">Zkuste uvolnit některý požadavek — nejčastěji pomůže vypnout „Budu pokládat sám“ nebo podlahové topení.</p>
+            <div className="mt-4 flex flex-wrap gap-2"><button type="button" className="btn btn-outline" onClick={() => goTo(2)}>Upravit požadavky</button><button type="button" className="btn btn-outline" onClick={() => goTo(0)}>Upravit místnosti</button><Link href="/podlahy" className="btn btn-ghost">Celý katalog</Link></div>
           </div>
         ) : (
           <ol className="mt-5 sm:mt-8 space-y-3">
@@ -554,6 +622,8 @@ function StepResult(p: ResultProps) {
               const pr = projectFor.get(r.product.id);
               const on = selected?.id === r.product.id;
               const enough = pr ? pr.coveredAreaM2 <= r.product.stockM2 : true;
+              const floor = pr?.lines.find((l) => l.kind === "product")?.lineTotal ?? 0;
+              const overBudget = !locked && answers.budget && r.product.pricePerM2 >= bmax;
               return (
                 <Fragment key={r.product.id}>
                   {locked && i === 1 && <li className="pt-4 text-lg">Podobné podlahy</li>}
@@ -566,15 +636,16 @@ function StepResult(p: ResultProps) {
                       <div className="flex-1 min-w-0">
                         <p className="eyebrow truncate">{i === 0 && !locked && <span className="text-accent-strong">{r.product.id === pinnedId ? "Vybráno ve 3D" : "Nejlepší shoda"} · </span>}{r.product.brand} · {r.product.collection}</p>
                         <p className="text-lg leading-tight mt-0.5"><Link href={`/podlaha/${r.product.slug}`} className="hover:underline underline-offset-4" onClick={(e) => e.stopPropagation()}>{r.product.decor}</Link></p>
-                        <p className="text-xs sm:text-sm text-muted mt-0.5 truncate sm:whitespace-normal">{FLOOR_TYPE_LABEL[r.product.type]} · {String(r.product.thicknessMm).replace(".", ",")} mm · nášlap {String(r.product.wearLayerMm).replace(".", ",")} mm · tř. {r.product.usageClass}{r.product.integratedUnderlay ? " · + podložka" : ""}</p>
+                        <p className="text-xs sm:text-sm text-muted mt-0.5 truncate sm:whitespace-normal">{FLOOR_TYPE_LABEL[r.product.type]} · {String(r.product.thicknessMm).replace(".", ",")} mm · nášlap {String(r.product.wearLayerMm).replace(".", ",")} mm · tř. {r.product.usageClass}{r.product.integratedUnderlay ? " · s podložkou" : ""}</p>
                         {r.reason && <p className="mt-1.5 text-xs sm:text-sm text-ink-soft leading-snug border-l-2 border-accent pl-2.5 line-clamp-2 sm:line-clamp-none">{r.reason}</p>}
-                        <p className="mt-2 text-xl leading-none tabular-nums">{pr ? fmtCzk(pr.total) : "—"} <span className="text-xs text-muted">vč. příslušenství</span></p>
-                        <p className="text-xs text-muted mt-1">{fmtCzk(r.product.pricePerM2)}/m²{pr ? ` · ${pr.packs} bal.` : ""} · dodání {r.product.deliveryDays} dní</p>
+                        <p className="mt-2 text-xl leading-none tabular-nums">{pr ? fmtCzk(projectTotal(pr)) : "—"} <span className="text-xs text-muted">celý projekt</span></p>
+                        <p className="text-xs text-muted mt-1">{pr ? `z toho podlaha ${fmtCzk(floor)} (${pr.packs} bal.) · ` : ""}{fmtCzk(r.product.pricePerM2)}/m²{overBudget && <span className="text-warn"> · nad rozpočet</span>}</p>
+                        <p className="text-xs text-muted mt-0.5">{pr ? `${shippingNote(pr)} · ` : ""}dodání {r.product.deliveryDays} dní</p>
                         {!enough && <p className="text-xs text-warn mt-1">Skladem jen {fmtInt(r.product.stockM2)} m² — zbytek doobjednáme</p>}
                       </div>
                     </div>
                     <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex gap-2 justify-end">
-                      <button type="button" className="btn btn-ghost btn-sm !px-3" onClick={() => setVizFor(r.product.id)} onMouseEnter={preloadVisualizer} onPointerDown={preloadVisualizer} title="Zobrazit ve 3D bytě" aria-label={`Zobrazit ${r.product.decor} ve 3D bytě`}><Cube className="h-4 w-4" /><span className="hidden md:inline">Ve 3D</span></button>
+                      <button type="button" className="btn btn-ghost btn-sm !px-3" onClick={() => setVizFor(r.product.id)} onMouseEnter={preloadVisualizer} onPointerDown={preloadVisualizer} title="Byt ve 3D" aria-label={`Zobrazit ${r.product.decor} v Bytě ve 3D`}><Cube className="h-4 w-4" /><span className="hidden md:inline">Byt ve 3D</span></button>
                       <SampleButton productId={r.product.id} max={settings.samples.max} size="sm" compact />
                       <button type="button" className={clsx("btn btn-sm", on ? "btn-primary" : "btn-outline")} onClick={() => setSelectedId(r.product.id)}>{on ? <><Check className="h-4 w-4" /> Vybráno</> : "Vybrat"}</button>
                     </div>
@@ -586,7 +657,7 @@ function StepResult(p: ResultProps) {
           </ol>
         )}
         <div className="mt-6 flex flex-wrap gap-x-5 gap-y-1 text-sm">
-          {!locked && <Link href={catalogHref} className="link py-2">Všech {rec.poolSize} vyhovujících v katalogu</Link>}
+          {!locked && n > 0 && <Link href={catalogHref} className="link py-2">{n === 1 ? "Vhodná podlaha v katalogu" : `${n < 5 ? "Všechny" : "Všech"} ${n} ${plural(n, "vhodná podlaha", "vhodné podlahy", "vhodných podlah")} v katalogu`}</Link>}
           <button type="button" className="link text-muted py-2" onClick={reset}>Začít znovu</button>
         </div>
       </div>
@@ -599,38 +670,50 @@ function StepResult(p: ResultProps) {
           ) : (
             <>
               <h3 className="h3 mt-1">{selected.brand} {selected.decor}</h3>
-              <p className="text-sm text-muted">{fmtCzk(selected.pricePerM2)}/m² · {fmtCzk(selected.pricePerPack)}/balení ({fmtNum2(selected.m2PerPack)} m²)</p>
-              <div className="mt-4 sm:mt-5"><CalcResultView result={selectedResult} /></div>
-              <div className="mt-4 grid sm:grid-cols-2 gap-x-3 text-sm">
-                <label className="check min-h-11"><input type="checkbox" checked={options.reservePack} onChange={(e) => setOptions({ ...options, reservePack: e.target.checked })} /> +1 balení rezerva</label>
-                <label className="check min-h-11"><input type="checkbox" checked={options.includeUnderlay} onChange={(e) => setOptions({ ...options, includeUnderlay: e.target.checked })} /> Podložka</label>
-                <label className="check min-h-11"><input type="checkbox" checked={options.includeSkirting} onChange={(e) => setOptions({ ...options, includeSkirting: e.target.checked })} /> Sokly + lepidlo + tmel</label>
-                <label className="check min-h-11"><input type="checkbox" checked={options.includeTransitions} onChange={(e) => setOptions({ ...options, includeTransitions: e.target.checked })} /> Přechodové lišty</label>
+              <p className="text-sm text-muted">{fmtNum2(selectedResult.totalAreaM2)} m² · {fmtCzk(selected.pricePerM2)}/m² · {fmtCzk(selected.pricePerPack)}/balení ({fmtNum2(selected.m2PerPack)} m²)</p>
+              {/* Cena a hlavní tlačítko nahoře — na desktopu bez posouvání */}
+              <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-ink pt-3">
+                <span className="text-sm text-muted leading-tight">Celý projekt<span className="block text-xs">{shippingNote(selectedResult)}</span></span>
+                <span className="text-3xl tabular-nums">{fmtCzk(projectTotal(selectedResult))}</span>
               </div>
-              {ship && (
-                <p className="text-sm text-ink-soft mt-3">Doprava podlahy: {ship.free ? <strong className="text-ok">zdarma</strong> : <strong>{fmtCzk(ship.price)}</strong>} · {ship.methodLabel.toLowerCase()}. {ship.method === "pallet" ? "Ke krajnici, vynáška v košíku." : "Ke dveřím domu."}</p>
-              )}
-              <div className="mt-5 grid gap-2">
+              <div className="mt-4 grid gap-2">
                 <button type="button" className="btn btn-accent btn-lg w-full" disabled={saving !== "idle"} onClick={onAddToCart}>{saving === "cart" ? "Ukládám…" : "Vložit celý projekt do košíku"}</button>
-                <button type="button" className="btn btn-outline w-full" disabled={saving !== "idle"} onClick={onShare}><Share className="h-4 w-4" /> {saving === "saving" ? "Ukládám…" : "Uložit a sdílet odkaz"}</button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button type="button" className="btn btn-outline w-full !px-2" disabled={saving !== "idle"} onClick={onShare}><Share className="h-4 w-4" /> {saving === "saving" ? "Ukládám…" : "Sdílet odkaz"}</button>
+                  <button type="button" className="btn btn-outline w-full !px-2" disabled={saving !== "idle"} onClick={onInstall}>{saving === "install" ? "Ukládám…" : "Poptat pokládku"}</button>
+                </div>
                 {shareUrl && (
                   <div className="rounded-md bg-bg p-3 text-sm">
                     <p className="text-muted mb-1.5">Kalkulace je uložená pod odkazem:</p>
                     <div className="flex gap-2"><input readOnly className="input !py-1.5 text-xs" value={shareUrl} onFocus={(e) => e.currentTarget.select()} /><button type="button" className="btn btn-primary btn-sm shrink-0" onClick={onCopy}>{copied ? <><Check className="h-4 w-4" /> Zkopírováno</> : <><Copy className="h-4 w-4" /> Kopírovat</>}</button></div>
                   </div>
                 )}
-                <Link href={`/montaz?product=${selected.slug}&area=${selectedResult.totalAreaM2}`} className="btn btn-ghost w-full text-ink-soft">Chci k tomu i pokládku</Link>
+              </div>
+              <SendCalcEmail key={selected.id} className="mt-4" ensureId={onSave} />
+
+              <button type="button" className="hidden lg:flex mt-4 w-full items-center justify-between gap-2 min-h-11 border-t border-line pt-2 text-sm text-left" aria-expanded={itemsOpen} onClick={() => setItemsOpen((v) => !v)}>
+                <span>{itemsOpen ? "Skrýt položky" : `Zobrazit položky (${itemCount}) a dopravu`}</span>
+                <ChevronDown className={clsx("h-4 w-4 transition-transform", itemsOpen && "rotate-180")} />
+              </button>
+              <div className={clsx("mt-4 lg:mt-2", !itemsOpen && "lg:hidden")}>
+                <CalcResultView result={selectedResult} />
+                <div className="mt-4 grid sm:grid-cols-2 gap-x-3 text-sm">
+                  <label className="check min-h-11"><input type="checkbox" checked={options.reservePack} onChange={(e) => setOptions({ ...options, reservePack: e.target.checked })} /> +1 balení rezerva</label>
+                  <label className={clsx("check min-h-11", noUnderlay && "text-muted")}><input type="checkbox" disabled={noUnderlay} checked={options.includeUnderlay && !noUnderlay} onChange={(e) => setOptions({ ...options, includeUnderlay: e.target.checked })} /> Podložka{noUnderlay ? " (není potřeba)" : ""}</label>
+                  <label className="check min-h-11"><input type="checkbox" checked={options.includeSkirting} onChange={(e) => setOptions({ ...options, includeSkirting: e.target.checked })} /> Sokly + lepidlo + tmel</label>
+                  <label className="check min-h-11"><input type="checkbox" checked={options.includeTransitions} onChange={(e) => setOptions({ ...options, includeTransitions: e.target.checked })} /> Přechodové lišty</label>
+                </div>
               </div>
             </>
           )}
         </div>
       </aside>
-      {selected && selectedResult && rec.results.length > 0 && (
-        <div className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)]">
+      {selected && selectedResult && shown > 0 && (
+        <div className="lg:hidden fixed inset-x-0 bottom-[var(--cookie-h,0px)] z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)]">
           <div className="container py-2 flex items-center gap-2">
             <div className="flex-1 min-w-0 leading-tight">
-              <p className="text-lg tabular-nums">{fmtCzk(selectedResult.total)}</p>
-              <p className="text-xs text-muted truncate">{ship ? (ship.free ? "doprava zdarma" : `+ doprava ${fmtCzk(ship.price)}`) : "vč. příslušenství"} · {selected.decor}</p>
+              <p className="text-lg tabular-nums">{fmtCzk(projectTotal(selectedResult))}</p>
+              <p className="text-xs text-muted truncate">{shippingNote(selectedResult)} · {selected.decor}</p>
             </div>
             <button type="button" className="btn btn-ghost !px-3 shrink-0" onClick={() => document.getElementById("rozpis")?.scrollIntoView({ behavior: "smooth" })}>Rozpis</button>
             <button type="button" className="btn btn-accent shrink-0" disabled={saving !== "idle"} onClick={onAddToCart}>{saving === "cart" ? "Ukládám…" : "Do košíku"}</button>
@@ -640,15 +723,15 @@ function StepResult(p: ResultProps) {
       <VisualizerDialog
         open={vizFor !== null}
         onClose={() => setVizFor(null)}
-        title="Porovnání ve 3D bytě"
-        subtitle={`${rec.results.length} dekorů z vaší nabídky · ceny za celý projekt`}
+        title="Byt ve 3D"
+        subtitle={`${shown} ${plural(shown, "podlaha", "podlahy", "podlah")} z vaší nabídky · ceny za celý projekt`}
         products={rec.results.map((r) => r.product)}
         initialProductId={vizFor}
         initialView={answers.roomKinds.length ? VIEW_FOR_ROOM[answers.roomKinds[0]] : "living"}
         initialLayout={layout}
         sampleMax={settings.samples.max}
         onLayoutChange={onLayout}
-        priceLabel={(prod) => { const pr = projectFor.get(prod.id); return pr ? fmtCzk(pr.total) : `${fmtCzk(prod.pricePerM2)}/m²`; }}
+        priceLabel={(prod) => { const pr = projectFor.get(prod.id); return pr ? fmtCzk(projectTotal(pr)) : `${fmtCzk(prod.pricePerM2)}/m²`; }}
         renderActions={(prod) => prod.id === selected?.id
           ? <button type="button" className="btn btn-primary btn-sm" onClick={() => setVizFor(null)}><Check className="h-4 w-4" /> Vybráno</button>
           : <button type="button" className="btn btn-accent btn-sm" onClick={() => { setSelectedId(prod.id); setVizFor(null); }}>Vybrat tuto</button>}

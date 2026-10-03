@@ -21,7 +21,7 @@
     "image": "/media/accessories/a_floortrade_acc-und-ixpe15.webp",
     "status": "active",
     "description": "Pěnová podložka pod click vinyl a SPC bez integrované podložky. Vyrovná drobné nerovnosti, tlumí kročejový hluk.",
-    "updatedAt": "2026-09-20T22:23:18.604Z"
+    "updatedAt": "2026-10-03T15:07:33.393Z"
   },
   {
     "id": "a_floortrade_acc-und-thermo12",
@@ -45,7 +45,7 @@
     "image": "/media/accessories/a_floortrade_acc-und-thermo12.webp",
     "status": "active",
     "description": "Podložka s nízkým tepelným odporem (0,01 m²K/W) určená pod podlahové topení. Parozábrana integrovaná.",
-    "updatedAt": "2026-09-20T22:23:18.849Z"
+    "updatedAt": "2026-10-03T15:07:33.506Z"
   },
   {
     "id": "a_floortrade_acc-glue-skt300",
@@ -69,7 +69,7 @@
     "image": null,
     "status": "active",
     "description": "Hybridní montážní lepidlo pro lepení soklových lišt na zdivo i sádrokarton.",
-    "updatedAt": "2026-09-20T22:23:18.849Z"
+    "updatedAt": "2026-10-03T15:07:33.506Z"
   },
   {
     "id": "a_floortrade_acc-sil-310",
@@ -93,7 +93,7 @@
     "image": null,
     "status": "active",
     "description": "Přetíratelný akrylový tmel na spáru mezi lištou a stěnou.",
-    "updatedAt": "2026-09-20T22:23:18.849Z"
+    "updatedAt": "2026-10-03T15:07:33.506Z"
   },
   {
     "id": "a_vinylia_vn-skt-60-light",
@@ -119,7 +119,7 @@
     "image": "/media/accessories/a_vinylia_vn-skt-60-light.webp",
     "status": "active",
     "description": "Foliovaná MDF lišta 60 × 15 mm s kabelovým kanálkem. Odstín sladěný se světlými dubovými dekory.",
-    "updatedAt": "2026-09-20T22:23:47.608Z"
+    "updatedAt": "2026-10-03T15:07:54.232Z"
   },
   {
     "id": "a_vinylia_vn-skt-60-dark",
@@ -145,7 +145,7 @@
     "image": "/media/accessories/a_vinylia_vn-skt-60-dark.webp",
     "status": "active",
     "description": "Foliovaná MDF lišta 60 × 15 mm s kabelovým kanálkem. Odstín pro tmavé dřevěné dekory.",
-    "updatedAt": "2026-09-20T22:23:47.782Z"
+    "updatedAt": "2026-10-03T15:07:54.349Z"
   },
   {
     "id": "a_vinylia_vn-skt-60-grey",
@@ -171,7 +171,7 @@
     "image": "/media/accessories/a_vinylia_vn-skt-60-grey.webp",
     "status": "active",
     "description": "Foliovaná MDF lišta 60 × 15 mm s kabelovým kanálkem. Šedý odstín.",
-    "updatedAt": "2026-09-20T22:23:48.028Z"
+    "updatedAt": "2026-10-03T15:07:54.457Z"
   },
   {
     "id": "a_vinylia_vn-skt-60-white",
@@ -197,7 +197,7 @@
     "image": "/media/accessories/a_vinylia_vn-skt-60-white.webp",
     "status": "active",
     "description": "Bílá lakovaná MDF lišta 60 × 15 mm. Univerzální ke kamenným a betonovým dekorům i k bílým stěnám.",
-    "updatedAt": "2026-09-20T22:23:48.244Z"
+    "updatedAt": "2026-10-03T15:07:54.573Z"
   },
   {
     "id": "a_vinylia_vn-adh-lvt-6",
@@ -221,7 +221,7 @@
     "image": null,
     "status": "active",
     "description": "Disperzní lepidlo pro celoplošné lepení LVT dílců, vhodné na podlahové topení. Spotřeba cca 300 g/m².",
-    "updatedAt": "2026-09-20T22:23:48.244Z"
+    "updatedAt": "2026-10-03T15:07:54.573Z"
   },
   {
     "id": "a_nordic_nf-trn-90-silver",
@@ -248,7 +248,7 @@
     "image": "/media/accessories/a_nordic_nf-trn-90-silver.webp",
     "status": "active",
     "description": "Hliníková samolepicí přechodová lišta 38 mm pro spojení podlah ve stejné výšce.",
-    "updatedAt": "2026-09-20T22:24:01.600Z"
+    "updatedAt": "2026-10-03T15:08:03.703Z"
   },
   {
     "id": "a_nordic_nf-trn-90-oak",
@@ -275,7 +275,7 @@
     "image": "/media/accessories/a_nordic_nf-trn-90-oak.webp",
     "status": "active",
     "description": "Hliníková samolepicí přechodová lišta 38 mm s dřevodekorem.",
-    "updatedAt": "2026-09-20T22:24:01.824Z"
+    "updatedAt": "2026-10-03T15:08:03.825Z"
   },
   {
     "id": "a_nordic_nf-clean-set",
@@ -299,6 +299,6 @@
     "image": null,
     "status": "active",
     "description": "Mop s mikrovláknem, rozprašovač a 1 l neutrálního čističe na vinyl a SPC.",
-    "updatedAt": "2026-09-20T22:24:01.824Z"
+    "updatedAt": "2026-10-03T15:08:03.825Z"
   }
 ]

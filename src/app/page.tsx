@@ -22,6 +22,8 @@ const LANDING_IMG: Record<string, string> = {
 const USP_ICONS = [Ruler, Truck, Swatch, Hammer];
 /** Orientační ceny: na očích jen typy podlah, příslušenství a pokládka se rozbalí. */
 const PRICE_ROWS_VISIBLE = 3;
+/** „Doprava zdarma od 25 m²“ v textech z adminu: číslo vždy podle nastavení dopravy. */
+const withFreeShipping = (text: string, m2: number) => text.replace(/(zdarma od )\d+(?:[.,]\d+)?(\s*m²)/i, `$1${String(m2).replace(".", ",")}$2`);
 
 export default function HomePage() {
   const c = contentRepo.get();
@@ -68,10 +70,10 @@ export default function HomePage() {
           <Image src="/media/inspiration/vizualizace.webp" alt="3D vizualizace obývacího pokoje s vinylovou podlahou v rybí kosti" fill sizes="(max-width: 1360px) 100vw, 1360px" className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/15 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-5 md:p-10">
-            <p className="eyebrow !text-white/75 mb-2">3D vizualizace</p>
+            <p className="eyebrow !text-white/75 mb-2">Byt ve 3D</p>
             <h2 className="h2 max-w-xl">Vyzkoušejte podlahu ve 3D bytě.</h2>
             <p className="mt-2 text-white/85 max-w-md">Byt 2+kk: přepněte dekor, kladení i barvu stěn.</p>
-            <span className="btn btn-accent btn-lg mt-5 w-full sm:w-auto">Otevřít 3D byt <ArrowRight className="h-5 w-5" /></span>
+            <span className="btn btn-accent btn-lg mt-5 w-full sm:w-auto"><Cube className="h-5 w-5" /> Byt ve 3D</span>
           </div>
         </Link>
       </section>
@@ -82,7 +84,7 @@ export default function HomePage() {
           {c.usps.map((u, i) => { const Icon = USP_ICONS[i % USP_ICONS.length]; return (
             <div key={u.title} className="border-t border-ink pt-4 md:pt-5">
               <Icon className="h-6 w-6 md:h-7 md:w-7 mb-3 md:mb-4" />
-              <h3 className="text-base sm:text-lg md:text-xl leading-tight">{u.title}</h3>
+              <h3 className="text-base sm:text-lg md:text-xl leading-tight">{withFreeShipping(u.title, cfg.freeShippingFromM2)}</h3>
               <p className="hidden sm:block text-ink-soft mt-2 leading-relaxed">{u.text}</p>
             </div>
           ); })}
@@ -122,7 +124,7 @@ export default function HomePage() {
             <h2 className="h2">{c.priceGuide.title}</h2>
             <p className="lead mt-3">{c.priceGuide.text}</p>
             <p className="mt-4 text-ink-soft">U nás <strong className="font-normal text-ink tabular-nums">{fmtInt(minPrice)}–{fmtInt(maxPrice)} Kč/m²</strong> · {visible.length} dekorů</p>
-            <Link href="/kalkulacka" className="btn btn-accent mt-5 w-full sm:w-auto">Spočítat cenu mého projektu <ArrowRight className="h-4 w-4" /></Link>
+            <Link href="/kalkulacka" className="btn btn-accent mt-5 w-full sm:w-auto"><Ruler className="h-4 w-4" /> Spočítat cenu</Link>
           </div>
           <div className="lg:col-span-7">
             <table className="spec"><tbody>{c.priceGuide.rows.slice(0, PRICE_ROWS_VISIBLE).map(priceRow)}</tbody></table>
@@ -157,7 +159,7 @@ export default function HomePage() {
           <div>
             <h2 className="h2">{c.about.title}</h2>
             <p className="lead mt-3">{c.about.text}</p>
-            <div className="mt-5 flex flex-wrap gap-2"><Link href="/doprava" className="btn btn-outline">Doprava</Link><Link href="/montaz" className="btn btn-ghost">Poptat pokládku</Link></div>
+            <div className="mt-5 flex flex-wrap gap-2"><Link href="/doprava" className="btn btn-outline">Doprava a platba</Link><Link href="/montaz" className="btn btn-ghost">Poptat pokládku</Link></div>
           </div>
         </div>
         <div className="mt-12 md:mt-16 border-t border-line pt-6 max-w-3xl">

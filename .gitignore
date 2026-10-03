@@ -41,3 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# demo fotky dekorů vykreslené seedem (cache, přegeneruje se)
+/data/feeds/demo-images/

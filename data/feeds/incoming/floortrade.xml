@@ -2,7 +2,7 @@
 <SHOP>
   <SHOPITEM>
     <ITEM_ID>QUA-BASICSPC-DUBPŘÍRODNÍ</ITEM_ID>
-    <PRODUCTNAME>Basic SPC 4 Dub Přírodní</PRODUCTNAME>
+    <PRODUCTNAME>Basic SPC 4 Dub přírodní</PRODUCTNAME>
     <MANUFACTURER>Quaro</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.</DESCRIPTION>
@@ -10,11 +10,10 @@
     <STOCK>640</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
     <WEIGHT>26</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-digitalbuggu-314073.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;brightness&quot;:1.1,&quot;saturation&quot;:0.85}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubprirodni.webp</IMGURL>
+    
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Přírodní</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub přírodní</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>SPC</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>4 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,3 mm</VAL></PARAM>
@@ -28,7 +27,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>QUA-BASICSPC-DUBBĚLENÝ</ITEM_ID>
-    <PRODUCTNAME>Basic SPC 4 Dub Bělený</PRODUCTNAME>
+    <PRODUCTNAME>Basic SPC 4 Dub bělený</PRODUCTNAME>
     <MANUFACTURER>Quaro</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.</DESCRIPTION>
@@ -36,11 +35,10 @@
     <STOCK>388</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
     <WEIGHT>26</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-designecologist-15226296.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;brightness&quot;:1.15,&quot;saturation&quot;:0.6}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubbeleny.webp</IMGURL>
+    
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Bělený</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub bělený</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>SPC</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>4 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,3 mm</VAL></PARAM>
@@ -54,7 +52,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>QUA-BASICSPC-DUBPOPELAVÝ</ITEM_ID>
-    <PRODUCTNAME>Basic SPC 4 Dub Popelavý</PRODUCTNAME>
+    <PRODUCTNAME>Basic SPC 4 Dub popelavý</PRODUCTNAME>
     <MANUFACTURER>Quaro</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.</DESCRIPTION>
@@ -62,11 +60,10 @@
     <STOCK>220</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
     <WEIGHT>26</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-digitalbuggu-368755.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;saturation&quot;:0.2,&quot;brightness&quot;:0.85}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubpopelavy.webp</IMGURL>
+    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Popelavý</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub popelavý</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>SPC</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>4 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,3 mm</VAL></PARAM>
@@ -79,8 +76,8 @@
     <PARAM><PARAM_NAME>Integrovaná podložka</PARAM_NAME><VAL>ne</VAL></PARAM>
   </SHOPITEM>
   <SHOPITEM>
-    <ITEM_ID>QUA-BASICSPC-DUBKARAMELOVÝ</ITEM_ID>
-    <PRODUCTNAME>Basic SPC 4 Dub Karamelový</PRODUCTNAME>
+    <ITEM_ID>QUA-BASICSPC-DUBKÁVOVÝ</ITEM_ID>
+    <PRODUCTNAME>Basic SPC 4 Dub kávový</PRODUCTNAME>
     <MANUFACTURER>Quaro</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.</DESCRIPTION>
@@ -88,11 +85,10 @@
     <STOCK>176</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
     <WEIGHT>26</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;brightness&quot;:0.85,&quot;saturation&quot;:1.15}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubkavovy.webp</IMGURL>
+    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Karamelový</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub kávový</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>SPC</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>4 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,3 mm</VAL></PARAM>
@@ -106,7 +102,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>QUA-BASICSPC-BETONSVĚTLÝ</ITEM_ID>
-    <PRODUCTNAME>Basic SPC 4 Beton Světlý</PRODUCTNAME>
+    <PRODUCTNAME>Basic SPC 4 Beton světlý</PRODUCTNAME>
     <MANUFACTURER>Quaro</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.</DESCRIPTION>
@@ -114,17 +110,16 @@
     <STOCK>44</STOCK>
     <DELIVERY_DATE>10</DELIVERY_DATE>
     <WEIGHT>26</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;saturation&quot;:0.3,&quot;brightness&quot;:1.05,&quot;crop&quot;:&quot;bottom&quot;}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/qua-basicspc-betonsvetly.webp</IMGURL>
+    
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Beton Světlý</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Beton světlý</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>SPC</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>4 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,3 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Třída zátěže</PARAM_NAME><VAL>31</VAL></PARAM>
     <PARAM><PARAM_NAME>Pokládka</PARAM_NAME><VAL>Click zámek</VAL></PARAM>
-    <PARAM><PARAM_NAME>Rozměr lamely</PARAM_NAME><VAL>1220 x 183 mm</VAL></PARAM>
+    <PARAM><PARAM_NAME>Rozměr lamely</PARAM_NAME><VAL>610 x 305 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Fáza</PARAM_NAME><VAL>ne</VAL></PARAM>
     <PARAM><PARAM_NAME>m2 v balení</PARAM_NAME><VAL>2,23</VAL></PARAM>
     <PARAM><PARAM_NAME>Podlahové topení</PARAM_NAME><VAL>ano</VAL></PARAM>
@@ -140,9 +135,8 @@
     <STOCK>180</STOCK>
     <DELIVERY_DATE>4</DELIVERY_DATE>
     <WEIGHT>19</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;brightness&quot;:1,&quot;saturation&quot;:0.9,&quot;hue&quot;:-5}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/cas-composit-dubprovence.webp</IMGURL>
+    
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Composite Comfort 6.5</VAL></PARAM>
     <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Provence</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>Vinyl na kompozitu</VAL></PARAM>
@@ -157,8 +151,8 @@
     <PARAM><PARAM_NAME>Integrovaná podložka</PARAM_NAME><VAL>ano</VAL></PARAM>
   </SHOPITEM>
   <SHOPITEM>
-    <ITEM_ID>CAS-COMPOSIT-DUBKÁVOVÝ</ITEM_ID>
-    <PRODUCTNAME>Composite Comfort 6.5 Dub Kávový</PRODUCTNAME>
+    <ITEM_ID>CAS-COMPOSIT-DUBKARAMELOVÝ</ITEM_ID>
+    <PRODUCTNAME>Composite Comfort 6.5 Dub karamelový</PRODUCTNAME>
     <MANUFACTURER>Casale</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.</DESCRIPTION>
@@ -166,11 +160,10 @@
     <STOCK>96</STOCK>
     <DELIVERY_DATE>4</DELIVERY_DATE>
     <WEIGHT>19</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-digitalbuggu-314073.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;brightness&quot;:0.7,&quot;saturation&quot;:0.9}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/cas-composit-dubkaramelovy.webp</IMGURL>
+    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Composite Comfort 6.5</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Kávový</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub karamelový</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>Vinyl na kompozitu</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>6,5 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,55 mm</VAL></PARAM>
@@ -184,7 +177,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>CAS-COMPOSIT-DUBSTŘÍBRNÝ</ITEM_ID>
-    <PRODUCTNAME>Composite Comfort 6.5 Dub Stříbrný</PRODUCTNAME>
+    <PRODUCTNAME>Composite Comfort 6.5 Dub stříbrný</PRODUCTNAME>
     <MANUFACTURER>Casale</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.</DESCRIPTION>
@@ -192,11 +185,10 @@
     <STOCK>110</STOCK>
     <DELIVERY_DATE>4</DELIVERY_DATE>
     <WEIGHT>19</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-digitalbuggu-314073.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-designecologist-15226296.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;saturation&quot;:0.1,&quot;brightness&quot;:1.05}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/cas-composit-dubstribrny.webp</IMGURL>
+    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Composite Comfort 6.5</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Stříbrný</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub stříbrný</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>Vinyl na kompozitu</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>6,5 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,55 mm</VAL></PARAM>
@@ -210,7 +202,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>CAS-COMPOSIT-TERRAZZOSVĚTLÉ</ITEM_ID>
-    <PRODUCTNAME>Composite Comfort 6.5 Terrazzo Světlé</PRODUCTNAME>
+    <PRODUCTNAME>Composite Comfort 6.5 Terrazzo světlé</PRODUCTNAME>
     <MANUFACTURER>Casale</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.</DESCRIPTION>
@@ -218,17 +210,16 @@
     <STOCK>62</STOCK>
     <DELIVERY_DATE>8</DELIVERY_DATE>
     <WEIGHT>19</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg</IMGURL>
+    <IMGURL>file://data/feeds/demo-images/cas-composit-terrazzosvetle.webp</IMGURL>
     <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;brightness&quot;:1.05,&quot;saturation&quot;:0.5,&quot;crop&quot;:&quot;top&quot;}</IMG_TRANSFORM>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Composite Comfort 6.5</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Terrazzo Světlé</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Terrazzo světlé</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>Vinyl na kompozitu</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>6,5 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,55 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Třída zátěže</PARAM_NAME><VAL>33</VAL></PARAM>
     <PARAM><PARAM_NAME>Pokládka</PARAM_NAME><VAL>Click zámek</VAL></PARAM>
-    <PARAM><PARAM_NAME>Rozměr lamely</PARAM_NAME><VAL>1500 x 228 mm</VAL></PARAM>
+    <PARAM><PARAM_NAME>Rozměr lamely</PARAM_NAME><VAL>610 x 610 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Fáza</PARAM_NAME><VAL>ano</VAL></PARAM>
     <PARAM><PARAM_NAME>m2 v balení</PARAM_NAME><VAL>2,05</VAL></PARAM>
     <PARAM><PARAM_NAME>Podlahové topení</PARAM_NAME><VAL>ano</VAL></PARAM>
@@ -236,7 +227,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>CAS-HERRINGB-DUBRYBÍKOSTPŘÍRODN</ITEM_ID>
-    <PRODUCTNAME>Herringbone 6.5 Dub Rybí kost Přírodní</PRODUCTNAME>
+    <PRODUCTNAME>Herringbone 6.5 Dub rybí kost přírodní</PRODUCTNAME>
     <MANUFACTURER>Casale</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Kratší lamely určené pro pokládku do rybí kosti. Kompozitní jádro s integrovanou podložkou, click zámek pro vzor rybí kost (pravé a levé lamely v balení).</DESCRIPTION>
@@ -244,11 +235,10 @@
     <STOCK>74</STOCK>
     <DELIVERY_DATE>8</DELIVERY_DATE>
     <WEIGHT>16</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;crop&quot;:&quot;bottom&quot;,&quot;brightness&quot;:1.05}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/cas-herringb-dubrybikostprirodn.webp</IMGURL>
+    
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Herringbone 6.5</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Rybí kost Přírodní</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub rybí kost přírodní</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>Vinyl na kompozitu</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>6,5 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,55 mm</VAL></PARAM>
@@ -262,7 +252,7 @@
   </SHOPITEM>
   <SHOPITEM>
     <ITEM_ID>CAS-HERRINGB-DUBRYBÍKOSTKOUŘOVÝ</ITEM_ID>
-    <PRODUCTNAME>Herringbone 6.5 Dub Rybí kost Kouřový</PRODUCTNAME>
+    <PRODUCTNAME>Herringbone 6.5 Dub rybí kost kouřový</PRODUCTNAME>
     <MANUFACTURER>Casale</MANUFACTURER>
     <CATEGORYTEXT>Podlahy | Vinylové podlahy</CATEGORYTEXT>
     <DESCRIPTION>Kratší lamely určené pro pokládku do rybí kosti. Kompozitní jádro s integrovanou podložkou, click zámek pro vzor rybí kost (pravé a levé lamely v balení).</DESCRIPTION>
@@ -270,11 +260,10 @@
     <STOCK>41</STOCK>
     <DELIVERY_DATE>8</DELIVERY_DATE>
     <WEIGHT>16</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg</IMGURL>
-    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</IMGURL_ALTERNATIVE>
-    <IMG_TRANSFORM>{&quot;crop&quot;:&quot;bottom&quot;,&quot;brightness&quot;:0.8,&quot;saturation&quot;:0.8}</IMG_TRANSFORM>
+    <IMGURL>file://data/feeds/demo-images/cas-herringb-dubrybikostkourovy.webp</IMGURL>
+    <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Herringbone 6.5</VAL></PARAM>
-    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub Rybí kost Kouřový</VAL></PARAM>
+    <PARAM><PARAM_NAME>Dekor</PARAM_NAME><VAL>Dub rybí kost kouřový</VAL></PARAM>
     <PARAM><PARAM_NAME>Typ</PARAM_NAME><VAL>Vinyl na kompozitu</VAL></PARAM>
     <PARAM><PARAM_NAME>Tloušťka</PARAM_NAME><VAL>6,5 mm</VAL></PARAM>
     <PARAM><PARAM_NAME>Nášlapná vrstva</PARAM_NAME><VAL>0,55 mm</VAL></PARAM>
@@ -295,7 +284,7 @@
     <STOCK>320</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
     <WEIGHT>3.5</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-designecologist-15226296.jpg</IMGURL>
+    <IMGURL>file://data/feeds/demo-images/acc-acc-und-ixpe15.webp</IMGURL>
     <PARAM><PARAM_NAME>Druh</PARAM_NAME><VAL>Podložka</VAL></PARAM>
     <PARAM><PARAM_NAME>Jednotka</PARAM_NAME><VAL>role</VAL></PARAM>
     <PARAM><PARAM_NAME>Pokrytí</PARAM_NAME><VAL>15</VAL></PARAM>
@@ -312,7 +301,7 @@
     <STOCK>180</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
     <WEIGHT>3</WEIGHT>
-    <IMGURL>file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg</IMGURL>
+    <IMGURL>file://data/feeds/demo-images/acc-acc-und-thermo12.webp</IMGURL>
     <PARAM><PARAM_NAME>Druh</PARAM_NAME><VAL>Podložka</VAL></PARAM>
     <PARAM><PARAM_NAME>Jednotka</PARAM_NAME><VAL>role</VAL></PARAM>
     <PARAM><PARAM_NAME>Pokrytí</PARAM_NAME><VAL>15</VAL></PARAM>

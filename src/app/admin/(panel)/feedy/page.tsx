@@ -16,7 +16,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         <form action={resetDemoFeedsAction}><button className="btn btn-ghost btn-sm">Demo: obnovit výchozí feedy</button></form>
       </PageHead>
       <Saved show={!!sp.synced} text="Synchronizace proběhla." />
-      <Saved show={!!sp.simulated} text="Do feedů byly zapsány změny (skok ceny +15 % u Terrano Dub Medový, zmizení Quaro Beton Světlý, pokles skladu Nordwood Dub Alpský) a proběhl sync. Podívejte se na upozornění níže." />
+      <Saved show={!!sp.simulated} text="Do feedů byly zapsány změny (skok ceny +15 % u Terrano Dub medový, zmizení Quaro Beton světlý, pokles skladu Nordwood Dub alpský) a proběhl sync. Podívejte se na upozornění níže." />
       <Saved show={!!sp.reset} text="Feedy obnoveny do výchozího stavu a synchronizovány. Produkty pozastavené kvůli zmizení se automaticky vrátily; skok ceny vyžaduje ruční schválení v Produktech." />
       <div className="grid md:grid-cols-3 gap-4">
         {sups.map((s) => (

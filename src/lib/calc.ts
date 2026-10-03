@@ -1,4 +1,6 @@
-import type { CalcLine, CalcOptions, CalcResult, RoomInput } from "./types";
+import type { CalcLine, CalcOptions, CalcResult, CalcShipping, RoomInput } from "./types";
+import { planShipments, type ShipmentPart } from "./shipping";
+import { fmtCzk, plural } from "./format";
 import type { PublicAccessory as Accessory, PublicProduct as Product, PublicSettings as Settings } from "./public";
 import { LAYOUT_WASTE } from "./types";
 
@@ -37,19 +39,41 @@ export function roomPerimeter(r: RoomInput): { value: number; estimated: boolean
   return { value: a > 0 ? 4 * Math.sqrt(a) : 0, estimated: true };
 }
 
-function pickUnderlay(list: Accessory[], floorHeating: boolean) {
+/** Potřebuje podlaha samostatnou podložku? Ne, když ji má integrovanou nebo se lepí (lepený / samolepicí vinyl se klade přímo na podklad). */
+export function underlayNeed(product: Pick<Product, "integratedUnderlay" | "lock" | "type">): "needed" | "integrated" | "glued" {
+  if (product.integratedUnderlay) return "integrated";
+  if (product.type === "vinyl-glue" || product.lock !== "click") return "glued";
+  return "needed";
+}
+
+/**
+ * Z vhodných kandidátů přednostně ten od stejného dodavatele jako podlaha — přijde ve stejné zásilce,
+ * takže nevzniká další doprava (u zásilky s podlahou nad limit je zdarma).
+ */
+function preferSupplier(list: Accessory[], supplierId: string): Accessory | null {
+  return list.find((a) => a.supplierId === supplierId) ?? list[0] ?? null;
+}
+
+function pickUnderlay(list: Accessory[], floorHeating: boolean, supplierId: string) {
   const usable = list.filter((a) => a.kind === "underlay" && a.status === "active");
-  if (floorHeating) return usable.find((a) => a.floorHeating) ?? usable[0] ?? null;
-  return usable.find((a) => !a.floorHeating) ?? usable[0] ?? null;
+  const fit = usable.filter((a) => (floorHeating ? a.floorHeating : !a.floorHeating));
+  return preferSupplier(fit.length ? fit : usable, supplierId);
 }
 
 function pickSkirting(list: Accessory[], product: Product) {
   const usable = list.filter((a) => a.kind === "skirting" && a.status === "active");
-  return usable.find((a) => a.decorTones.includes(product.decorTone)) ?? usable[0] ?? null;
+  const tone = usable.filter((a) => a.decorTones.includes(product.decorTone));
+  return preferSupplier(tone.length ? tone : usable, product.supplierId);
 }
 
-function pickKind(list: Accessory[], kind: Accessory["kind"]) {
-  return list.find((a) => a.kind === kind && a.status === "active") ?? null;
+function pickTransition(list: Accessory[], product: Product) {
+  const usable = list.filter((a) => a.kind === "transition" && a.status === "active");
+  const tone = usable.filter((a) => a.decorTones.includes(product.decorTone));
+  return preferSupplier(tone.length ? tone : usable, product.supplierId);
+}
+
+function pickKind(list: Accessory[], kind: Accessory["kind"], supplierId: string) {
+  return preferSupplier(list.filter((a) => a.kind === kind && a.status === "active"), supplierId);
 }
 
 const r2 = (v: number) => Math.round(v * 100) / 100;
@@ -67,7 +91,7 @@ export function calculateProject(
   rooms: RoomInput[],
   options: CalcOptions,
   accessoriesList: Accessory[],
-  _settings: Settings,
+  settings: Settings,
 ): CalcResult {
   const warnings: string[] = [];
   const roomsOut = rooms
@@ -130,10 +154,12 @@ export function calculateProject(
 
   // Podložka
   if (options.includeUnderlay && totalArea > 0) {
-    if (product.integratedUnderlay) {
-      lines.push({ kind: "accessory", refId: "underlay", name: "Podložka", detail: "Podlaha má integrovanou podložku — není potřeba.", qty: 0, unit: "role", unitPrice: 0, lineTotal: 0, skipped: "integrated" });
+    const need = underlayNeed(product);
+    if (need !== "needed") {
+      const detail = need === "integrated" ? "Podlaha má integrovanou podložku — není potřeba." : "Lepená podlaha se klade přímo na podklad — podložka se nepoužívá.";
+      lines.push({ kind: "accessory", refId: "underlay", name: "Podložka", detail, qty: 0, unit: "role", unitPrice: 0, lineTotal: 0, skipped: "integrated" });
     } else {
-      const u = pickUnderlay(accessoriesList, anyFloorHeating);
+      const u = pickUnderlay(accessoriesList, anyFloorHeating, product.supplierId);
       if (u) {
         const qty = Math.ceil(totalArea / u.coverage);
         lines.push({
@@ -159,12 +185,12 @@ export function calculateProject(
         detail: `${qty} × ${s.coverage.toString().replace(".", ",")} m na obvod ${totalPerimeter.toFixed(2).replace(".", ",")} m`,
         qty, unit: s.unit, unitPrice: s.pricePerUnit, lineTotal: qty * s.pricePerUnit,
       });
-      const g = pickKind(accessoriesList, "glue");
+      const g = pickKind(accessoriesList, "glue", product.supplierId);
       if (g) {
         const gq = Math.ceil(skirtingMeters / 20);
         lines.push({ kind: "accessory", refId: g.id, name: g.name, detail: `${gq} ks — 1 ks na každých 20 m lišt`, qty: gq, unit: g.unit, unitPrice: g.pricePerUnit, lineTotal: gq * g.pricePerUnit });
       }
-      const si = pickKind(accessoriesList, "silicone");
+      const si = pickKind(accessoriesList, "silicone", product.supplierId);
       if (si) {
         const sq = Math.ceil(skirtingMeters / 15);
         lines.push({ kind: "accessory", refId: si.id, name: si.name, detail: `${sq} ks — 1 ks na každých 15 m lišt`, qty: sq, unit: si.unit, unitPrice: si.pricePerUnit, lineTotal: sq * si.pricePerUnit });
@@ -174,7 +200,7 @@ export function calculateProject(
 
   // Lepidlo na podlahu — jen u lepených dílců
   if (product.lock === "glue" && totalArea > 0) {
-    const fa = pickKind(accessoriesList, "floor-adhesive");
+    const fa = pickKind(accessoriesList, "floor-adhesive", product.supplierId);
     if (fa) {
       const q = Math.ceil(totalAreaWithWaste(totalArea, totalWithWaste) / fa.coverage);
       lines.push({ kind: "accessory", refId: fa.id, name: fa.name, detail: `${q} × ${fa.coverageLabel} pro lepenou pokládku`, qty: q, unit: fa.unit, unitPrice: fa.pricePerUnit, lineTotal: q * fa.pricePerUnit });
@@ -185,14 +211,14 @@ export function calculateProject(
 
   // Přechodové lišty
   if (options.includeTransitions && totalDoors > 0) {
-    const t = accessoriesList.find((a) => a.kind === "transition" && a.status === "active" && a.decorTones.includes(product.decorTone))
-      ?? pickKind(accessoriesList, "transition");
+    const t = pickTransition(accessoriesList, product);
     if (t) {
       lines.push({ kind: "accessory", refId: t.id, name: t.name, detail: `${totalDoors} ks — 1 ks na každé dveře`, qty: totalDoors, unit: t.unit, unitPrice: t.pricePerUnit, lineTotal: totalDoors * t.pricePerUnit });
     }
   }
 
   const total = lines.reduce((s, l) => s + l.lineTotal, 0);
+  const shipping = projectShipping(lines, product, accessoriesList, settings);
 
   return {
     rooms: roomsOut,
@@ -206,8 +232,61 @@ export function calculateProject(
     anyFloorHeating,
     lines,
     total,
+    shipping,
     warnings,
   };
+}
+
+/**
+ * Doprava projektu přesně jako v košíku: položky se rozdělí na zásilky podle dodavatele (`planShipments`),
+ * zásilka s podlahou nad limit m² je zdarma, příslušenství od jiného dodavatele se platí zvlášť. Bez vynášky.
+ */
+export function projectShipping(lines: CalcLine[], product: Product, accessoriesList: Accessory[], settings: Settings): CalcShipping {
+  const parts: ShipmentPart[] = [];
+  const names = new Map<string, string[]>();
+  for (const l of lines) {
+    if (l.skipped || l.qty <= 0) continue;
+    if (l.kind === "product") {
+      parts.push({ supplierId: product.supplierId, weightKg: l.qty * product.packWeightKg, floorM2: l.qty * product.m2PerPack, weightEstimated: product.weightEstimated, deliveryDays: product.deliveryDays });
+      names.set(product.supplierId, ["Podlaha", ...(names.get(product.supplierId) ?? [])]);
+    } else {
+      const a = accessoriesList.find((x) => x.id === l.refId);
+      if (!a) continue;
+      parts.push({ supplierId: a.supplierId, weightKg: l.qty * a.unitWeightKg, floorM2: 0, weightEstimated: false, deliveryDays: a.deliveryDays });
+      names.set(a.supplierId, [...(names.get(a.supplierId) ?? []), shortAccName(a.kind)]);
+    }
+  }
+  const shipments = planShipments(parts, settings).map((ps) => {
+    const n = [...new Set(names.get(ps.supplierId) ?? [])];
+    const label = n[0] === "Podlaha" ? (n.length > 1 ? `Podlaha + ${n.slice(1).join(", ").toLowerCase()}` : "Podlaha") : n.join(", ").replace(/^./, (c) => c.toUpperCase());
+    return { supplierId: ps.supplierId, label, method: ps.method, methodLabel: ps.methodLabel, price: ps.price, free: ps.freeShipping, floorM2: ps.floorM2 };
+  });
+  return { total: shipments.reduce((s, x) => s + x.price, 0), shipments };
+}
+
+function shortAccName(kind: Accessory["kind"]): string {
+  switch (kind) {
+    case "underlay": return "podložka";
+    case "skirting": return "lišty";
+    case "glue": return "lepidlo na lišty";
+    case "silicone": return "tmel";
+    case "floor-adhesive": return "lepidlo na podlahu";
+    case "transition": return "přechodové lišty";
+    default: return "příslušenství";
+  }
+}
+
+/** Cena celého projektu = zboží + doprava (stejně jako košík bez vynášky). U starých uložených kalkulací jen zboží. */
+export function projectTotal(r: Pick<CalcResult, "total" | "shipping">): number {
+  return r.total + (r.shipping?.total ?? 0);
+}
+
+/** Krátký popisek dopravy pro lištu a kartu: „doprava zdarma“ / „vč. dopravy 298 Kč · 2 zásilky“. */
+export function shippingNote(r: Pick<CalcResult, "shipping">): string {
+  if (!r.shipping) return "bez dopravy";
+  const n = r.shipping.shipments.length;
+  const parts = r.shipping.total === 0 ? "doprava zdarma" : `vč. dopravy ${fmtCzk(r.shipping.total)}`;
+  return n > 1 ? `${parts} · ${n} ${plural(n, "zásilka", "zásilky", "zásilek")}` : parts;
 }
 
 function totalAreaWithWaste(_area: number, withWaste: number) { return withWaste; }

@@ -51,6 +51,45 @@ export function deliveryLabel(daysMax: number) {
   return `${lo}–${daysMax} pracovních dní`;
 }
 
+/** Podíl jedné položky na zásilce (hmotnost, m² podlahy, lhůta) — vstup pro `planShipments`. */
+export interface ShipmentPart { supplierId: string; weightKg: number; floorM2: number; weightEstimated: boolean; deliveryDays: number }
+
+export interface PlannedShipment {
+  supplierId: string;
+  weightKg: number;
+  weightEstimated: boolean;
+  floorM2: number;
+  deliveryDays: number;
+  method: "parcel" | "pallet";
+  methodLabel: string;
+  basePrice: number;
+  freeShipping: boolean;
+  price: number;
+}
+
+/**
+ * Rozdělení zboží na zásilky podle dodavatele a cena dopravy každé z nich (bez vynášky).
+ * Čistá funkce bez dat dodavatelů — používá ji košík (`quoteCart`) i kalkulačka, aby se ceny nikdy nerozešly.
+ * Zdarma je zásilka, která obsahuje aspoň `freeShippingFromM2` m² podlahy; samotné příslušenství se platí vždy.
+ */
+export function planShipments(parts: ShipmentPart[], settings: PublicSettings): PlannedShipment[] {
+  const by = new Map<string, { weight: number; floorM2: number; estimated: boolean; days: number }>();
+  for (const p of parts) {
+    const cur = by.get(p.supplierId) ?? { weight: 0, floorM2: 0, estimated: false, days: 0 };
+    cur.weight += p.weightKg; cur.floorM2 += p.floorM2; cur.estimated ||= p.weightEstimated; cur.days = Math.max(cur.days, p.deliveryDays);
+    by.set(p.supplierId, cur);
+  }
+  return [...by].map(([supplierId, x]) => {
+    const weight = r1(x.weight);
+    const base = shippingForWeight(weight, settings);
+    const free = x.floorM2 >= settings.freeShippingFromM2;
+    return {
+      supplierId, weightKg: weight, weightEstimated: x.estimated, floorM2: Math.round(x.floorM2 * 100) / 100, deliveryDays: x.days,
+      method: base.method, methodLabel: base.methodLabel, basePrice: base.price, freeShipping: free, price: free ? 0 : base.price,
+    };
+  });
+}
+
 /** Kompletní ocenění košíku: řádky, rozdělení na zásilky podle dodavatele, doprava, vynáška. */
 export function quoteCart(items: CartItem[], carryUp: CarryUpChoice, ctx: ShippingContext): CartQuote {
   const { settings } = ctx;
@@ -86,41 +125,35 @@ export function quoteCart(items: CartItem[], carryUp: CarryUpChoice, ctx: Shippi
   }
 
   // Rozdělení na zásilky podle dodavatele — každá má vlastní hmotnost, cenu dopravy i termín.
-  const bySupplier = new Map<string, CartQuoteLine[]>();
-  for (const l of lines) bySupplier.set(l.supplierId, [...(bySupplier.get(l.supplierId) ?? []), l]);
-
-  const shipments: Shipment[] = [];
-  for (const [supplierId, sl] of bySupplier) {
-    const sup = ctx.suppliers.find((s) => s.id === supplierId);
-    let weight = 0; let estimated = false; let floorM2 = 0; let maxDays = 0;
-    for (const l of sl) {
-      if (l.kind === "product") {
-        const p = ctx.products.find((x) => x.id === l.id)!;
-        weight += l.qty * p.packWeightKg; floorM2 += l.qty * p.m2PerPack; estimated ||= p.weightEstimated; maxDays = Math.max(maxDays, p.deliveryDays);
-      } else {
-        const a = ctx.accessories.find((x) => x.id === l.id)!;
-        weight += l.qty * a.unitWeightKg; maxDays = Math.max(maxDays, a.deliveryDays);
-      }
+  // Výpočet zásilek sdílí s kalkulačkou `planShipments` (cena „celý projekt“ v kalkulačce = košík).
+  const planned = planShipments(lines.map((l) => {
+    if (l.kind === "product") {
+      const p = ctx.products.find((x) => x.id === l.id)!;
+      return { supplierId: l.supplierId, weightKg: l.qty * p.packWeightKg, floorM2: l.qty * p.m2PerPack, weightEstimated: p.weightEstimated, deliveryDays: p.deliveryDays };
     }
-    weight = r1(weight);
-    const base = shippingForWeight(weight, settings);
-    const free = floorM2 >= settings.freeShippingFromM2;
+    const a = ctx.accessories.find((x) => x.id === l.id)!;
+    return { supplierId: l.supplierId, weightKg: l.qty * a.unitWeightKg, floorM2: 0, weightEstimated: false, deliveryDays: a.deliveryDays };
+  }), settings);
+
+  const shipments: Shipment[] = planned.map((ps) => {
+    const sl = lines.filter((l) => l.supplierId === ps.supplierId);
+    const sup = ctx.suppliers.find((s) => s.id === ps.supplierId);
     const notes: string[] = [];
-    if (base.method === "pallet") notes.push("Paletová přeprava: řidič složí paletu ke krajnici / před dům. Vynáška do patra je příplatek.");
+    if (ps.method === "pallet") notes.push("Paletová přeprava: řidič složí paletu ke krajnici / před dům. Vynáška do patra je příplatek.");
     else notes.push("Balíková přeprava ke dveřím domu.");
-    if (free) notes.push(`Doprava zdarma — zásilka obsahuje ${floorM2.toFixed(2).replace(".", ",")} m² podlahy (limit ${settings.freeShippingFromM2} m²).`);
-    if (estimated) notes.push("Hmotnost části zboží je odhadnuta.");
-    shipments.push({
-      supplierId, supplierName: sup?.name ?? "Dodavatel", shipsFrom: sup?.shipsFrom ?? "",
+    if (ps.freeShipping) notes.push(`Doprava zdarma — zásilka obsahuje ${ps.floorM2.toFixed(2).replace(".", ",")} m² podlahy (limit ${settings.freeShippingFromM2} m²).`);
+    if (ps.weightEstimated) notes.push("Hmotnost části zboží je odhadnuta.");
+    return {
+      supplierId: ps.supplierId, supplierName: sup?.name ?? "Dodavatel", shipsFrom: sup?.shipsFrom ?? "",
       items: sl.map((l) => ({ kind: l.kind, id: l.id, name: l.name, qty: l.qty })),
-      weightKg: weight, weightEstimated: estimated, floorM2: Math.round(floorM2 * 100) / 100,
-      method: base.method, methodLabel: base.methodLabel, basePrice: base.price, freeShipping: free,
-      price: free ? 0 : base.price,
+      weightKg: ps.weightKg, weightEstimated: ps.weightEstimated, floorM2: ps.floorM2,
+      method: ps.method, methodLabel: ps.methodLabel, basePrice: ps.basePrice, freeShipping: ps.freeShipping,
+      price: ps.price,
       // Vynáška se účtuje jen u zásilek s podlahou / paletou — drobné příslušenství jde ke dveřím tak jako tak.
-      carryUpPrice: base.method === "pallet" || floorM2 > 0 ? carryUpPrice(base.method, carryUp, settings) : 0,
-      deliveryDays: maxDays, deliveryLabel: deliveryLabel(maxDays), notes,
-    });
-  }
+      carryUpPrice: ps.method === "pallet" || ps.floorM2 > 0 ? carryUpPrice(ps.method, carryUp, settings) : 0,
+      deliveryDays: ps.deliveryDays, deliveryLabel: deliveryLabel(ps.deliveryDays), notes,
+    };
+  });
   if (shipments.length > 1) warnings.push(`Objednávka obsahuje zboží od ${shipments.length} dodavatelů — přijde ve ${shipments.length} zásilkách, každá s vlastním termínem.`);
 
   const itemsTotal = lines.reduce((s, l) => s + l.lineTotal, 0);

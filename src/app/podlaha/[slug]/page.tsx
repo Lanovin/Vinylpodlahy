@@ -5,12 +5,20 @@ import { Site } from "@/components/layout/Site";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { BuyBox } from "@/components/product/BuyBox";
 import { ProductCard } from "@/components/product/ProductCard";
-import { ProductCalcLink, ProductUiProvider, TryInRoom } from "@/components/visualizer/TryInRoom";
+import { ProductUiProvider, TryInRoom } from "@/components/visualizer/TryInRoom";
+import { Term } from "@/components/ui/Term";
+import { LOCK_TERM, TYPE_TERM, USAGE_SHORT, type TermId } from "@/components/ui/terms";
 import { products, settings as settingsRepo } from "@/lib/db/repos";
 import { toPublicProduct, toPublicSettings } from "@/lib/public";
 import { DECOR_TONE_LABEL, FLOOR_TYPE_LABEL, LOCK_LABEL } from "@/lib/types";
 import { fmtCzk, fmtKg, fmtMm, fmtNum2 } from "@/lib/format";
 import { ArrowRight, ChevronRight, Cube, Droplet, Flame, Layers } from "@/components/ui/icons";
+
+/** Řádek tabulky parametrů: popisek, hodnota, volitelně vysvětlení pojmu (ⓘ). */
+type Spec = [label: string, value: React.ReactNode, term?: TermId];
+const SpecRows = ({ rows }: { rows: Spec[] }) => (
+  <table className="spec"><tbody>{rows.map(([k, v, t]) => <tr key={k}><th>{k}{t && <> <Term id={t} /></>}</th><td>{v}</td></tr>)}</tbody></table>
+);
 
 export const dynamic = "force-dynamic";
 
@@ -35,71 +43,65 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     .slice(0, 11).map(toPublicProduct)];
 
   // Klíčové parametry na očích, zbytek sbalený; dostupnost a termín jsou v BuyBoxu.
-  const keySpecs: [string, React.ReactNode][] = [
-    ["Tloušťka / nášlap", `${fmtMm(p.thicknessMm)} / ${fmtMm(p.wearLayerMm)}`],
-    ["Třída zátěže", `${p.usageClass} — ${p.usageClass >= 42 ? "komerční, vysoká" : p.usageClass >= 33 ? "komerční, běžná / bytová intenzivní" : p.usageClass >= 32 ? "bytová, intenzivní" : p.usageClass >= 31 ? "bytová, běžná" : "bytová, nízká"}`],
-    ["Pokládka", LOCK_LABEL[p.lock]],
-    ["Rozměr lamely", `${p.plankLengthMm} × ${p.plankWidthMm} mm, ${p.bevel ? "s fází" : "bez fáze"}`],
-    ["Podlahové topení", p.floorHeating ? "vhodná" : "nevhodná"],
-    ["Voděodolnost", p.waterproof ? "ano — i do koupelny" : "ne — jen suché místnosti"],
+  const keySpecs: Spec[] = [
+    ["Typ podlahy", FLOOR_TYPE_LABEL[p.type], TYPE_TERM[p.type]],
+    ["Tloušťka", fmtMm(p.thicknessMm)],
+    ["Nášlapná vrstva", fmtMm(p.wearLayerMm), "wear"],
+    ["Třída zátěže", `${p.usageClass} — ${USAGE_SHORT[p.usageClass]}`, "usage"],
+    ["Pokládka", LOCK_LABEL[p.lock], LOCK_TERM[p.lock]],
+    ["Podlahové topení", p.floorHeating ? "vhodná" : "nevhodná", "heating"],
+    ["Voděodolnost", p.waterproof ? "ano — i do koupelny" : "ne — jen suché místnosti", "waterproof"],
   ];
-  const moreSpecs: [string, React.ReactNode][] = [
-    ["Typ podlahy", FLOOR_TYPE_LABEL[p.type]],
+  const moreSpecs: Spec[] = [
+    [p.decorTone === "stone" ? "Rozměr dlaždice" : "Rozměr lamely", `${p.plankLengthMm} × ${p.plankWidthMm} mm`],
+    ["Hrany", p.bevel ? "s fází (V-drážka)" : "bez fáze", "bevel"],
     ["Značka / kolekce", `${p.brand} · ${p.collection}`],
     ["Odstín", DECOR_TONE_LABEL[p.decorTone]],
-    ["Integrovaná podložka", p.integratedUnderlay ? "ano — podložku nekupujete" : "ne (podložku přidá kalkulačka)"],
+    ["Integrovaná podložka", p.integratedUnderlay ? "ano — podložku nekupujete" : "ne (podložku přidá kalkulačka)", "ixpe"],
     ["m² v balení", `${fmtNum2(p.m2PerPack)} m²`],
     ["Hmotnost balení", <>{fmtKg(p.packWeightKg)}{p.weightEstimated && <span className="text-warn"> (odhad — dodavatel neuvedl)</span>}</>],
   ];
   // U lepeného a samolepicího vinylu typ pokládku už říká.
-  const summary = [FLOOR_TYPE_LABEL[p.type], fmtMm(p.thicknessMm), `nášlap ${fmtMm(p.wearLayerMm)}`, `tř. ${p.usageClass}`, p.lock === "click" ? LOCK_LABEL[p.lock] : null].filter(Boolean).join(" · ");
-  const needs = [!p.integratedUnderlay && p.lock === "click" ? "podložku" : null, "soklové a přechodové lišty", p.lock === "glue" ? "lepidlo na vinyl" : null, "montážní lepidlo a tmel"].filter(Boolean).join(", ");
+  const summary = [FLOOR_TYPE_LABEL[p.type], fmtMm(p.thicknessMm), `nášlap ${fmtMm(p.wearLayerMm)}`, USAGE_SHORT[p.usageClass], p.lock === "click" ? LOCK_LABEL[p.lock] : null].filter(Boolean).join(" · ");
 
   return (
     <Site>
       <ProductUiProvider product={p} products={tryList} sampleMax={cfg.samples.max}>
       <div className="container pt-3 md:pt-10">
         <nav className="text-xs text-muted mb-3 md:mb-4 hidden sm:block"><Link href="/" className="hover:text-ink">Domů</Link> / <Link href="/podlahy" className="hover:text-ink">Podlahy</Link> / <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="hover:text-ink">{p.collection}</Link> / <span className="text-ink">{p.decor}</span></nav>
-        <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="sm:hidden inline-flex items-center gap-1 h-9 mb-1 text-sm text-muted"><ChevronRight className="h-4 w-4 rotate-180" /> {p.collection}</Link>
+        <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="sm:hidden inline-flex items-center gap-1 h-9 text-sm text-muted"><ChevronRight className="h-4 w-4 rotate-180" /> {p.brand} · {p.collection}</Link>
         {paused && <div className="notice notice-warn mb-6">Produkt je dočasně pozastaven — čekáme na potvrzení nové ceny od dodavatele. Nechte si poslat vzorek, nebo se podívejte na podobné dekory.</div>}
-        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-6 lg:gap-12">
+        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12">
           <div className="lg:col-span-7">
             <ProductGallery images={[p.images.hero ?? "", p.images.card ?? "", ...(p.images.gallery.filter((g) => g !== p.images.hero && g !== p.images.card))]} alt={`${p.brand} ${p.name}`}>
-              {!paused && <TryInRoom className="absolute left-3 bottom-3 sm:bottom-auto sm:top-3 bg-white/95 text-ink shadow-card hover:bg-white"><Cube className="h-5 w-5" /> Vyzkoušet v interiéru</TryInRoom>}
+              {/* Nahoře (zeď), ať tlačítko nezakrývá podlahu */}
+              {!paused && <TryInRoom className="btn-sm sm:h-11 absolute left-3 top-3 bg-white/95 text-ink shadow-card hover:bg-white"><Cube className="h-5 w-5" /> Byt ve 3D</TryInRoom>}
             </ProductGallery>
           </div>
-          <div className="lg:col-span-5">
-            <p className="eyebrow">{p.brand} · {p.collection}</p>
-            <h1 className="h2 mt-1.5">{p.decor}</h1>
-            <p className="text-sm text-muted mt-1.5">{summary}</p>
+          {/* Na telefonu: název, cena a hlavní tlačítko hned pod fotkou; štítky až pod nákupním boxem */}
+          <div className="lg:col-span-5 flex flex-col">
+            <p className="eyebrow hidden sm:block">{p.brand} · {p.collection}</p>
+            <h1 className="h2 sm:mt-1.5">{p.decor}</h1>
+            <p className="text-sm text-muted mt-1">{summary}</p>
             {(p.waterproof || p.floorHeating || p.integratedUnderlay) && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {p.waterproof && <span className="tag tag-sage"><Droplet className="h-3.5 w-3.5" /> voděodolné</span>}
-                {p.floorHeating && <span className="tag tag-sage"><Flame className="h-3.5 w-3.5" /> podlahové topení</span>}
-                {p.integratedUnderlay && <span className="tag tag-sage"><Layers className="h-3.5 w-3.5" /> integrovaná podložka</span>}
+              <div className="flex flex-wrap gap-2 mt-4 sm:mt-3 order-last sm:order-none">
+                {p.waterproof && <span className="tag tag-sage text-xs"><Droplet className="h-3.5 w-3.5" /> voděodolné</span>}
+                {p.floorHeating && <span className="tag tag-sage text-xs"><Flame className="h-3.5 w-3.5" /> podlahové topení</span>}
+                {p.integratedUnderlay && <span className="tag tag-sage text-xs"><Layers className="h-3.5 w-3.5" /> podložka v ceně</span>}
               </div>
             )}
-            <div className="mt-5">{paused ? <div className="panel text-muted">Prodej je pozastaven do potvrzení nové ceny.</div> : <BuyBox p={p} settings={toPublicSettings(cfg)} />}</div>
+            <div className="mt-4 sm:mt-5">{paused ? <div className="panel text-muted">Prodej je pozastaven do potvrzení nové ceny.</div> : <BuyBox p={p} settings={toPublicSettings(cfg)} />}</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-12 mt-10 md:mt-16">
-          <div className="lg:col-span-7">
-            <p className="leading-relaxed text-ink-soft mb-6">{p.description}</p>
-            <h2 className="h3 mb-3">Parametry</h2>
-            <table className="spec"><tbody>{keySpecs.map(([k, v]) => <tr key={k}><th>{k}</th><td>{v}</td></tr>)}</tbody></table>
-            <details className="group">
-              <summary className="cursor-pointer list-none h-11 flex items-center gap-2 text-sm text-ink-soft [&::-webkit-details-marker]:hidden">Všechny parametry <ArrowRight className="h-4 w-4 transition-transform group-open:rotate-90" /></summary>
-              <table className="spec"><tbody>{moreSpecs.map(([k, v]) => <tr key={k}><th>{k}</th><td>{v}</td></tr>)}</tbody></table>
-            </details>
-          </div>
-          <div className="lg:col-span-5">
-            <div className="panel">
-              <h2 className="h3">K podlaze budete potřebovat</h2>
-              <p className="text-ink-soft mt-2 leading-relaxed">{needs.charAt(0).toUpperCase() + needs.slice(1)}. Kalkulačka spočítá přesné množství i dopravu.</p>
-              <ProductCalcLink product={p} className="btn btn-primary mt-4 w-full sm:w-auto">Spočítat vše na můj byt <ArrowRight className="h-4 w-4" /></ProductCalcLink>
-            </div>
-          </div>
+        <div className="mt-10 md:mt-16 lg:w-7/12">
+          <p className="leading-relaxed text-ink-soft mb-6">{p.description}</p>
+          <h2 className="h3 mb-3">Parametry</h2>
+          <SpecRows rows={keySpecs} />
+          <details className="group">
+            <summary className="cursor-pointer list-none h-11 flex items-center gap-2 text-sm text-ink-soft [&::-webkit-details-marker]:hidden">Všechny parametry <ArrowRight className="h-4 w-4 transition-transform group-open:rotate-90" /></summary>
+            <SpecRows rows={moreSpecs} />
+          </details>
         </div>
       </div>
       {related.length > 0 && (

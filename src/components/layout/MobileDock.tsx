@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { Cube, Ruler } from "@/components/ui/icons";
 
-/** Stránky s vlastní spodní lištou nebo tam, kde by odváděla od nákupu. */
+/** Stránky s vlastní spodní lištou nebo tam, kde by odváděla od nákupu. Nad cookie lištou díky --cookie-h (CookieBanner). */
 const HIDDEN = ["/kalkulacka", "/kalkulace", "/vizualizace", "/kosik", "/pokladna", "/objednavka", "/podlaha/", "/vzorky", "/montaz", "/admin"];
 
 /**
@@ -38,7 +38,7 @@ export function MobileDock() {
   const show = (!home || pastHero) && !typing;
 
   return (
-    <div className={clsx("lg:hidden fixed inset-x-0 bottom-0 z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)] transition-transform duration-300", show ? "translate-y-0" : "translate-y-full")} aria-hidden={!show}>
+    <div className={clsx("lg:hidden fixed inset-x-0 bottom-[var(--cookie-h,0px)] z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)] transition-transform duration-300", show ? "translate-y-0" : "translate-y-[calc(100%+var(--cookie-h,0px))]")} aria-hidden={!show}>
       <div className="container py-2 grid grid-cols-[1.4fr_1fr] gap-2">
         <Link href="/kalkulacka" tabIndex={show ? undefined : -1} className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat cenu</Link>
         <Link href="/vizualizace" tabIndex={show ? undefined : -1} className="btn btn-outline"><Cube className="h-4 w-4" /> Byt ve 3D</Link>

@@ -1,12 +1,46 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useCart } from "@/store/cart";
 import { useQuote } from "./useQuote";
 import { ShipmentsView } from "./ShipmentsView";
-import { fmtCzk, fmtNum2 } from "@/lib/format";
-import type { CartQuote, Shipment } from "@/lib/types";
-import { Minus, Plus, Trash, Hammer, Ruler, Cube } from "@/components/ui/icons";
+import { BlockedActions, BlockedNotice } from "./BlockedLines";
+import { fmtCzk, fmtNum2, plural } from "@/lib/format";
+import type { CartItem, CartQuote, Shipment } from "@/lib/types";
+import type { AccessorySuggestion } from "@/lib/orderGuard";
+import { Minus, Plus, Trash, Hammer, Ruler, Cube, Layers } from "@/components/ui/icons";
+
+/** Návrhy podložky a soklových lišt k podlahám v košíku (počítá server stejně jako kalkulačka). */
+function useSuggestions(items: CartItem[]) {
+  const key = JSON.stringify(items);
+  const [state, setState] = useState<{ key: string; list: AccessorySuggestion[] } | null>(null);
+  useEffect(() => {
+    if (!items.some((i) => i.kind === "product")) return;
+    const ctrl = new AbortController();
+    fetch("/api/cart/suggest", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ items }), signal: ctrl.signal })
+      .then((r) => r.json()).then((d: { suggestions?: AccessorySuggestion[] }) => setState({ key, list: d.suggestions ?? [] })).catch(() => {});
+    return () => ctrl.abort();
+  }, [items, key]);
+  return state?.key === key ? state.list : [];
+}
+
+const unitText = (n: number, unit: string) => (unit === "role" ? plural(n, "role", "role", "rolí") : unit);
+
+function SuggestionRow({ s, onAdd }: { s: AccessorySuggestion; onAdd: () => void }) {
+  const parts = s.items.map((it) => `${it.kind === "underlay" ? "podložka" : "soklové lišty"} ${it.qty} ${unitText(it.qty, it.unit)}`);
+  const skirting = s.items.some((it) => it.kind === "skirting");
+  return (
+    <div className="card p-3 md:p-4 flex flex-wrap items-center gap-x-4 gap-y-3 border-sage/40 bg-sage-soft/40">
+      <span className="h-9 w-9 rounded-full bg-sage-soft text-sage grid place-items-center shrink-0"><Layers className="h-5 w-5" /></span>
+      <div className="flex-1 min-w-48">
+        <p className="leading-snug">Doplnit k podlaze {fmtNum2(s.m2)} m²: {parts.join(", ")} <span className="tabular-nums whitespace-nowrap">(+{fmtCzk(s.total)})</span></p>
+        <p className="text-xs text-muted mt-0.5">{s.productName}{skirting ? " · lišty: odhad z plochy (obvod ≈ 4 × √plocha), přesně spočítá kalkulačka" : ""}</p>
+      </div>
+      <button type="button" className="btn btn-primary shrink-0" onClick={onAdd}><Plus className="h-4 w-4" /> Přidat</button>
+    </div>
+  );
+}
 
 /**
  * Pobídka k dopravě zdarma: kolik balení podlahy v zásilce chybí do limitu a jestli je doplnění levnější než doprava.
@@ -37,17 +71,21 @@ export function CartView({ freeFromM2, carryUpParcel, carryUpPalletPerFloor }: {
   const installRequested = useCart((s) => s.installRequested);
   const setInstall = useCart((s) => s.setInstallRequested);
   const calculationId = useCart((s) => s.calculationId);
+  const items = useCart((s) => s.items);
+  const addMany = useCart((s) => s.addMany);
+  const suggestions = useSuggestions(items);
 
   if (!hydrated || (loading && !quote)) return <div className="panel text-muted">Načítám košík…</div>;
   if (!quote || quote.lines.length === 0) {
     return (
       <div className="panel text-center py-12 md:py-16">
         <p className="h3">Košík je prázdný.</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3"><Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat projekt</Link><Link href="/vizualizace" className="btn btn-outline"><Cube className="h-4 w-4" /> Vyzkoušet ve 3D</Link></div>
+        <div className="mt-6 flex flex-wrap justify-center gap-3"><Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat cenu</Link><Link href="/vizualizace" className="btn btn-outline"><Cube className="h-4 w-4" /> Byt ve 3D</Link></div>
       </div>
     );
   }
   const anyPallet = quote.shipments.some((s) => s.method === "pallet");
+  const blocked = quote.lines.some((l) => l.blocked);
 
   const tipFor = (s: Shipment) => {
     const t = freeShippingTip(s, quote, freeFromM2);
@@ -63,9 +101,9 @@ export function CartView({ freeFromM2, carryUpParcel, carryUpPalletPerFloor }: {
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-8 lg:gap-12 pb-24 lg:pb-0">
       <div className="lg:col-span-7 space-y-8">
-        <ul className="card divide-y divide-line">
+        <ul id="kosik-polozky" className="card divide-y divide-line scroll-mt-24">
           {quote.lines.map((l) => (
-            <li key={`${l.kind}-${l.id}`} className="p-3 md:p-4 flex gap-3 md:gap-4">
+            <li key={`${l.kind}-${l.id}`} className={`p-3 md:p-4 flex gap-3 md:gap-4 ${l.blocked ? "bg-danger-soft/50" : ""}`}>
               <div className="relative h-16 w-16 rounded-sm overflow-hidden bg-bg shrink-0">{l.image ? <Image src={l.image} alt="" fill sizes="64px" className="object-cover" /> : <div className="absolute inset-0 grid place-items-center text-[10px] text-muted">bez fotky</div>}</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start gap-1">
@@ -74,19 +112,25 @@ export function CartView({ freeFromM2, carryUpParcel, carryUpPalletPerFloor }: {
                 </div>
                 <p className="text-xs text-muted">{l.detail} · {fmtCzk(l.unitPrice)}/{l.unit}</p>
                 {l.m2 !== null && <p className="text-xs text-muted">= {fmtNum2(l.m2)} m²</p>}
-                {l.availabilityNote && <p className="text-xs text-warn mt-1">{l.availabilityNote}</p>}
-                <div className="mt-2 flex items-center gap-3">
+                {l.blocked && <p className="tag mt-1.5 !border-danger !text-danger">Nelze objednat</p>}
+                {l.availabilityNote && <p className={`text-xs mt-1 ${l.blocked ? "text-danger" : "text-warn"}`}>{l.availabilityNote}</p>}
+                {l.blocked ? <BlockedActions line={l} className="mt-2" /> : <div className="mt-2 flex items-center gap-3">
                   <div className="inline-flex items-center border border-line-strong rounded-sm bg-white">
                     <button type="button" className="h-10 w-10 grid place-items-center hover:bg-bg" aria-label={`Méně: ${l.name}`} onClick={() => setQty(l.kind, l.id, l.qty - 1)}><Minus className="h-4 w-4" /></button>
                     <span className="w-10 text-center tabular-nums text-sm" aria-live="polite">{l.qty}</span>
                     <button type="button" className="h-10 w-10 grid place-items-center hover:bg-bg" aria-label={`Více: ${l.name}`} onClick={() => setQty(l.kind, l.id, l.qty + 1)}><Plus className="h-4 w-4" /></button>
                   </div>
                   <span className="ml-auto tabular-nums">{fmtCzk(l.lineTotal)}</span>
-                </div>
+                </div>}
               </div>
             </li>
           ))}
         </ul>
+        {suggestions.length > 0 && (
+          <div className="space-y-2 -mt-4">
+            {suggestions.map((s) => <SuggestionRow key={s.productId} s={s} onAdd={() => addMany(s.items.map((it) => ({ kind: "accessory", id: it.id, qty: it.qty })))} />)}
+          </div>
+        )}
         {quote.warnings.map((w) => <p key={w} className="notice notice-info text-sm">{w}</p>)}
 
         <section>
@@ -119,20 +163,25 @@ export function CartView({ freeFromM2, carryUpParcel, carryUpPalletPerFloor }: {
             {carryUp.enabled && <div className="flex justify-between"><dt className="text-muted">Vynáška</dt><dd className="tabular-nums">{fmtCzk(quote.carryUpTotal)}</dd></div>}
           </dl>
           <div className="flex justify-between items-baseline border-t border-ink mt-4 pt-4"><span>Celkem vč. DPH</span><span className="text-2xl tabular-nums">{fmtCzk(quote.total)}</span></div>
-          <Link href="/pokladna" className="btn btn-accent btn-lg w-full mt-6">Pokračovat k objednávce</Link>
+          {blocked ? (
+            <>
+              <div className="mt-6"><BlockedNotice lines={quote.lines} /></div>
+              <button type="button" className="btn btn-accent btn-lg w-full mt-4" disabled>Pokračovat k objednávce</button>
+            </>
+          ) : <Link href="/pokladna" className="btn btn-accent btn-lg w-full mt-6">Pokračovat k objednávce</Link>}
           {calculationId && <p className="text-xs text-muted mt-3">Košík vychází z <Link href={`/kalkulace/${calculationId}`} className="link">uložené kalkulace</Link>.</p>}
-          <Link href="/kalkulacka" className="btn btn-ghost w-full mt-3 text-ink-soft">Přidat další místnost přes kalkulačku</Link>
+          <Link href="/kalkulacka" className="btn btn-ghost w-full mt-3 text-ink-soft">Spočítat cenu další místnosti</Link>
         </div>
       </aside>
 
       {/* Telefon: cena a pokračování vždy na dosah palce (globální spodní lišta se v košíku nezobrazuje). */}
-      <div className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)]">
+      <div className="lg:hidden fixed inset-x-0 bottom-[var(--cookie-h,0px)] z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)]">
         <div className="container py-2.5 flex items-center gap-3">
           <div className="flex-1 min-w-0">
             <p className={`text-lg leading-tight tabular-nums ${loading ? "opacity-60" : ""}`}>{fmtCzk(quote.total)}</p>
             <p className="text-xs text-muted truncate">vč. dopravy{carryUp.enabled ? " a vynášky" : ""}</p>
           </div>
-          <Link href="/pokladna" className="btn btn-accent">K objednávce</Link>
+          {blocked ? <a href="#kosik-polozky" className="btn btn-outline">Upravit košík</a> : <Link href="/pokladna" className="btn btn-accent">K objednávce</Link>}
         </div>
       </div>
     </div>

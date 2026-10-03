@@ -31,9 +31,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
           <F name="priceGuide.source" label="Zdroj / poznámka pod tabulkou" value={c.priceGuide.source} />
         </div></Card>
         <Card><h2 className="text-lg mb-4">O nás</h2><div className="grid gap-4"><F name="about.title" label="Nadpis" value={c.about.title} /><F name="about.text" label="Text" value={c.about.text} rows={3} /></div></Card>
-        <Card><h2 className="text-lg mb-4">Kontakt a patička</h2><div className="grid md:grid-cols-2 gap-4">
-          <F name="contact.email" label="E-mail" value={c.contact.email} /><F name="contact.phone" label="Telefon" value={c.contact.phone} /><F name="contact.hours" label="Provozní doba" value={c.contact.hours} /><F name="contact.company" label="Firma" value={c.contact.company} />
-          <div className="md:col-span-2"><F name="contact.address" label="Adresa" value={c.contact.address} /></div><div className="md:col-span-2"><F name="footerNote" label="Poznámka v patičce" value={c.footerNote} rows={2} /></div>
+        <Card><h2 className="text-lg mb-1">Kontakt, provozovatel a patička</h2><p className="text-sm text-muted mb-4">Údaje provozovatele se zobrazují v patičce, na stránce Kontakt a v obchodních podmínkách, reklamačním řádu, formuláři pro odstoupení a v zásadách ochrany osobních údajů.</p><div className="grid md:grid-cols-2 gap-4">
+          <F name="contact.email" label="E-mail" value={c.contact.email} /><F name="contact.phone" label="Telefon" value={c.contact.phone} /><F name="contact.hours" label="Provozní doba" value={c.contact.hours} /><F name="contact.company" label="Provozovatel (obchodní firma / jméno)" value={c.contact.company} />
+          <div className="md:col-span-2"><F name="contact.address" label="Sídlo (adresa provozovatele)" value={c.contact.address} /></div>
+          <F name="contact.ico" label="IČO" value={c.contact.ico} /><F name="contact.dic" label="DIČ (nebo „neplátce DPH“)" value={c.contact.dic} />
+          <div className="md:col-span-2"><F name="contact.registry" label="Zápis v rejstříku (obchodní / živnostenský)" value={c.contact.registry} /></div><div className="md:col-span-2"><F name="footerNote" label="Poznámka v patičce" value={c.footerNote} rows={2} /></div>
         </div></Card>
         <Card><h2 className="text-lg mb-1">SEO landing pages</h2><p className="text-sm text-muted mb-4">Každá kombinace hlavních filtrů má vlastní URL, H1 a text.</p>
           <div className="space-y-6">{LANDINGS.map((l) => { const t = c.landings[l.slug]; return (

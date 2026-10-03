@@ -40,8 +40,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <p className="text-sm text-muted mt-3">{o.carryUp.enabled ? carryUpText(o.carryUp, pallet) : "Dovoz ke krajnici."} Řidič vám zavolá na {o.customer.phone}.</p>
 
           <div className="mt-8 grid sm:flex sm:flex-wrap gap-3">
-            <Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Naplánovat další místnost</Link>
-            <Link href={floor ? `/vizualizace?podlaha=${encodeURIComponent(floor.slug)}` : "/vizualizace"} className="btn btn-outline"><Cube className="h-4 w-4" /> Prohlédnout podlahu ve 3D</Link>
+            <Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat cenu další místnosti</Link>
+            <Link href={floor ? `/vizualizace?podlaha=${encodeURIComponent(floor.slug)}` : "/vizualizace"} className="btn btn-outline"><Cube className="h-4 w-4" /> Byt ve 3D</Link>
           </div>
           {o.calculationId && <Link href={`/kalkulace/${o.calculationId}`} className="mt-2 inline-flex items-center min-h-11 text-sm link">Zobrazit kalkulaci</Link>}
         </div>
@@ -56,6 +56,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </dl>
             <div className="flex justify-between items-baseline border-t border-ink mt-3 pt-3"><span>Celkem vč. DPH</span><span className="text-2xl">{fmtCzk(o.quote.total)}</span></div>
             <p className="text-sm text-muted mt-4">{o.customer.name}<br />{o.customer.street}<br />{o.customer.zip} {o.customer.city}</p>
+            {o.customer.business && <p className="text-sm text-muted mt-2">{o.customer.business.company}<br />IČO {o.customer.business.ico}{o.customer.business.dic ? ` · DIČ ${o.customer.business.dic}` : ""}</p>}
           </div>
         </aside>
       </div>

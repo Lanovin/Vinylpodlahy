@@ -8,12 +8,14 @@ import { Logo } from "./Logo";
 import { useCart, useHydrated } from "@/store/cart";
 import { LANDINGS } from "@/lib/catalog";
 
-const NAV = [
+/** Jednotné názvy: Kalkulačka, Byt ve 3D, Vzorky zdarma, Pokládka, Doprava a platba. `xl` = na užším desktopu se nevejde (vzorky mají ikonu v hlavičce). */
+const NAV: { href: string; label: string; xl?: boolean }[] = [
   { href: "/kalkulacka", label: "Kalkulačka" },
-  { href: "/vizualizace", label: "Vizualizace" },
-  { href: "/vzorky", label: "Vzorky zdarma" },
+  { href: "/vizualizace", label: "Byt ve 3D" },
+  { href: "/vzorky", label: "Vzorky zdarma", xl: true },
   { href: "/montaz", label: "Pokládka" },
-  { href: "/kontakt", label: "Kontakt" },
+  { href: "/doprava", label: "Doprava a platba" },
+  { href: "/kontakt", label: "Kontakt", xl: true },
 ];
 
 export function Header({ overlay = false }: { overlay?: boolean }) {
@@ -41,13 +43,15 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
 
   const light = overlay && !scrolled && !open && !searchOpen;
+  // Odkaz na právě otevřenou stránku cestu nezmění — menu proto zavírá i samotný klik.
+  const close = () => setOpen(false);
 
   return (
     <>
     <header className={clsx("z-50 top-0 left-0 right-0 transition-colors duration-300", overlay ? "fixed" : "sticky", light ? "text-white" : "text-ink bg-bg/95 backdrop-blur border-b border-line")}>
       <div className="container flex items-center justify-between h-16 md:h-20">
         <Logo light={light} />
-        <nav className="hidden lg:flex items-center gap-7 text-[0.95rem]">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-6 text-[0.95rem]">
           <div className="relative group">
             <Link href="/podlahy" className="inline-flex items-center gap-1 py-6 hover:opacity-70">Podlahy <ChevronDown className="h-4 w-4" /></Link>
             <div className="absolute left-1/2 -translate-x-1/2 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
@@ -63,7 +67,7 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             </div>
           </div>
           {NAV.map((n) => (
-            <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
+            <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70 whitespace-nowrap", n.xl && "hidden xl:inline", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
           ))}
         </nav>
         {/* Na telefonu jen hledání, košík a menu (44 px na palec); vzorky jsou v menu a na kartách */}
@@ -104,14 +108,14 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
           <nav className="flex-1 overflow-y-auto px-4 py-4 text-lg">
             {/* Hlavní nástroje jako první — kalkulačka a 3D byt jsou hlavní cesta k nákupu */}
             <div className="grid grid-cols-2 gap-2 mb-3">
-              <Link href="/kalkulacka" className="rounded-md bg-accent text-white p-3.5 flex flex-col gap-2"><Ruler className="h-6 w-6" /><span className="leading-tight">Spočítat cenu<span className="block text-xs text-white/80 mt-0.5">za 2 minuty</span></span></Link>
-              <Link href="/vizualizace" className="rounded-md bg-ink text-white p-3.5 flex flex-col gap-2"><Cube className="h-6 w-6" /><span className="leading-tight">Byt ve 3D<span className="block text-xs text-white/70 mt-0.5">vyzkoušejte dekor</span></span></Link>
+              <Link href="/kalkulacka" onClick={close} className="rounded-md bg-accent text-white p-3.5 flex flex-col gap-2"><Ruler className="h-6 w-6" /><span className="leading-tight">Spočítat cenu<span className="block text-xs text-white/80 mt-0.5">za 2 minuty</span></span></Link>
+              <Link href="/vizualizace" onClick={close} className="rounded-md bg-ink text-white p-3.5 flex flex-col gap-2"><Cube className="h-6 w-6" /><span className="leading-tight">Byt ve 3D<span className="block text-xs text-white/70 mt-0.5">vyzkoušejte dekor</span></span></Link>
             </div>
-            <Link href="/podlahy" className="block py-3 border-b border-line">Všechny podlahy</Link>
-            {LANDINGS.map((l) => (<Link key={l.slug} href={`/${l.slug}`} className="block py-2.5 pl-4 text-base text-ink-soft">{l.navLabel}</Link>))}
-            <Link href="/prislusenstvi" className="block py-2.5 pl-4 text-base text-ink-soft border-b border-line">Příslušenství</Link>
+            <Link href="/podlahy" onClick={close} className="block py-3 border-b border-line">Všechny podlahy</Link>
+            {LANDINGS.map((l) => (<Link key={l.slug} href={`/${l.slug}`} onClick={close} className="block py-2.5 pl-4 text-base text-ink-soft">{l.navLabel}</Link>))}
+            <Link href="/prislusenstvi" onClick={close} className="block py-2.5 pl-4 text-base text-ink-soft border-b border-line">Příslušenství</Link>
             {NAV.filter((n) => n.href !== "/kalkulacka" && n.href !== "/vizualizace").map((n) => (
-              <Link key={n.href} href={n.href} className="flex items-center justify-between py-3 border-b border-line">{n.label}{n.href === "/vzorky" && sampleCount > 0 && <span className="h-5 min-w-5 px-1.5 rounded-full bg-sage text-white text-xs leading-5 text-center">{sampleCount}</span>}</Link>
+              <Link key={n.href} href={n.href} onClick={close} className="flex items-center justify-between py-3 border-b border-line">{n.label}{n.href === "/vzorky" && sampleCount > 0 && <span className="h-5 min-w-5 px-1.5 rounded-full bg-sage text-white text-xs leading-5 text-center">{sampleCount}</span>}</Link>
             ))}
           </nav>
         </div>

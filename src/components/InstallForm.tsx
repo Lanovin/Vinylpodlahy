@@ -13,7 +13,7 @@ type Field = "zip" | "areaM2" | "term" | "name" | "phone" | "email" | "note";
 const FIELDS: Record<Field, [string, string]> = {
   zip: ["i-zip", "Zkontrolujte PSČ (5 číslic)."],
   areaM2: ["i-area", "Zadejte plochu v m² (např. 24,5)."],
-  term: ["i-term-0", "Vyberte termín."],
+  term: ["i-term", "Vyberte termín."],
   name: ["i-name", "Vyplňte jméno."],
   phone: ["i-phone", "Zkontrolujte telefon (aspoň 9 číslic)."],
   email: ["i-email", "Zkontrolujte e-mail."],
@@ -33,7 +33,10 @@ export function InstallForm({ productId, calculationId, area, productName, sourc
   };
   const fail = (f: Field) => {
     flushSync(() => { setBad(f); setErr(FIELDS[f][1]); });
-    document.getElementById(FIELDS[f][0])?.focus();
+    const el = document.getElementById(FIELDS[f][0]);
+    // Termín je skupina skrytých radií — fokus dostane celá skupina (fieldset) a posune se doprostřed obrazovky i s hláškou.
+    if (f === "term") { el?.focus({ preventScroll: true }); el?.scrollIntoView({ block: "center", behavior: "smooth" }); }
+    else el?.focus();
   };
   const inv = (f: Field) => (bad === f ? { "aria-invalid": true, "aria-describedby": "i-err" } : {});
 
@@ -62,16 +65,17 @@ export function InstallForm({ productId, calculationId, area, productName, sourc
           <Link href="/kalkulacka" className="inline-flex items-center min-h-10 text-sm link">Nevím → spočítat v kalkulačce</Link>
         </div>
       </div>
-      <fieldset>
+      <fieldset id="i-term" tabIndex={-1} className="outline-none scroll-mt-24" aria-invalid={bad === "term" || undefined} aria-describedby={bad === "term" ? "i-term-err" : undefined}>
         <legend className="label">Termín</legend>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {TERMS.map((t, i) => (
             <label key={t} className={clsx("relative h-11 px-2 grid place-items-center text-center text-sm leading-tight rounded-sm border cursor-pointer transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ink/30", form.term === t ? "border-ink bg-ink text-white" : bad === "term" ? "border-danger bg-white" : "border-line-strong bg-white hover:border-ink")}>
-              <input id={`i-term-${i}`} type="radio" name="term" value={t} className="sr-only" checked={form.term === t} onChange={() => set("term", t)} {...(i === 0 ? inv("term") : {})} />
+              <input id={`i-term-${i}`} type="radio" name="term" value={t} className="sr-only" checked={form.term === t} onChange={() => set("term", t)} />
               {t}
             </label>
           ))}
         </div>
+        {bad === "term" && <p id="i-term-err" className="text-sm text-danger mt-1.5" role="alert">{FIELDS.term[1]}</p>}
       </fieldset>
       <div><label className="label" htmlFor="i-name">Jméno</label><input id="i-name" className="input" required minLength={2} autoComplete="name" autoCapitalize="words" enterKeyHint="next" value={form.name} onChange={(e) => set("name", e.target.value)} {...inv("name")} /></div>
       <div className="grid sm:grid-cols-2 gap-4">
@@ -79,9 +83,9 @@ export function InstallForm({ productId, calculationId, area, productName, sourc
         <div><label className="label" htmlFor="i-email">E-mail</label><input id="i-email" type="email" className="input" required autoComplete="email" autoCapitalize="none" spellCheck={false} enterKeyHint="done" value={form.email} onChange={(e) => set("email", e.target.value)} {...inv("email")} /></div>
       </div>
       <div><label className="label" htmlFor="i-note">Poznámka (nepovinné)</label><textarea id="i-note" className="textarea" rows={2} maxLength={2000} placeholder="stav podkladu, patro, demontáž staré podlahy…" value={form.note} onChange={(e) => set("note", e.target.value)} {...inv("note")} /></div>
-      {err && <p id="i-err" className="notice notice-danger text-sm" role="alert">{err}</p>}
+      {err && bad !== "term" && <p id="i-err" className="notice notice-danger text-sm" role="alert">{err}</p>}
       <button className="btn btn-accent btn-lg w-full" disabled={busy}>{busy ? "Odesílám…" : "Poptat pokládku"}</button>
-      <p className="text-xs text-muted">Nezávazné.</p>
+      <p className="text-xs text-muted">Nezávazné. Kontakt předáme jen podlahaři, který vám připraví nabídku. Více v <Link href="/ochrana-osobnich-udaju" target="_blank" className="link">zásadách ochrany osobních údajů</Link>.</p>
     </form>
   );
 }

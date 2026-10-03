@@ -24,7 +24,7 @@ export interface RoomVisualizerProps {
   /** Krátká cena u dekoru (v kalkulačce cena celého projektu). */
   priceLabel?: (p: PublicProduct) => React.ReactNode;
   /** Hlavní akce pro zobrazený dekor (na telefonu ve spodní liště); bez nich plocha → kalkulačka a detail podlahy. */
-  renderActions?: (p: PublicProduct, ctx: { layout: LayoutMode }) => React.ReactNode;
+  renderActions?: (p: PublicProduct, ctx: { layout: LayoutMode; /** Úzká lišta na telefonu (jinak panel vedle bytu). */ compact: boolean }) => React.ReactNode;
   /** Uživatel změnil kladení — kalkulačka podle něj přepočítá ceny. */
   onLayoutChange?: (layout: LayoutMode) => void;
   /** page = samostatná stránka (plátno drží nahoře, lišta dole), inline = vložené do jiné stránky, dialog = přes celou obrazovku. */
@@ -214,20 +214,21 @@ export default function RoomVisualizer({ products, initialProductId, initialView
   const calcForm = (p: PublicProduct, compact: boolean) => (
     <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); router.push(calcHref(p, layout, area)); }}>
       <label className={clsx("relative shrink-0", compact ? "w-[4.5rem]" : "w-28")}>
-        <span className="sr-only">Plocha v m²</span>
-        <input inputMode="decimal" enterKeyHint="go" placeholder={compact ? "40" : "Plocha"} value={areaInput} onChange={(e) => setAreaInput(e.target.value)} className="input !py-2 !pl-2.5 !pr-8 h-11" />
-        <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-sm text-muted">m²</span>
+        <span className="sr-only">Plocha v m² (nepovinné)</span>
+        {/* Na úzké liště je jednotka v placeholderu (číslo by vypadalo jako vyplněná hodnota); po vyplnění se ukáže vpravo. */}
+        <input inputMode="decimal" enterKeyHint="go" placeholder={compact ? "m²" : "Plocha"} value={areaInput} onChange={(e) => setAreaInput(e.target.value)} className={clsx("input !py-2 !pl-2.5 h-11", compact && !areaInput ? "!pr-2.5" : "!pr-8")} />
+        {(!compact || areaInput) && <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-sm text-muted">m²</span>}
       </label>
-      <button type="submit" className={clsx("btn btn-accent shrink-0", compact ? "!px-3.5" : "flex-1")}>{compact ? "Spočítat cenu" : "Spočítat cenu pro můj byt"} <ArrowRight className="h-4 w-4" /></button>
+      <button type="submit" className={clsx("btn btn-accent shrink-0", compact ? "!px-3.5" : "flex-1")}>Spočítat cenu <ArrowRight className="h-4 w-4" /></button>
     </form>
   );
-  const actions = (p: PublicProduct, compact: boolean) => renderActions ? renderActions(p, { layout }) : calcForm(p, compact);
+  const actions = (p: PublicProduct, compact: boolean) => renderActions ? renderActions(p, { layout, compact }) : calcForm(p, compact);
 
   /** Lišta vybraného dekoru s hlavní akcí — na telefonu vždy po ruce. */
   const bar = selected && (
     <div className={clsx(
       "lg:hidden z-30 bg-bg/95 backdrop-blur border-line",
-      page && "fixed inset-x-0 bottom-0 border-t pb-[env(safe-area-inset-bottom)] max-lg:landscape:hidden",
+      page && "fixed inset-x-0 bottom-[var(--cookie-h,0px)] border-t pb-[env(safe-area-inset-bottom)] max-lg:landscape:hidden",
       dialog && "sticky bottom-0 -mx-3 md:-mx-5 px-3 md:px-5 border-t",
       variant === "inline" && "rounded-md border px-3",
     )}>
@@ -286,10 +287,12 @@ export default function RoomVisualizer({ products, initialProductId, initialView
                   <button type="button" onClick={() => setLighting("evening")} aria-pressed={lighting === "evening"} className={clsx("h-10 w-10 grid place-items-center rounded-full", lighting === "evening" && "bg-ink text-white")} title="Večer s lampami" aria-label="Večer s lampami"><Moon className="h-5 w-5" /></button>
                 </div>
                 <div className="hidden pointer-fine:flex flex-col rounded-full bg-white/90 shadow-card p-0.5">
-                  <button type="button" onClick={() => viewerRef.current?.zoom(1.2)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-bg" title="Přiblížit"><Plus className="h-4 w-4" /></button>
-                  <button type="button" onClick={() => viewerRef.current?.zoom(1 / 1.2)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-bg" title="Oddálit"><Minus className="h-4 w-4" /></button>
-                  <button type="button" onClick={() => viewerRef.current?.resetView()} className="h-8 w-8 grid place-items-center rounded-full hover:bg-bg" title="Výchozí pohled"><Refresh className="h-4 w-4" /></button>
+                  <button type="button" onClick={() => viewerRef.current?.zoom(1.2)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-bg" title="Přiblížit" aria-label="Přiblížit"><Plus className="h-4 w-4" /></button>
+                  <button type="button" onClick={() => viewerRef.current?.zoom(1 / 1.2)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-bg" title="Oddálit" aria-label="Oddálit"><Minus className="h-4 w-4" /></button>
+                  <button type="button" onClick={() => viewerRef.current?.resetView()} className="h-8 w-8 grid place-items-center rounded-full hover:bg-bg" title="Výchozí pohled" aria-label="Výchozí pohled"><Refresh className="h-4 w-4" /></button>
                 </div>
+                {/* Dotyk: přiblížení prsty, ale návrat do výchozího pohledu potřebuje tlačítko (44 px) */}
+                <button type="button" onClick={() => viewerRef.current?.resetView()} className="pointer-fine:hidden h-11 w-11 grid place-items-center rounded-full bg-white/90 shadow-card" title="Výchozí pohled" aria-label="Výchozí pohled"><Refresh className="h-5 w-5" /></button>
                 {syncUrl && <button type="button" onClick={share} className="h-10 w-10 grid place-items-center rounded-full bg-white/90 shadow-card hover:bg-white" title="Sdílet odkaz" aria-label="Sdílet odkaz"><Share className="h-4 w-4" /></button>}
                 <button type="button" onClick={snapshot} className="h-10 w-10 grid place-items-center rounded-full bg-white/90 shadow-card hover:bg-white" title="Uložit obrázek" aria-label="Uložit obrázek"><Download className="h-4 w-4" /></button>
               </div>
@@ -303,7 +306,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
               )}
               {!notice && !interacted && view !== "overview" && (
                 <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap">
-                  <span className="pointer-coarse:hidden">Tažením se rozhlédnete · dvojklik = zpět</span><span className="hidden pointer-coarse:inline">Táhněte prstem · 2× klepněte = zpět</span>
+                  <span className="pointer-coarse:hidden">Tažením se rozhlédnete · dvojklik = zpět</span><span className="hidden pointer-coarse:inline">Táhněte prstem a rozhlédněte se</span>
                 </div>
               )}
               {view === "overview" && <div className="absolute left-1/2 bottom-3 -translate-x-1/2 rounded-full bg-ink/70 text-white px-3 py-1 text-xs pointer-events-none whitespace-nowrap"><span className="pointer-coarse:hidden">Klikněte</span><span className="hidden pointer-coarse:inline">Klepněte</span> na místnost</div>}
@@ -313,7 +316,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
                 <div className="hidden sm:block absolute left-2 top-2 max-w-[55%] rounded-md bg-white/90 px-3 py-2 shadow-card pointer-events-none">
                   <p className="text-xs tracking-[0.12em] uppercase text-muted truncate">{selected.brand} · {selected.collection}</p>
                   <p className="leading-tight truncate">{selected.decor}</p>
-                  <p className="text-xs text-ink-soft mt-0.5 truncate">lamela {selected.plankLengthMm} × {selected.plankWidthMm} mm · {selected.bevel ? "V-drážka" : "bez fáze"} · {LAYOUT_LABEL[layout].toLowerCase()}</p>
+                  <p className="text-xs text-ink-soft mt-0.5 truncate">{selected.decorTone === "stone" ? "dlaždice" : "lamela"} {selected.plankLengthMm} × {selected.plankWidthMm} mm · {selected.bevel ? "V-drážka" : "bez fáze"} · {LAYOUT_LABEL[layout].toLowerCase()}</p>
                 </div>
               )}
             </>
@@ -363,7 +366,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
 
         {/* Méně častá nastavení — na telefonu sbalená */}
         <button type="button" className="lg:hidden flex items-center justify-between h-10 text-sm -my-1" aria-expanded={moreOpen} onClick={() => setMoreOpen((v) => !v)}>
-          Upravit interiér <span className="text-muted inline-flex items-center gap-1 text-xs">stěny, lišty, náročnost <ChevronDown className={clsx("h-4 w-4 transition-transform", moreOpen && "rotate-180")} /></span>
+          Upravit interiér <span className="text-muted inline-flex items-center gap-1 text-xs">stěny, lišty, kvalita <ChevronDown className={clsx("h-4 w-4 transition-transform", moreOpen && "rotate-180")} /></span>
         </button>
         <div className={clsx("flex-col gap-4", moreOpen ? "flex" : "hidden lg:flex")}>
           <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 items-center">
@@ -384,8 +387,8 @@ export default function RoomVisualizer({ products, initialProductId, initialView
           </div>
 
           <div>
-            <p className="label">Náročnost 3D</p>
-            <div className="grid grid-cols-4 gap-1" role="group" aria-label="Náročnost 3D zobrazení">
+            <p className="label">Kvalita obrazu</p>
+            <div className="grid grid-cols-4 gap-1" role="group" aria-label="Kvalita obrazu">
               {CHOICES.map((c) => (
                 <button key={c.id} type="button" aria-pressed={qualityPick === c.id} onClick={() => { saveChoice(c.id); setNotice(null); changeQuality(c.id); }} className={clsx("rounded-sm border px-1 h-10 lg:h-8 text-xs", qualityPick === c.id ? "border-ink bg-ink text-white" : "border-line-strong bg-white hover:border-ink")}>{c.label}</button>
               ))}

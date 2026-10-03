@@ -35,7 +35,7 @@ export async function saveContentAction(formData: FormData) {
     about: { title: g("about.title"), text: g("about.text") },
     usps: c.usps.map((u, i) => ({ title: g(`usp.${i}.title`) || u.title, text: g(`usp.${i}.text`) || u.text })),
     steps: c.steps.map((s, i) => ({ title: g(`step.${i}.title`) || s.title, text: g(`step.${i}.text`) || s.text })),
-    contact: { email: g("contact.email"), phone: g("contact.phone"), hours: g("contact.hours"), company: g("contact.company"), address: g("contact.address") },
+    contact: { email: g("contact.email"), phone: g("contact.phone"), hours: g("contact.hours"), company: g("contact.company"), address: g("contact.address"), ico: g("contact.ico"), dic: g("contact.dic"), registry: g("contact.registry") },
     footerNote: g("footerNote"),
     priceGuide: {
       title: g("priceGuide.title") || c.priceGuide.title, text: g("priceGuide.text") || c.priceGuide.text, source: g("priceGuide.source"),

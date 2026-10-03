@@ -252,8 +252,19 @@ export interface CalcResult {
   coveredAreaM2: number;
   anyFloorHeating: boolean;
   lines: CalcLine[];
+  /** Součet položek (zboží) bez dopravy. */
   total: number;
+  /**
+   * Doprava stejnou logikou jako košík (zásilky podle dodavatele, bez vynášky).
+   * Celý projekt = total + shipping.total. Chybí u kalkulací uložených před zavedením.
+   */
+  shipping?: CalcShipping;
   warnings: string[];
+}
+
+export interface CalcShipping {
+  total: number;
+  shipments: { supplierId: string; label: string; method: "parcel" | "pallet"; methodLabel: string; price: number; free: boolean; floorM2: number }[];
 }
 
 export type RoomKind = "living" | "bedroom" | "kitchen" | "bathroom" | "hallway" | "commercial";
@@ -294,14 +305,27 @@ export interface SampleRequest {
   zip: string;
   productIds: string[];
   calculationId: string | null;
+  /** Historické pole (dřív jeden společný souhlas). Nově = stejná hodnota jako marketingConsent. */
   consent: boolean;
+  /** Nepovinný souhlas s navazujícími e-maily (rady, sleva). Zaslání vzorků samo o sobě souhlas nepotřebuje (plnění smlouvy). */
+  marketingConsent?: boolean;
+  marketingConsentAt?: string | null;
   status: "new" | "sent" | "done";
 }
 
-export type EmailType = "sample-confirm" | "sample-reminder-calc" | "sample-discount";
+/** Odhlášení z marketingových e-mailů (odkaz /odhlaseni v e-mailech). */
+export interface EmailUnsubscribe {
+  email: string;
+  createdAt: string;
+  /** Kolik naplánovaných marketingových e-mailů se zrušilo. */
+  cancelled: number;
+}
+
+export type EmailType = "sample-confirm" | "sample-reminder-calc" | "sample-discount" | "calc-share";
 
 export interface EmailQueueItem {
   id: string;
+  /** U e-mailů ke vzorkům id žádosti; u „calc-share“ (kalkulace na e-mail) prázdné. */
   sampleRequestId: string;
   to: string;
   type: EmailType;
@@ -368,6 +392,11 @@ export interface CartQuoteLine {
   available: boolean;
   availabilityNote: string | null;
   m2: number | null;
+  /** Nelze objednat (produkt / příslušenství pozastaveno nebo skryto). Na rozdíl od `available:false` kvůli skladu,
+   *  kde jde jen o delší lhůtu. Plní API košíku / objednávky (src/lib/orderGuard.ts). */
+  blocked?: boolean;
+  /** U zablokované položky: kam poslat zákazníka pro náhradu (podobné dekory / příslušenství). */
+  alternativesHref?: string;
 }
 
 export interface CartQuote {
@@ -394,6 +423,8 @@ export interface Order {
     city: string;
     zip: string;
     note: string;
+    /** Nákup na firmu (nepovinné). */
+    business?: { company: string; ico: string; dic: string } | null;
   };
   carryUp: { enabled: boolean; floor: number; elevator: boolean };
   installRequested: boolean;
@@ -440,7 +471,8 @@ export interface SiteContent {
   homeIntro: { title: string; text: string };
   steps: { title: string; text: string }[];
   about: { title: string; text: string };
-  contact: { email: string; phone: string; hours: string; company: string; address: string };
+  /** Údaje provozovatele — patička, kontakt a právní stránky. `address` = sídlo provozovatele. */
+  contact: { email: string; phone: string; hours: string; company: string; address: string; ico: string; dic: string; registry: string };
   landings: Record<string, { h1: string; intro: string; seoText: string; metaTitle: string; metaDescription: string }>;
   /** Orientační ceny na trhu (materiál, pokládka…) — kontext pro rozpočet zákazníka. */
   priceGuide: { title: string; text: string; rows: { label: string; range: string; note: string }[]; source: string };

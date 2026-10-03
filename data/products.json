@@ -2,10 +2,10 @@
   {
     "id": "p_floortrade_qua-basicspc-dubprirodni",
     "slug": "quaro-basic-spc-4-dub-prirodni",
-    "name": "Basic SPC 4 Dub Přírodní",
+    "name": "Basic SPC 4 Dub přírodní",
     "brand": "Quaro",
     "collection": "Basic SPC 4",
-    "decor": "Dub Přírodní",
+    "decor": "Dub přírodní",
     "decorTone": "light-oak",
     "type": "spc",
     "thicknessMm": 4,
@@ -38,35 +38,27 @@
       "swatch": "/media/products/p_floortrade_qua-basicspc-dubprirodni/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_qua-basicspc-dubprirodni/hero.webp",
-        "/media/products/p_floortrade_qua-basicspc-dubprirodni/card.webp",
         "/media/products/p_floortrade_qua-basicspc-dubprirodni/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
-          "transform": {
-            "brightness": 1.1,
-            "saturation": 0.85
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+          "url": "file://data/feeds/demo-images/qua-basicspc-dubprirodni.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:22:55.468Z",
-    "updatedAt": "2026-09-20T22:22:55.468Z"
+    "createdAt": "2026-10-03T15:07:17.205Z",
+    "updatedAt": "2026-10-03T15:07:17.205Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-dubbeleny",
     "slug": "quaro-basic-spc-4-dub-beleny",
-    "name": "Basic SPC 4 Dub Bělený",
+    "name": "Basic SPC 4 Dub bělený",
     "brand": "Quaro",
     "collection": "Basic SPC 4",
-    "decor": "Dub Bělený",
+    "decor": "Dub bělený",
     "decorTone": "light-oak",
     "type": "spc",
     "thicknessMm": 4,
@@ -99,35 +91,27 @@
       "swatch": "/media/products/p_floortrade_qua-basicspc-dubbeleny/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_qua-basicspc-dubbeleny/hero.webp",
-        "/media/products/p_floortrade_qua-basicspc-dubbeleny/card.webp",
         "/media/products/p_floortrade_qua-basicspc-dubbeleny/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1.15,
-            "saturation": 0.6
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://data/feeds/demo-images/qua-basicspc-dubbeleny.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:22:57.769Z",
-    "updatedAt": "2026-09-20T22:22:57.769Z"
+    "createdAt": "2026-10-03T15:07:18.414Z",
+    "updatedAt": "2026-10-03T15:07:18.414Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-dubpopelavy",
     "slug": "quaro-basic-spc-4-dub-popelavy",
-    "name": "Basic SPC 4 Dub Popelavý",
+    "name": "Basic SPC 4 Dub popelavý",
     "brand": "Quaro",
     "collection": "Basic SPC 4",
-    "decor": "Dub Popelavý",
+    "decor": "Dub popelavý",
     "decorTone": "grey",
     "type": "spc",
     "thicknessMm": 4,
@@ -160,35 +144,31 @@
       "swatch": "/media/products/p_floortrade_qua-basicspc-dubpopelavy/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_qua-basicspc-dubpopelavy/hero.webp",
-        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/card.webp",
-        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/detail.webp"
+        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/detail.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubpopelavy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "saturation": 0.2,
-            "brightness": 0.85
-          }
+          "url": "file://data/feeds/demo-images/qua-basicspc-dubpopelavy.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:22:59.580Z",
-    "updatedAt": "2026-09-20T22:22:59.580Z"
+    "createdAt": "2026-10-03T15:07:19.658Z",
+    "updatedAt": "2026-10-03T15:07:19.658Z"
   },
   {
-    "id": "p_floortrade_qua-basicspc-dubkaramelovy",
-    "slug": "quaro-basic-spc-4-dub-karamelovy",
-    "name": "Basic SPC 4 Dub Karamelový",
+    "id": "p_floortrade_qua-basicspc-dubkavovy",
+    "slug": "quaro-basic-spc-4-dub-kavovy",
+    "name": "Basic SPC 4 Dub kávový",
     "brand": "Quaro",
     "collection": "Basic SPC 4",
-    "decor": "Dub Karamelový",
+    "decor": "Dub kávový",
     "decorTone": "dark-wood",
     "type": "spc",
     "thicknessMm": 4,
@@ -209,55 +189,51 @@
     "deliveryDays": 3,
     "purchasePriceM2": 245,
     "supplierId": "floortrade",
-    "supplierSku": "QUA-BASICSPC-DUBKARAMELOVÝ",
+    "supplierSku": "QUA-BASICSPC-DUBKÁVOVÝ",
     "description": "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
     "marginOverridePct": null,
     "marginPct": 30,
     "pricePerM2": 385,
     "pricePerPack": 859,
     "images": {
-      "card": "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/card.webp",
-      "hero": "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/hero.webp",
-      "swatch": "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/swatch.webp",
+      "card": "/media/products/p_floortrade_qua-basicspc-dubkavovy/card.webp",
+      "hero": "/media/products/p_floortrade_qua-basicspc-dubkavovy/hero.webp",
+      "swatch": "/media/products/p_floortrade_qua-basicspc-dubkavovy/swatch.webp",
       "gallery": [
-        "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/hero.webp",
-        "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/card.webp",
-        "/media/products/p_floortrade_qua-basicspc-dubkaramelovy/detail.webp"
+        "/media/products/p_floortrade_qua-basicspc-dubkavovy/hero.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubkavovy/detail.webp",
+        "/media/products/p_floortrade_qua-basicspc-dubkavovy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg",
-          "transform": {
-            "brightness": 0.85,
-            "saturation": 1.15
-          }
+          "url": "file://data/feeds/demo-images/qua-basicspc-dubkavovy.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:01.582Z",
-    "updatedAt": "2026-09-20T22:23:01.582Z"
+    "createdAt": "2026-10-03T15:07:21.404Z",
+    "updatedAt": "2026-10-03T15:07:21.404Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-betonsvetly",
     "slug": "quaro-basic-spc-4-beton-svetly",
-    "name": "Basic SPC 4 Beton Světlý",
+    "name": "Basic SPC 4 Beton světlý",
     "brand": "Quaro",
     "collection": "Basic SPC 4",
-    "decor": "Beton Světlý",
+    "decor": "Beton světlý",
     "decorTone": "stone",
     "type": "spc",
     "thicknessMm": 4,
     "wearLayerMm": 0.3,
     "usageClass": 31,
     "lock": "click",
-    "plankLengthMm": 1220,
-    "plankWidthMm": 183,
+    "plankLengthMm": 610,
+    "plankWidthMm": 305,
     "bevel": false,
     "m2PerPack": 2.23,
     "packWeightKg": 26,
@@ -282,28 +258,19 @@
       "swatch": "/media/products/p_floortrade_qua-basicspc-betonsvetly/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_qua-basicspc-betonsvetly/hero.webp",
-        "/media/products/p_floortrade_qua-basicspc-betonsvetly/card.webp",
         "/media/products/p_floortrade_qua-basicspc-betonsvetly/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg",
-          "transform": {
-            "saturation": 0.3,
-            "brightness": 1.05,
-            "crop": "bottom"
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+          "url": "file://data/feeds/demo-images/qua-basicspc-betonsvetly.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:03.374Z",
-    "updatedAt": "2026-09-21T07:03:00.183Z"
+    "createdAt": "2026-10-03T15:07:23.098Z",
+    "updatedAt": "2026-10-03T15:07:23.098Z"
   },
   {
     "id": "p_floortrade_cas-composit-dubprovence",
@@ -344,36 +311,27 @@
       "swatch": "/media/products/p_floortrade_cas-composit-dubprovence/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_cas-composit-dubprovence/hero.webp",
-        "/media/products/p_floortrade_cas-composit-dubprovence/card.webp",
         "/media/products/p_floortrade_cas-composit-dubprovence/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg",
-          "transform": {
-            "brightness": 1,
-            "saturation": 0.9,
-            "hue": -5
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+          "url": "file://data/feeds/demo-images/cas-composit-dubprovence.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:05.529Z",
-    "updatedAt": "2026-09-20T22:23:05.529Z"
+    "createdAt": "2026-10-03T15:07:24.159Z",
+    "updatedAt": "2026-10-03T15:07:24.159Z"
   },
   {
-    "id": "p_floortrade_cas-composit-dubkavovy",
-    "slug": "casale-composite-comfort-6-5-dub-kavovy",
-    "name": "Composite Comfort 6.5 Dub Kávový",
+    "id": "p_floortrade_cas-composit-dubkaramelovy",
+    "slug": "casale-composite-comfort-6-5-dub-karamelovy",
+    "name": "Composite Comfort 6.5 Dub karamelový",
     "brand": "Casale",
     "collection": "Composite Comfort 6.5",
-    "decor": "Dub Kávový",
+    "decor": "Dub karamelový",
     "decorTone": "dark-wood",
     "type": "vinyl-composite",
     "thicknessMm": 6.5,
@@ -394,47 +352,43 @@
     "deliveryDays": 4,
     "purchasePriceM2": 720,
     "supplierId": "floortrade",
-    "supplierSku": "CAS-COMPOSIT-DUBKÁVOVÝ",
+    "supplierSku": "CAS-COMPOSIT-DUBKARAMELOVÝ",
     "description": "Široké dlouhé lamely na kompozitním jádru s integrovanou korkovou podložkou. Výjimečně tichý a teplý došlap, voděodolné jádro, hluboce embosovaná struktura synchronní s dekorem.",
     "marginOverridePct": null,
     "marginPct": 30,
     "pricePerM2": 1133,
     "pricePerPack": 2323,
     "images": {
-      "card": "/media/products/p_floortrade_cas-composit-dubkavovy/card.webp",
-      "hero": "/media/products/p_floortrade_cas-composit-dubkavovy/hero.webp",
-      "swatch": "/media/products/p_floortrade_cas-composit-dubkavovy/swatch.webp",
+      "card": "/media/products/p_floortrade_cas-composit-dubkaramelovy/card.webp",
+      "hero": "/media/products/p_floortrade_cas-composit-dubkaramelovy/hero.webp",
+      "swatch": "/media/products/p_floortrade_cas-composit-dubkaramelovy/swatch.webp",
       "gallery": [
-        "/media/products/p_floortrade_cas-composit-dubkavovy/hero.webp",
-        "/media/products/p_floortrade_cas-composit-dubkavovy/card.webp",
-        "/media/products/p_floortrade_cas-composit-dubkavovy/detail.webp"
+        "/media/products/p_floortrade_cas-composit-dubkaramelovy/hero.webp",
+        "/media/products/p_floortrade_cas-composit-dubkaramelovy/detail.webp",
+        "/media/products/p_floortrade_cas-composit-dubkaramelovy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
-          "transform": {
-            "brightness": 0.7,
-            "saturation": 0.9
-          }
+          "url": "file://data/feeds/demo-images/cas-composit-dubkaramelovy.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:07.412Z",
-    "updatedAt": "2026-09-20T22:23:07.412Z"
+    "createdAt": "2026-10-03T15:07:25.317Z",
+    "updatedAt": "2026-10-03T15:07:25.317Z"
   },
   {
     "id": "p_floortrade_cas-composit-dubstribrny",
     "slug": "casale-composite-comfort-6-5-dub-stribrny",
-    "name": "Composite Comfort 6.5 Dub Stříbrný",
+    "name": "Composite Comfort 6.5 Dub stříbrný",
     "brand": "Casale",
     "collection": "Composite Comfort 6.5",
-    "decor": "Dub Stříbrný",
+    "decor": "Dub stříbrný",
     "decorTone": "grey",
     "type": "vinyl-composite",
     "thicknessMm": 6.5,
@@ -467,43 +421,39 @@
       "swatch": "/media/products/p_floortrade_cas-composit-dubstribrny/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_cas-composit-dubstribrny/hero.webp",
-        "/media/products/p_floortrade_cas-composit-dubstribrny/card.webp",
-        "/media/products/p_floortrade_cas-composit-dubstribrny/detail.webp"
+        "/media/products/p_floortrade_cas-composit-dubstribrny/detail.webp",
+        "/media/products/p_floortrade_cas-composit-dubstribrny/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
-          "transform": {
-            "saturation": 0.1,
-            "brightness": 1.05
-          }
+          "url": "file://data/feeds/demo-images/cas-composit-dubstribrny.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:09.268Z",
-    "updatedAt": "2026-09-20T22:23:09.268Z"
+    "createdAt": "2026-10-03T15:07:27.014Z",
+    "updatedAt": "2026-10-03T15:07:27.014Z"
   },
   {
     "id": "p_floortrade_cas-composit-terrazzosvetle",
     "slug": "casale-composite-comfort-6-5-terrazzo-svetle",
-    "name": "Composite Comfort 6.5 Terrazzo Světlé",
+    "name": "Composite Comfort 6.5 Terrazzo světlé",
     "brand": "Casale",
     "collection": "Composite Comfort 6.5",
-    "decor": "Terrazzo Světlé",
+    "decor": "Terrazzo světlé",
     "decorTone": "stone",
     "type": "vinyl-composite",
     "thicknessMm": 6.5,
     "wearLayerMm": 0.55,
     "usageClass": 33,
     "lock": "click",
-    "plankLengthMm": 1500,
-    "plankWidthMm": 228,
+    "plankLengthMm": 610,
+    "plankWidthMm": 610,
     "bevel": true,
     "m2PerPack": 2.05,
     "packWeightKg": 19,
@@ -528,17 +478,12 @@
       "swatch": "/media/products/p_floortrade_cas-composit-terrazzosvetle/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_cas-composit-terrazzosvetle/hero.webp",
-        "/media/products/p_floortrade_cas-composit-terrazzosvetle/card.webp",
-        "/media/products/p_floortrade_cas-composit-terrazzosvetle/detail.webp"
+        "/media/products/p_floortrade_cas-composit-terrazzosvetle/detail.webp",
+        "/media/products/p_floortrade_cas-composit-terrazzosvetle/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg",
-          "transform": {
-            "brightness": 1.05,
-            "saturation": 0.5,
-            "crop": "top"
-          }
+          "url": "file://data/feeds/demo-images/cas-composit-terrazzosvetle.webp"
         },
         "room": {
           "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
@@ -548,16 +493,16 @@
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:11.331Z",
-    "updatedAt": "2026-09-20T22:23:11.331Z"
+    "createdAt": "2026-10-03T15:07:28.590Z",
+    "updatedAt": "2026-10-03T15:07:28.590Z"
   },
   {
     "id": "p_floortrade_cas-herringb-dubrybikostprirodn",
     "slug": "casale-herringbone-6-5-dub-rybi-kost-prirodni",
-    "name": "Herringbone 6.5 Dub Rybí kost Přírodní",
+    "name": "Herringbone 6.5 Dub rybí kost přírodní",
     "brand": "Casale",
     "collection": "Herringbone 6.5",
-    "decor": "Dub Rybí kost Přírodní",
+    "decor": "Dub rybí kost přírodní",
     "decorTone": "light-oak",
     "type": "vinyl-composite",
     "thicknessMm": 6.5,
@@ -590,35 +535,27 @@
       "swatch": "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/hero.webp",
-        "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/card.webp",
         "/media/products/p_floortrade_cas-herringb-dubrybikostprirodn/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg",
-          "transform": {
-            "crop": "bottom",
-            "brightness": 1.05
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg"
+          "url": "file://data/feeds/demo-images/cas-herringb-dubrybikostprirodn.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:14.079Z",
-    "updatedAt": "2026-09-20T22:23:14.079Z"
+    "createdAt": "2026-10-03T15:07:30.469Z",
+    "updatedAt": "2026-10-03T15:07:30.469Z"
   },
   {
     "id": "p_floortrade_cas-herringb-dubrybikostkourovy",
     "slug": "casale-herringbone-6-5-dub-rybi-kost-kourovy",
-    "name": "Herringbone 6.5 Dub Rybí kost Kouřový",
+    "name": "Herringbone 6.5 Dub rybí kost kouřový",
     "brand": "Casale",
     "collection": "Herringbone 6.5",
-    "decor": "Dub Rybí kost Kouřový",
+    "decor": "Dub rybí kost kouřový",
     "decorTone": "dark-wood",
     "type": "vinyl-composite",
     "thicknessMm": 6.5,
@@ -651,36 +588,31 @@
       "swatch": "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/swatch.webp",
       "gallery": [
         "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/hero.webp",
-        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/card.webp",
-        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/detail.webp"
+        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/detail.webp",
+        "/media/products/p_floortrade_cas-herringb-dubrybikostkourovy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg",
-          "transform": {
-            "crop": "bottom",
-            "brightness": 0.8,
-            "saturation": 0.8
-          }
+          "url": "file://data/feeds/demo-images/cas-herringb-dubrybikostkourovy.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:16.284Z",
-    "updatedAt": "2026-09-20T22:23:16.284Z"
+    "createdAt": "2026-10-03T15:07:31.631Z",
+    "updatedAt": "2026-10-03T15:07:31.631Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubskandinavsky",
     "slug": "terrano-rigid-stone-5-5-dub-skandinavsky",
-    "name": "Rigid Stone 5.5 Dub Skandinávský",
+    "name": "Rigid Stone 5.5 Dub skandinávský",
     "brand": "Terrano",
     "collection": "Rigid Stone 5.5",
-    "decor": "Dub Skandinávský",
+    "decor": "Dub skandinávský",
     "decorTone": "light-oak",
     "type": "spc",
     "thicknessMm": 5.5,
@@ -713,35 +645,27 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/card.webp",
         "/media/products/p_vinylia_ter-rigidsto-dubskandinavsky/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1.05,
-            "saturation": 0.8
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://data/feeds/demo-images/ter-rigidsto-dubskandinavsky.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:19.140Z",
-    "updatedAt": "2026-09-20T22:23:19.140Z"
+    "createdAt": "2026-10-03T15:07:33.548Z",
+    "updatedAt": "2026-10-03T15:07:33.548Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubmedovy",
     "slug": "terrano-rigid-stone-5-5-dub-medovy",
-    "name": "Rigid Stone 5.5 Dub Medový",
+    "name": "Rigid Stone 5.5 Dub medový",
     "brand": "Terrano",
     "collection": "Rigid Stone 5.5",
-    "decor": "Dub Medový",
+    "decor": "Dub medový",
     "decorTone": "light-oak",
     "type": "spc",
     "thicknessMm": 5.5,
@@ -774,12 +698,12 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-dubmedovy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-dubmedovy/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/card.webp",
-        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/detail.webp"
+        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/detail.webp",
+        "/media/products/p_vinylia_ter-rigidsto-dubmedovy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg"
+          "url": "file://data/feeds/demo-images/ter-rigidsto-dubmedovy.webp"
         },
         "room": {
           "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
@@ -789,16 +713,16 @@
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:21.096Z",
-    "updatedAt": "2026-09-21T07:03:00.202Z"
+    "createdAt": "2026-10-03T15:07:34.780Z",
+    "updatedAt": "2026-10-03T15:07:34.780Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubkourovy",
     "slug": "terrano-rigid-stone-5-5-dub-kourovy",
-    "name": "Rigid Stone 5.5 Dub Kouřový",
+    "name": "Rigid Stone 5.5 Dub kouřový",
     "brand": "Terrano",
     "collection": "Rigid Stone 5.5",
-    "decor": "Dub Kouřový",
+    "decor": "Dub kouřový",
     "decorTone": "dark-wood",
     "type": "spc",
     "thicknessMm": 5.5,
@@ -831,35 +755,27 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-dubkourovy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-dubkourovy/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-dubkourovy/card.webp",
         "/media/products/p_vinylia_ter-rigidsto-dubkourovy/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
-          "transform": {
-            "brightness": 0.8,
-            "saturation": 0.7
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+          "url": "file://data/feeds/demo-images/ter-rigidsto-dubkourovy.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:22.721Z",
-    "updatedAt": "2026-09-20T22:23:22.721Z"
+    "createdAt": "2026-10-03T15:07:36.602Z",
+    "updatedAt": "2026-10-03T15:07:36.602Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-orechtmavy",
     "slug": "terrano-rigid-stone-5-5-orech-tmavy",
-    "name": "Rigid Stone 5.5 Ořech Tmavý",
+    "name": "Rigid Stone 5.5 Ořech tmavý",
     "brand": "Terrano",
     "collection": "Rigid Stone 5.5",
-    "decor": "Ořech Tmavý",
+    "decor": "Ořech tmavý",
     "decorTone": "dark-wood",
     "type": "spc",
     "thicknessMm": 5.5,
@@ -892,17 +808,12 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-orechtmavy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-orechtmavy/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/card.webp",
-        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/detail.webp"
+        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/detail.webp",
+        "/media/products/p_vinylia_ter-rigidsto-orechtmavy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
-          "transform": {
-            "brightness": 0.9,
-            "saturation": 1.3,
-            "hue": 15
-          }
+          "url": "file://data/feeds/demo-images/ter-rigidsto-orechtmavy.webp"
         },
         "room": {
           "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
@@ -912,16 +823,16 @@
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:24.778Z",
-    "updatedAt": "2026-09-20T22:23:24.778Z"
+    "createdAt": "2026-10-03T15:07:37.683Z",
+    "updatedAt": "2026-10-03T15:07:37.683Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubsedy",
     "slug": "terrano-rigid-stone-5-5-dub-sedy",
-    "name": "Rigid Stone 5.5 Dub Šedý",
+    "name": "Rigid Stone 5.5 Dub šedý",
     "brand": "Terrano",
     "collection": "Rigid Stone 5.5",
-    "decor": "Dub Šedý",
+    "decor": "Dub šedý",
     "decorTone": "grey",
     "type": "spc",
     "thicknessMm": 5.5,
@@ -954,43 +865,35 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-dubsedy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-dubsedy/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-dubsedy/card.webp",
         "/media/products/p_vinylia_ter-rigidsto-dubsedy/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "saturation": 0.15,
-            "brightness": 0.9
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://data/feeds/demo-images/ter-rigidsto-dubsedy.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:26.595Z",
-    "updatedAt": "2026-09-20T22:23:26.595Z"
+    "createdAt": "2026-10-03T15:07:39.309Z",
+    "updatedAt": "2026-10-03T15:07:39.309Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-betonsedy",
     "slug": "terrano-rigid-stone-5-5-beton-sedy",
-    "name": "Rigid Stone 5.5 Beton Šedý",
+    "name": "Rigid Stone 5.5 Beton šedý",
     "brand": "Terrano",
     "collection": "Rigid Stone 5.5",
-    "decor": "Beton Šedý",
+    "decor": "Beton šedý",
     "decorTone": "stone",
     "type": "spc",
     "thicknessMm": 5.5,
     "wearLayerMm": 0.55,
     "usageClass": 33,
     "lock": "click",
-    "plankLengthMm": 1220,
-    "plankWidthMm": 180,
+    "plankLengthMm": 610,
+    "plankWidthMm": 305,
     "bevel": true,
     "m2PerPack": 2.2,
     "packWeightKg": 30,
@@ -1015,35 +918,31 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-betonsedy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-betonsedy/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-betonsedy/card.webp",
-        "/media/products/p_vinylia_ter-rigidsto-betonsedy/detail.webp"
+        "/media/products/p_vinylia_ter-rigidsto-betonsedy/detail.webp",
+        "/media/products/p_vinylia_ter-rigidsto-betonsedy/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg",
-          "transform": {
-            "saturation": 0.4,
-            "crop": "bottom"
-          }
+          "url": "file://data/feeds/demo-images/ter-rigidsto-betonsedy.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg"
+          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:28.598Z",
-    "updatedAt": "2026-09-20T22:23:28.598Z"
+    "createdAt": "2026-10-03T15:07:40.503Z",
+    "updatedAt": "2026-10-03T15:07:40.503Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-dubvanilkovy",
     "slug": "lumea-glue-down-2-5-dub-vanilkovy",
-    "name": "Glue Down 2.5 Dub Vanilkový",
+    "name": "Glue Down 2.5 Dub vanilkový",
     "brand": "Lumea",
     "collection": "Glue Down 2.5",
-    "decor": "Dub Vanilkový",
+    "decor": "Dub vanilkový",
     "decorTone": "light-oak",
     "type": "vinyl-glue",
     "thicknessMm": 2.5,
@@ -1076,35 +975,27 @@
       "swatch": "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/hero.webp",
-        "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/card.webp",
         "/media/products/p_vinylia_lum-gluedown-dubvanilkovy/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1.08,
-            "saturation": 0.75
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
+          "url": "file://data/feeds/demo-images/lum-gluedown-dubvanilkovy.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:30.648Z",
-    "updatedAt": "2026-09-20T22:23:30.648Z"
+    "createdAt": "2026-10-03T15:07:42.211Z",
+    "updatedAt": "2026-10-03T15:07:42.211Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-dubuhlovy",
     "slug": "lumea-glue-down-2-5-dub-uhlovy",
-    "name": "Glue Down 2.5 Dub Uhlový",
+    "name": "Glue Down 2.5 Dub uhlový",
     "brand": "Lumea",
     "collection": "Glue Down 2.5",
-    "decor": "Dub Uhlový",
+    "decor": "Dub uhlový",
     "decorTone": "dark-wood",
     "type": "vinyl-glue",
     "thicknessMm": 2.5,
@@ -1137,35 +1028,27 @@
       "swatch": "/media/products/p_vinylia_lum-gluedown-dubuhlovy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_lum-gluedown-dubuhlovy/hero.webp",
-        "/media/products/p_vinylia_lum-gluedown-dubuhlovy/card.webp",
         "/media/products/p_vinylia_lum-gluedown-dubuhlovy/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
-          "transform": {
-            "brightness": 0.75,
-            "saturation": 0.5
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+          "url": "file://data/feeds/demo-images/lum-gluedown-dubuhlovy.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:32.484Z",
-    "updatedAt": "2026-09-20T22:23:32.484Z"
+    "createdAt": "2026-10-03T15:07:43.200Z",
+    "updatedAt": "2026-10-03T15:07:43.200Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-dubgrafit",
     "slug": "lumea-glue-down-2-5-dub-grafit",
-    "name": "Glue Down 2.5 Dub Grafit",
+    "name": "Glue Down 2.5 Dub grafit",
     "brand": "Lumea",
     "collection": "Glue Down 2.5",
-    "decor": "Dub Grafit",
+    "decor": "Dub grafit",
     "decorTone": "grey",
     "type": "vinyl-glue",
     "thicknessMm": 2.5,
@@ -1198,43 +1081,35 @@
       "swatch": "/media/products/p_vinylia_lum-gluedown-dubgrafit/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_lum-gluedown-dubgrafit/hero.webp",
-        "/media/products/p_vinylia_lum-gluedown-dubgrafit/card.webp",
         "/media/products/p_vinylia_lum-gluedown-dubgrafit/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
-          "transform": {
-            "saturation": 0.05,
-            "brightness": 0.95
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg"
+          "url": "file://data/feeds/demo-images/lum-gluedown-dubgrafit.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:34.158Z",
-    "updatedAt": "2026-09-20T22:23:34.158Z"
+    "createdAt": "2026-10-03T15:07:44.299Z",
+    "updatedAt": "2026-10-03T15:07:44.299Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-travertinbezovy",
     "slug": "lumea-glue-down-2-5-travertin-bezovy",
-    "name": "Glue Down 2.5 Travertin Béžový",
+    "name": "Glue Down 2.5 Travertin béžový",
     "brand": "Lumea",
     "collection": "Glue Down 2.5",
-    "decor": "Travertin Béžový",
+    "decor": "Travertin béžový",
     "decorTone": "stone",
     "type": "vinyl-glue",
     "thicknessMm": 2.5,
     "wearLayerMm": 0.55,
     "usageClass": 33,
     "lock": "glue",
-    "plankLengthMm": 1219,
-    "plankWidthMm": 184,
+    "plankLengthMm": 610,
+    "plankWidthMm": 305,
     "bevel": false,
     "m2PerPack": 3.37,
     "packWeightKg": 15,
@@ -1259,43 +1134,35 @@
       "swatch": "/media/products/p_vinylia_lum-gluedown-travertinbezovy/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_lum-gluedown-travertinbezovy/hero.webp",
-        "/media/products/p_vinylia_lum-gluedown-travertinbezovy/card.webp",
         "/media/products/p_vinylia_lum-gluedown-travertinbezovy/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg",
-          "transform": {
-            "crop": "bottom",
-            "saturation": 0.8
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-rebornfilmes-29222397.jpg"
+          "url": "file://data/feeds/demo-images/lum-gluedown-travertinbezovy.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:36.057Z",
-    "updatedAt": "2026-09-20T22:23:36.057Z"
+    "createdAt": "2026-10-03T15:07:45.387Z",
+    "updatedAt": "2026-10-03T15:07:45.387Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-mramorbily",
     "slug": "lumea-glue-down-2-5-mramor-bily",
-    "name": "Glue Down 2.5 Mramor Bílý",
+    "name": "Glue Down 2.5 Mramor bílý",
     "brand": "Lumea",
     "collection": "Glue Down 2.5",
-    "decor": "Mramor Bílý",
+    "decor": "Mramor bílý",
     "decorTone": "stone",
     "type": "vinyl-glue",
     "thicknessMm": 2.5,
     "wearLayerMm": 0.55,
     "usageClass": 33,
     "lock": "glue",
-    "plankLengthMm": 1219,
-    "plankWidthMm": 184,
+    "plankLengthMm": 610,
+    "plankWidthMm": 610,
     "bevel": false,
     "m2PerPack": 3.37,
     "packWeightKg": 15,
@@ -1320,17 +1187,12 @@
       "swatch": "/media/products/p_vinylia_lum-gluedown-mramorbily/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_lum-gluedown-mramorbily/hero.webp",
-        "/media/products/p_vinylia_lum-gluedown-mramorbily/card.webp",
-        "/media/products/p_vinylia_lum-gluedown-mramorbily/detail.webp"
+        "/media/products/p_vinylia_lum-gluedown-mramorbily/detail.webp",
+        "/media/products/p_vinylia_lum-gluedown-mramorbily/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg",
-          "transform": {
-            "brightness": 1.1,
-            "saturation": 0.3,
-            "crop": "bottom"
-          }
+          "url": "file://data/feeds/demo-images/lum-gluedown-mramorbily.webp"
         },
         "room": {
           "url": "file://fotky_podlahy/pexels-thesovereignwolf-13369847.jpg"
@@ -1340,24 +1202,24 @@
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:38.044Z",
-    "updatedAt": "2026-09-20T22:23:38.044Z"
+    "createdAt": "2026-10-03T15:07:46.482Z",
+    "updatedAt": "2026-10-03T15:07:46.482Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-bridlicetmava",
     "slug": "lumea-glue-down-2-5-bridlice-tmava",
-    "name": "Glue Down 2.5 Břidlice Tmavá",
+    "name": "Glue Down 2.5 Břidlice tmavá",
     "brand": "Lumea",
     "collection": "Glue Down 2.5",
-    "decor": "Břidlice Tmavá",
+    "decor": "Břidlice tmavá",
     "decorTone": "stone",
     "type": "vinyl-glue",
     "thicknessMm": 2.5,
     "wearLayerMm": 0.55,
     "usageClass": 33,
     "lock": "glue",
-    "plankLengthMm": 1219,
-    "plankWidthMm": 184,
+    "plankLengthMm": 610,
+    "plankWidthMm": 305,
     "bevel": false,
     "m2PerPack": 3.37,
     "packWeightKg": 15,
@@ -1382,36 +1244,27 @@
       "swatch": "/media/products/p_vinylia_lum-gluedown-bridlicetmava/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_lum-gluedown-bridlicetmava/hero.webp",
-        "/media/products/p_vinylia_lum-gluedown-bridlicetmava/card.webp",
         "/media/products/p_vinylia_lum-gluedown-bridlicetmava/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg",
-          "transform": {
-            "saturation": 0.3,
-            "brightness": 0.9,
-            "crop": "bottom"
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg"
+          "url": "file://data/feeds/demo-images/lum-gluedown-bridlicetmava.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:40.004Z",
-    "updatedAt": "2026-09-20T22:23:40.004Z"
+    "createdAt": "2026-10-03T15:07:48.029Z",
+    "updatedAt": "2026-10-03T15:07:48.029Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubpisecny",
     "slug": "terrano-rigid-stone-xl-commercial-dub-pisecny",
-    "name": "Rigid Stone XL Commercial Dub Písečný",
+    "name": "Rigid Stone XL Commercial Dub písečný",
     "brand": "Terrano",
     "collection": "Rigid Stone XL Commercial",
-    "decor": "Dub Písečný",
+    "decor": "Dub písečný",
     "decorTone": "light-oak",
     "type": "spc",
     "thicknessMm": 6,
@@ -1444,28 +1297,19 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-dubpisecny/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-dubpisecny/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-dubpisecny/card.webp",
         "/media/products/p_vinylia_ter-rigidsto-dubpisecny/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1.02,
-            "saturation": 0.7,
-            "hue": 10
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
+          "url": "file://data/feeds/demo-images/ter-rigidsto-dubpisecny.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:41.895Z",
-    "updatedAt": "2026-09-20T22:23:41.895Z"
+    "createdAt": "2026-10-03T15:07:49.049Z",
+    "updatedAt": "2026-10-03T15:07:49.049Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-wenge",
@@ -1506,17 +1350,12 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-wenge/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-wenge/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-wenge/card.webp",
-        "/media/products/p_vinylia_ter-rigidsto-wenge/detail.webp"
+        "/media/products/p_vinylia_ter-rigidsto-wenge/detail.webp",
+        "/media/products/p_vinylia_ter-rigidsto-wenge/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
-          "transform": {
-            "brightness": 0.8,
-            "saturation": 0.9,
-            "hue": 10
-          }
+          "url": "file://data/feeds/demo-images/ter-rigidsto-wenge.webp"
         },
         "room": {
           "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
@@ -1526,24 +1365,24 @@
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:43.692Z",
-    "updatedAt": "2026-09-20T22:23:43.692Z"
+    "createdAt": "2026-10-03T15:07:50.243Z",
+    "updatedAt": "2026-10-03T15:07:50.243Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-kamenantracit",
     "slug": "terrano-rigid-stone-xl-commercial-kamen-antracit",
-    "name": "Rigid Stone XL Commercial Kámen Antracit",
+    "name": "Rigid Stone XL Commercial Kámen antracit",
     "brand": "Terrano",
     "collection": "Rigid Stone XL Commercial",
-    "decor": "Kámen Antracit",
+    "decor": "Kámen antracit",
     "decorTone": "stone",
     "type": "spc",
     "thicknessMm": 6,
     "wearLayerMm": 0.55,
     "usageClass": 42,
     "lock": "click",
-    "plankLengthMm": 1800,
-    "plankWidthMm": 228,
+    "plankLengthMm": 914,
+    "plankWidthMm": 457,
     "bevel": true,
     "m2PerPack": 2.46,
     "packWeightKg": 34,
@@ -1568,36 +1407,31 @@
       "swatch": "/media/products/p_vinylia_ter-rigidsto-kamenantracit/swatch.webp",
       "gallery": [
         "/media/products/p_vinylia_ter-rigidsto-kamenantracit/hero.webp",
-        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/card.webp",
-        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/detail.webp"
+        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/detail.webp",
+        "/media/products/p_vinylia_ter-rigidsto-kamenantracit/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg",
-          "transform": {
-            "saturation": 0.2,
-            "brightness": 0.8,
-            "crop": "bottom"
-          }
+          "url": "file://data/feeds/demo-images/ter-rigidsto-kamenantracit.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-meruyert-gonullu-7314609.jpg"
+          "url": "file://fotky_podlahy/pexels-thuan-33701233.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:45.368Z",
-    "updatedAt": "2026-09-20T22:23:45.368Z"
+    "createdAt": "2026-10-03T15:07:51.938Z",
+    "updatedAt": "2026-10-03T15:07:51.938Z"
   },
   {
     "id": "p_nordic_nor-naturehd-dubalpsky",
     "slug": "nordwood-nature-hdf-9-dub-alpsky",
-    "name": "Nature HDF 9 Dub Alpský",
+    "name": "Nature HDF 9 Dub alpský",
     "brand": "Nordwood",
     "collection": "Nature HDF 9",
-    "decor": "Dub Alpský",
+    "decor": "Dub alpský",
     "decorTone": "light-oak",
     "type": "vinyl-hdf",
     "thicknessMm": 9.5,
@@ -1630,35 +1464,27 @@
       "swatch": "/media/products/p_nordic_nor-naturehd-dubalpsky/swatch.webp",
       "gallery": [
         "/media/products/p_nordic_nor-naturehd-dubalpsky/hero.webp",
-        "/media/products/p_nordic_nor-naturehd-dubalpsky/card.webp",
         "/media/products/p_nordic_nor-naturehd-dubalpsky/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1,
-            "saturation": 0.9
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://data/feeds/demo-images/nor-naturehd-dubalpsky.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:48.386Z",
-    "updatedAt": "2026-09-21T07:03:00.214Z"
+    "createdAt": "2026-10-03T15:07:54.598Z",
+    "updatedAt": "2026-10-03T15:07:54.598Z"
   },
   {
     "id": "p_nordic_nor-naturehd-dublatte",
     "slug": "nordwood-nature-hdf-9-dub-latte",
-    "name": "Nature HDF 9 Dub Latte",
+    "name": "Nature HDF 9 Dub latte",
     "brand": "Nordwood",
     "collection": "Nature HDF 9",
-    "decor": "Dub Latte",
+    "decor": "Dub latte",
     "decorTone": "light-oak",
     "type": "vinyl-hdf",
     "thicknessMm": 9.5,
@@ -1691,35 +1517,27 @@
       "swatch": "/media/products/p_nordic_nor-naturehd-dublatte/swatch.webp",
       "gallery": [
         "/media/products/p_nordic_nor-naturehd-dublatte/hero.webp",
-        "/media/products/p_nordic_nor-naturehd-dublatte/card.webp",
         "/media/products/p_nordic_nor-naturehd-dublatte/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-hakimsatoso-5776224.jpg",
-          "transform": {
-            "brightness": 1.05,
-            "saturation": 0.7
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg"
+          "url": "file://data/feeds/demo-images/nor-naturehd-dublatte.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:50.107Z",
-    "updatedAt": "2026-09-20T22:23:50.107Z"
+    "createdAt": "2026-10-03T15:07:55.762Z",
+    "updatedAt": "2026-10-03T15:07:55.762Z"
   },
   {
     "id": "p_nordic_nor-naturehd-jasansvetly",
     "slug": "nordwood-nature-hdf-9-jasan-svetly",
-    "name": "Nature HDF 9 Jasan Světlý",
+    "name": "Nature HDF 9 Jasan světlý",
     "brand": "Nordwood",
     "collection": "Nature HDF 9",
-    "decor": "Jasan Světlý",
+    "decor": "Jasan světlý",
     "decorTone": "light-oak",
     "type": "vinyl-hdf",
     "thicknessMm": 9.5,
@@ -1752,35 +1570,27 @@
       "swatch": "/media/products/p_nordic_nor-naturehd-jasansvetly/swatch.webp",
       "gallery": [
         "/media/products/p_nordic_nor-naturehd-jasansvetly/hero.webp",
-        "/media/products/p_nordic_nor-naturehd-jasansvetly/card.webp",
         "/media/products/p_nordic_nor-naturehd-jasansvetly/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1.1,
-            "saturation": 0.5
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-yi-ren-57040649-26068814.jpg"
+          "url": "file://data/feeds/demo-images/nor-naturehd-jasansvetly.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:51.863Z",
-    "updatedAt": "2026-09-20T22:23:51.863Z"
+    "createdAt": "2026-10-03T15:07:57.004Z",
+    "updatedAt": "2026-10-03T15:07:57.004Z"
   },
   {
     "id": "p_nordic_nor-naturehd-dubantik",
     "slug": "nordwood-nature-hdf-9-dub-antik",
-    "name": "Nature HDF 9 Dub Antik",
+    "name": "Nature HDF 9 Dub antik",
     "brand": "Nordwood",
     "collection": "Nature HDF 9",
-    "decor": "Dub Antik",
+    "decor": "Dub antik",
     "decorTone": "dark-wood",
     "type": "vinyl-hdf",
     "thicknessMm": 9.5,
@@ -1813,35 +1623,31 @@
       "swatch": "/media/products/p_nordic_nor-naturehd-dubantik/swatch.webp",
       "gallery": [
         "/media/products/p_nordic_nor-naturehd-dubantik/hero.webp",
-        "/media/products/p_nordic_nor-naturehd-dubantik/card.webp",
-        "/media/products/p_nordic_nor-naturehd-dubantik/detail.webp"
+        "/media/products/p_nordic_nor-naturehd-dubantik/detail.webp",
+        "/media/products/p_nordic_nor-naturehd-dubantik/room.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-leticia-alvares-1805702-36178801.jpg",
-          "transform": {
-            "brightness": 0.85,
-            "crop": "bottom"
-          }
+          "url": "file://data/feeds/demo-images/nor-naturehd-dubantik.webp"
         },
         "room": {
-          "url": "file://fotky_podlahy/pexels-irfansimsar-36252681.jpg"
+          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:53.895Z",
-    "updatedAt": "2026-09-20T22:23:53.895Z"
+    "createdAt": "2026-10-03T15:07:58.301Z",
+    "updatedAt": "2026-10-03T15:07:58.301Z"
   },
   {
     "id": "p_nordic_nor-naturehd-boroviceseda",
     "slug": "nordwood-nature-hdf-9-borovice-seda",
-    "name": "Nature HDF 9 Borovice Šedá",
+    "name": "Nature HDF 9 Borovice šedá",
     "brand": "Nordwood",
     "collection": "Nature HDF 9",
-    "decor": "Borovice Šedá",
+    "decor": "Borovice šedá",
     "decorTone": "grey",
     "type": "vinyl-hdf",
     "thicknessMm": 9.5,
@@ -1874,35 +1680,27 @@
       "swatch": "/media/products/p_nordic_nor-naturehd-boroviceseda/swatch.webp",
       "gallery": [
         "/media/products/p_nordic_nor-naturehd-boroviceseda/hero.webp",
-        "/media/products/p_nordic_nor-naturehd-boroviceseda/card.webp",
         "/media/products/p_nordic_nor-naturehd-boroviceseda/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-tiago-silveira-2248531-5476279.jpg",
-          "transform": {
-            "saturation": 0.1,
-            "brightness": 1.2
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://data/feeds/demo-images/nor-naturehd-boroviceseda.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:55.811Z",
-    "updatedAt": "2026-09-20T22:23:55.811Z"
+    "createdAt": "2026-10-03T15:08:00.100Z",
+    "updatedAt": "2026-10-03T15:08:00.100Z"
   },
   {
-    "id": "p_nordic_qua-selfstic-dubsvetlybasic",
-    "slug": "quaro-self-stick-2-dub-svetly-basic",
-    "name": "Self-Stick 2 Dub Světlý Basic",
+    "id": "p_nordic_qua-selfstic-dubsvetly",
+    "slug": "quaro-self-stick-2-dub-svetly",
+    "name": "Self-Stick 2 Dub světlý",
     "brand": "Quaro",
     "collection": "Self-Stick 2",
-    "decor": "Dub Světlý Basic",
+    "decor": "Dub světlý",
     "decorTone": "light-oak",
     "type": "vinyl-glue",
     "thicknessMm": 2,
@@ -1923,46 +1721,39 @@
     "deliveryDays": 3,
     "purchasePriceM2": 190,
     "supplierId": "nordic",
-    "supplierSku": "QUA-SELFSTIC-DUBSVĚTLÝBASIC",
-    "description": "Samolepicí vinylové lamely pro rychlou renovaci: strhnout fólii, přilepit. Jen do bytových prostor s nízkou zátěží, na hladký a čistý podklad. Není určeno na podlahové topení.",
+    "supplierSku": "QUA-SELFSTIC-DUBSVĚTLÝ",
+    "description": "Samolepicí vinylové lamely pro rychlou renovaci: stačí stáhnout ochrannou fólii a lamelu přitlačit k podkladu. Jen do bytových prostor s nízkou zátěží, na rovný, hladký, čistý a suchý podklad bez prachu. Není určeno na podlahové topení.",
     "marginOverridePct": null,
     "marginPct": 30,
     "pricePerM2": 299,
     "pricePerPack": 748,
     "images": {
-      "card": "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/card.webp",
-      "hero": "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/hero.webp",
-      "swatch": "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/swatch.webp",
+      "card": "/media/products/p_nordic_qua-selfstic-dubsvetly/card.webp",
+      "hero": "/media/products/p_nordic_qua-selfstic-dubsvetly/hero.webp",
+      "swatch": "/media/products/p_nordic_qua-selfstic-dubsvetly/swatch.webp",
       "gallery": [
-        "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/hero.webp",
-        "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/card.webp",
-        "/media/products/p_nordic_qua-selfstic-dubsvetlybasic/detail.webp"
+        "/media/products/p_nordic_qua-selfstic-dubsvetly/hero.webp",
+        "/media/products/p_nordic_qua-selfstic-dubsvetly/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-368755.jpg",
-          "transform": {
-            "brightness": 1.05
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-designecologist-15226296.jpg"
+          "url": "file://data/feeds/demo-images/qua-selfstic-dubsvetly.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:57.689Z",
-    "updatedAt": "2026-09-20T22:23:57.689Z"
+    "createdAt": "2026-10-03T15:08:01.322Z",
+    "updatedAt": "2026-10-03T15:08:01.322Z"
   },
   {
-    "id": "p_nordic_qua-selfstic-dubtmavybasic",
-    "slug": "quaro-self-stick-2-dub-tmavy-basic",
-    "name": "Self-Stick 2 Dub Tmavý Basic",
+    "id": "p_nordic_qua-selfstic-dubtmavy",
+    "slug": "quaro-self-stick-2-dub-tmavy",
+    "name": "Self-Stick 2 Dub tmavý",
     "brand": "Quaro",
     "collection": "Self-Stick 2",
-    "decor": "Dub Tmavý Basic",
+    "decor": "Dub tmavý",
     "decorTone": "dark-wood",
     "type": "vinyl-glue",
     "thicknessMm": 2,
@@ -1983,37 +1774,30 @@
     "deliveryDays": 3,
     "purchasePriceM2": 190,
     "supplierId": "nordic",
-    "supplierSku": "QUA-SELFSTIC-DUBTMAVÝBASIC",
-    "description": "Samolepicí vinylové lamely pro rychlou renovaci: strhnout fólii, přilepit. Jen do bytových prostor s nízkou zátěží, na hladký a čistý podklad. Není určeno na podlahové topení.",
+    "supplierSku": "QUA-SELFSTIC-DUBTMAVÝ",
+    "description": "Samolepicí vinylové lamely pro rychlou renovaci: stačí stáhnout ochrannou fólii a lamelu přitlačit k podkladu. Jen do bytových prostor s nízkou zátěží, na rovný, hladký, čistý a suchý podklad bez prachu. Není určeno na podlahové topení.",
     "marginOverridePct": null,
     "marginPct": 30,
     "pricePerM2": 299,
     "pricePerPack": 748,
     "images": {
-      "card": "/media/products/p_nordic_qua-selfstic-dubtmavybasic/card.webp",
-      "hero": "/media/products/p_nordic_qua-selfstic-dubtmavybasic/hero.webp",
-      "swatch": "/media/products/p_nordic_qua-selfstic-dubtmavybasic/swatch.webp",
+      "card": "/media/products/p_nordic_qua-selfstic-dubtmavy/card.webp",
+      "hero": "/media/products/p_nordic_qua-selfstic-dubtmavy/hero.webp",
+      "swatch": "/media/products/p_nordic_qua-selfstic-dubtmavy/swatch.webp",
       "gallery": [
-        "/media/products/p_nordic_qua-selfstic-dubtmavybasic/hero.webp",
-        "/media/products/p_nordic_qua-selfstic-dubtmavybasic/card.webp",
-        "/media/products/p_nordic_qua-selfstic-dubtmavybasic/detail.webp"
+        "/media/products/p_nordic_qua-selfstic-dubtmavy/hero.webp",
+        "/media/products/p_nordic_qua-selfstic-dubtmavy/detail.webp"
       ],
       "sources": {
         "texture": {
-          "url": "file://fotky_podlahy/pexels-digitalbuggu-314073.jpg",
-          "transform": {
-            "brightness": 0.8
-          }
-        },
-        "room": {
-          "url": "file://fotky_podlahy/pexels-curtis-adams-1694007-3935327.jpg"
+          "url": "file://data/feeds/demo-images/qua-selfstic-dubtmavy.webp"
         }
       }
     },
     "status": "active",
     "pauseReason": null,
     "isNew": false,
-    "createdAt": "2026-09-20T22:23:59.516Z",
-    "updatedAt": "2026-09-20T22:23:59.516Z"
+    "createdAt": "2026-10-03T15:08:02.475Z",
+    "updatedAt": "2026-10-03T15:08:02.475Z"
   }
 ]

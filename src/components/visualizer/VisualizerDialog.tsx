@@ -7,7 +7,7 @@ import type { RoomVisualizerProps } from "./RoomVisualizer";
 
 const Loading = () => (
   <div className="h-full min-h-[320px] grid place-items-center text-muted">
-    <div className="flex flex-col items-center gap-3"><span className="h-8 w-8 rounded-full border-2 border-line-strong border-t-ink animate-spin" /><span className="text-sm">Načítám vizualizaci…</span></div>
+    <div className="flex flex-col items-center gap-3"><span className="h-8 w-8 rounded-full border-2 border-line-strong border-t-ink animate-spin" /><span className="text-sm">Načítám byt ve 3D…</span></div>
   </div>
 );
 
@@ -36,7 +36,7 @@ export function VisualizerDialog({ open, onClose, title, subtitle, ...props }: D
 
   if (!open) return null;
   return createPortal(
-    <div role="dialog" aria-modal="true" aria-label={title} className="fixed inset-0 z-[80] bg-bg flex flex-col">
+    <div role="dialog" aria-modal="true" aria-label={title} className="fixed inset-x-0 top-0 bottom-[var(--cookie-h,0px)] z-[80] bg-bg flex flex-col">
       <div className="flex items-center justify-between gap-3 pl-4 pr-1.5 md:px-6 h-14 border-b border-line shrink-0">
         <div className="min-w-0">
           <p className="leading-tight truncate">{title}</p>
