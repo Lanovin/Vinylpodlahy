@@ -8,7 +8,7 @@ import { SortSelect } from "./SortSelect";
 import { ScrollRow } from "./ScrollRow";
 import { activeChips, catalogHref, clearedFilters } from "./activeFilters";
 import { applyFilters, EMPTY_FILTERS, parseFilters, type CatalogFilters, type LandingDef, type SearchParams, LANDINGS } from "@/lib/catalog";
-import { content as contentRepo, products, settings as settingsRepo } from "@/lib/db/repos";
+import { content as contentRepo, products } from "@/lib/db/repos";
 import { toPublicProduct } from "@/lib/public";
 import { plural } from "@/lib/format";
 
@@ -40,7 +40,6 @@ function matchesLanding(f: CatalogFilters, l: LandingDef) {
 }
 
 export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: LandingDef }) {
-  const cfg = settingsRepo.get();
   const c = contentRepo.get();
   const all = products.visible().map(toPublicProduct);
   const filters = parseFilters(sp, landing?.preset ?? {});
@@ -114,7 +113,7 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-flow-row-dense gap-x-4 gap-y-8 md:gap-y-10">
               {list.flatMap((p, i) => {
-                const card = <ProductCard key={p.id} p={p} sampleMax={cfg.samples.max} />;
+                const card = <ProductCard key={p.id} p={p} />;
                 return i === ctaAt ? [card, cta] : [card];
               })}
             </div>

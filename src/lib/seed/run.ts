@@ -109,7 +109,7 @@ export async function buildDemoDecorImages(log: (s: string) => void = () => {}) 
 
 /** Smaže odvozená data (produkty, příslušenství, upozornění, běhy, média) — čistý start dema. */
 export function wipeDerivedData() {
-  for (const f of ["products", "accessories", "alerts", "feed-runs", "media-manifest", "calculations", "orders", "leads", "sample-requests", "email-queue"]) {
+  for (const f of ["products", "accessories", "alerts", "feed-runs", "media-manifest", "calculations", "orders", "leads", "email-queue"]) {
     const file = path.join(ROOT, "data", `${f}.json`);
     if (fs.existsSync(file)) fs.unlinkSync(file);
   }

@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
   // Reálné odesílání zatím není — e-mail čeká ve frontě (admin / budoucí odesílač).
   const item: EmailQueueItem = {
-    id: newId("e"), sampleRequestId: "", to: email, type: "calc-share", dueAt: nowIso(), sentAt: null,
+    id: newId("e"), to: email, type: "calc-share", dueAt: nowIso(), sentAt: null,
     payload: { calculationId: calc.id, url: `/kalkulace/${calc.id}`, product: calc.productSnapshot.name, areaM2: calc.result.totalAreaM2, total: projectTotal(calc.result) },
   };
   emailQueue.addMany([item]);

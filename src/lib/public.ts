@@ -22,7 +22,7 @@ export function toPublicAccessory(a: Accessory): PublicAccessory {
 }
 
 /** Nastavení potřebné v klientu (bez interních pojistek pipeline). */
-export type PublicSettings = Pick<Settings, "vatRate" | "freeShippingFromM2" | "shipping" | "samples" | "weightEstimateKgPerM2">;
+export type PublicSettings = Pick<Settings, "vatRate" | "freeShippingFromM2" | "shipping" | "weightEstimateKgPerM2">;
 export function toPublicSettings(s: Settings): PublicSettings {
-  return { vatRate: s.vatRate, freeShippingFromM2: s.freeShippingFromM2, shipping: s.shipping, samples: s.samples, weightEstimateKgPerM2: s.weightEstimateKgPerM2 };
+  return { vatRate: s.vatRate, freeShippingFromM2: s.freeShippingFromM2, shipping: s.shipping, weightEstimateKgPerM2: s.weightEstimateKgPerM2 };
 }

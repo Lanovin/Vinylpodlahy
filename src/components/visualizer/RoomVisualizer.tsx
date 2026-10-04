@@ -7,7 +7,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PublicProduct } from "@/lib/public";
 import { DECOR_TONE_LABEL, LAYOUT_LABEL, type DecorTone, type LayoutMode } from "@/lib/types";
 import { fmtCzk } from "@/lib/format";
-import { SampleButton } from "@/components/product/SampleButton";
 import { ArrowRight, ChevronDown, Download, Minus, Moon, Plus, Refresh, Share, Sun, X } from "@/components/ui/icons";
 import { FALLBACK_PALETTE, paletteFromImage, toHex, tunePalette } from "./engine/palette";
 import { LEVEL_LABEL, lowerLevel, type Detection, type QualityChoice, type QualityLevel } from "./engine/quality";
@@ -20,7 +19,6 @@ export interface RoomVisualizerProps {
   initialProductId?: string | null;
   initialView?: ViewId | null;
   initialLayout?: LayoutMode | null;
-  sampleMax: number;
   /** Krátká cena u dekoru (v kalkulačce cena celého projektu). */
   priceLabel?: (p: PublicProduct) => React.ReactNode;
   /** Hlavní akce pro zobrazený dekor (na telefonu ve spodní liště); bez nich plocha → kalkulačka a detail podlahy. */
@@ -54,7 +52,7 @@ const saveChoice = (c: QualityChoice) => { try { if (c === "auto") localStorage.
 
 const darken = (hex: string, k: number) => "#" + [1, 3, 5].map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * k).toString(16).padStart(2, "0")).join("");
 
-export default function RoomVisualizer({ products, initialProductId, initialView, initialLayout, sampleMax, priceLabel, renderActions, onLayoutChange, variant, syncUrl }: RoomVisualizerProps) {
+export default function RoomVisualizer({ products, initialProductId, initialView, initialLayout, priceLabel, renderActions, onLayoutChange, variant, syncUrl }: RoomVisualizerProps) {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -404,16 +402,13 @@ export default function RoomVisualizer({ products, initialProductId, initialView
             {actions(selected, false)}
             <div className="flex flex-wrap gap-2">
               {!renderActions && <Link href={`/podlaha/${selected.slug}`} className="btn btn-outline btn-sm">Detail podlahy</Link>}
-              <SampleButton productId={selected.id} max={sampleMax} size="sm" compact />
             </div>
-            <p className="text-xs text-muted leading-snug">Barvu ověřte na vzorku zdarma.</p>
           </div>
         )}
-        {/* Na telefonu: vzorek a detail pod výběrem (hlavní akce je v liště) */}
-        {selected && (
+        {/* Na telefonu: detail pod výběrem (hlavní akce je v liště) */}
+        {selected && !renderActions && (
           <div className={clsx("lg:hidden flex flex-wrap items-center gap-2", page && "max-lg:landscape:hidden")}>
-            <SampleButton productId={selected.id} max={sampleMax} size="sm" compact />
-            {!renderActions && <Link href={`/podlaha/${selected.slug}`} className="btn btn-ghost btn-sm">Detail podlahy</Link>}
+            <Link href={`/podlaha/${selected.slug}`} className="btn btn-ghost btn-sm">Detail podlahy</Link>
           </div>
         )}
       </aside>

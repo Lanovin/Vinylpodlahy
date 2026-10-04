@@ -5,8 +5,6 @@ import type { CartItem } from "@/lib/types";
 
 interface CartState {
   items: CartItem[];
-  /** Vzorky zdarma — oddělený košík (jiná doprava, jiný proces). */
-  samples: string[];
   calculationId: string | null;
   carryUp: { enabled: boolean; floor: number; elevator: boolean };
   installRequested: boolean;
@@ -15,18 +13,14 @@ interface CartState {
   setQty: (kind: CartItem["kind"], id: string, qty: number) => void;
   remove: (kind: CartItem["kind"], id: string) => void;
   clear: () => void;
-  toggleSample: (id: string, max: number) => "added" | "removed" | "full";
-  removeSample: (id: string) => void;
-  clearSamples: () => void;
   setCarryUp: (c: Partial<CartState["carryUp"]>) => void;
   setInstallRequested: (v: boolean) => void;
 }
 
 export const useCart = create<CartState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       items: [],
-      samples: [],
       calculationId: null,
       carryUp: { enabled: false, floor: 1, elevator: false },
       installRequested: false,
@@ -51,15 +45,6 @@ export const useCart = create<CartState>()(
       })),
       remove: (kind, id) => set((s) => ({ items: s.items.filter((i) => !(i.kind === kind && i.id === id)) })),
       clear: () => set({ items: [], calculationId: null, carryUp: { enabled: false, floor: 1, elevator: false }, installRequested: false }),
-      toggleSample: (id, max) => {
-        const s = get();
-        if (s.samples.includes(id)) { set({ samples: s.samples.filter((x) => x !== id) }); return "removed"; }
-        if (s.samples.length >= max) return "full";
-        set({ samples: [...s.samples, id] });
-        return "added";
-      },
-      removeSample: (id) => set((s) => ({ samples: s.samples.filter((x) => x !== id) })),
-      clearSamples: () => set({ samples: [] }),
       setCarryUp: (c) => set((s) => ({ carryUp: { ...s.carryUp, ...c } })),
       setInstallRequested: (v) => set({ installRequested: v }),
     }),

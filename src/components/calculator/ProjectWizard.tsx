@@ -15,7 +15,6 @@ import { fmtCzk, fmtInt, fmtNum2, plural } from "@/lib/format";
 import { useCart } from "@/store/cart";
 import { CalcResultView } from "./CalcResultView";
 import { SendCalcEmail } from "./SavedCalcActions";
-import { SampleButton } from "@/components/product/SampleButton";
 import { ArrowRight, Check, ChevronDown, ChevronRight, Copy, Cube, Plus, Share, Trash } from "@/components/ui/icons";
 import { preloadVisualizer, VisualizerDialog, VisualizerEmbed } from "@/components/visualizer/VisualizerDialog";
 import { VIEW_FOR_ROOM } from "@/components/visualizer/decor";
@@ -291,7 +290,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
         {step === 3 && (
           <StepStyle value={answers.style} onPick={(s) => patchAnswers({ style: s })} onSkip={() => { patchAnswers({ style: null }); go(RESULT); }}
             onChoose={(p) => { patchAnswers({ style: p.decorTone }); setPinnedId(p.id); setSelectedId(p.id); go(RESULT); }} onLayout={setLayoutAll}
-            sampleMax={settings.samples.max} initialView={kinds.length ? VIEW_FOR_ROOM[kinds[0]] : "living"} layout={rooms[0]?.layout ?? "straight"} products={suitable} />
+            initialView={kinds.length ? VIEW_FOR_ROOM[kinds[0]] : "living"} layout={rooms[0]?.layout ?? "straight"} products={suitable} />
         )}
         {step === RESULT && (
           <StepResult
@@ -499,7 +498,7 @@ function StepExtras({ answers, patch }: { answers: WizardAnswers; patch: (p: Par
 }
 
 /* Krok 4 — barva */
-function StepStyle({ value, onPick, onSkip, onChoose, onLayout, products, sampleMax, initialView, layout }: { value: WizardAnswers["style"]; onPick: (s: WizardAnswers["style"]) => void; onSkip: () => void; onChoose: (p: PublicProduct) => void; onLayout: (l: LayoutMode) => void; products: PublicProduct[]; sampleMax: number; initialView: ViewId; layout: LayoutMode }) {
+function StepStyle({ value, onPick, onSkip, onChoose, onLayout, products, initialView, layout }: { value: WizardAnswers["style"]; onPick: (s: WizardAnswers["style"]) => void; onSkip: () => void; onChoose: (p: PublicProduct) => void; onLayout: (l: LayoutMode) => void; products: PublicProduct[]; initialView: ViewId; layout: LayoutMode }) {
   const [viz, setViz] = useState(false);
   const vizRef = useRef<HTMLDivElement>(null);
   // Byt je pod kartami odstínů — po otevření k němu sjedeme.
@@ -538,7 +537,6 @@ function StepStyle({ value, onPick, onSkip, onChoose, onLayout, products, sample
                 initialProductId={value ? products.find((p) => p.decorTone === value)?.id ?? null : null}
                 initialView={initialView}
                 initialLayout={layout}
-                sampleMax={sampleMax}
                 onLayoutChange={onLayout}
                 renderActions={(p) => <button type="button" className="btn btn-accent btn-sm" onClick={() => onChoose(p)}>Ukázat cenu <ArrowRight className="h-4 w-4" /></button>}
               />
@@ -559,7 +557,7 @@ interface ResultProps {
   goTo: (s: number) => void; reset: () => void; locked: PublicProduct | null; pinnedId: string | null; layout: LayoutMode; onLayout: (l: LayoutMode) => void;
 }
 function StepResult(p: ResultProps) {
-  const { rec, answers, projectFor, selected, selectedResult, setSelectedId, options, setOptions, settings, hasArea, saving, shareUrl, copied, onShare, onAddToCart, onInstall, onSave, onCopy, goTo, reset, locked, pinnedId, layout, onLayout } = p;
+  const { rec, answers, projectFor, selected, selectedResult, setSelectedId, options, setOptions, hasArea, saving, shareUrl, copied, onShare, onAddToCart, onInstall, onSave, onCopy, goTo, reset, locked, pinnedId, layout, onLayout } = p;
   // Vizualizace v modelovém bytě: dekory z nabídky vedle sebe, s cenou celého projektu.
   const [vizFor, setVizFor] = useState<string | null>(null);
   // Desktop: položky rozpisu sbalené, aby cena a „Vložit do košíku“ byly vidět bez posouvání.
@@ -646,7 +644,6 @@ function StepResult(p: ResultProps) {
                     </div>
                     <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex gap-2 justify-end">
                       <button type="button" className="btn btn-ghost btn-sm !px-3" onClick={() => setVizFor(r.product.id)} onMouseEnter={preloadVisualizer} onPointerDown={preloadVisualizer} title="Byt ve 3D" aria-label={`Zobrazit ${r.product.decor} v Bytě ve 3D`}><Cube className="h-4 w-4" /><span className="hidden md:inline">Byt ve 3D</span></button>
-                      <SampleButton productId={r.product.id} max={settings.samples.max} size="sm" compact />
                       <button type="button" className={clsx("btn btn-sm", on ? "btn-primary" : "btn-outline")} onClick={() => setSelectedId(r.product.id)}>{on ? <><Check className="h-4 w-4" /> Vybráno</> : "Vybrat"}</button>
                     </div>
                   </li>
@@ -729,7 +726,6 @@ function StepResult(p: ResultProps) {
         initialProductId={vizFor}
         initialView={answers.roomKinds.length ? VIEW_FOR_ROOM[answers.roomKinds[0]] : "living"}
         initialLayout={layout}
-        sampleMax={settings.samples.max}
         onLayoutChange={onLayout}
         priceLabel={(prod) => { const pr = projectFor.get(prod.id); return pr ? fmtCzk(projectTotal(pr)) : `${fmtCzk(prod.pricePerM2)}/m²`; }}
         renderActions={(prod) => prod.id === selected?.id

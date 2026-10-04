@@ -19,7 +19,6 @@ export const DEFAULT_SETTINGS: Settings = {
     carryUpParcelPrice: 290,
     carryUpPalletPricePerFloor: 690,
   },
-  samples: { min: 1, max: 5 },
   weightEstimateKgPerM2: {
     spc: 13,
     "vinyl-hdf": 9.5,
@@ -33,14 +32,12 @@ export const DEFAULT_CONTENT: SiteContent = {
     title: "Podlaha, která sedí.",
     subtitle: "Cena celého projektu na vaše metry — za 2 minuty.",
     ctaPrimary: "Spočítat cenu",
-    ctaSecondary: "Vzorky zdarma",
     ctaTertiary: "Byt ve 3D",
     image: "/media/inspiration/hero.webp",
   },
   usps: [
     { title: "Přesný výpočet", text: "Balení, podložka, lišty i doprava na vaše metry — jedním klikem v košíku." },
     { title: "Doprava zdarma od 25 m²", text: "Cenu dopravy vidíte ještě před košíkem, včetně toho, kdy jede paleta." },
-    { title: "Vzorky zdarma", text: "Až 5 dekorů domů, bez platby a bez závazku." },
     { title: "Pokládka na přání", text: "Ozve se vám ověřený podlahář z vašeho okolí." },
   ],
   homeIntro: {
@@ -86,7 +83,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       intro: "Jen 100% voděodolné podlahy: SPC, kompozit nebo lepený vinyl. Žádné HDF.",
       seoText: "Do koupelny patří podlaha, které nevadí stojící voda ani vlhkost ze sprchy. Najdete tu proto jen SPC s minerálním jádrem, vinyl na voděodolném kompozitu a lepené (i samolepicí) vinylové dílce — žádné HDF, které by nabobtnalo. Doporučujeme nášlapnou vrstvu 0,4 mm a vyšší.",
       metaTitle: "Vinyl do koupelny — 100 % voděodolné podlahy | vinylpodlahy.cz",
-      metaDescription: "Voděodolné vinylové a SPC podlahy do koupelny. Filtrujeme jen to, co vlhkost skutečně vydrží. Vzorky zdarma.",
+      metaDescription: "Voděodolné vinylové a SPC podlahy do koupelny. Filtrujeme jen to, co vlhkost skutečně vydrží.",
     },
     "vinyl-na-podlahove-topeni": {
       h1: "Vinyl na podlahové topení",
@@ -98,9 +95,9 @@ export const DEFAULT_CONTENT: SiteContent = {
     "vinylove-podlahy-dub": {
       h1: "Vinylové podlahy dub",
       intro: "Nejoblíbenější dekor — od světlého po tmavý dub.",
-      seoText: "Dubový dekor je bezpečná volba do každého interiéru. Světlý dub místnost opticky zvětší, přírodní dodá teplo, tmavý působí luxusně. Všechny dekory si můžete nechat poslat jako vzorek zdarma.",
+      seoText: "Dubový dekor je bezpečná volba do každého interiéru. Světlý dub místnost opticky zvětší, přírodní dodá teplo, tmavý působí luxusně.",
       metaTitle: "Vinylové podlahy dub — světlý, přírodní, tmavý | vinylpodlahy.cz",
-      metaDescription: "Vinylové podlahy v dekoru dub. Desítky odstínů, vzorky zdarma, kalkulačka balení a příslušenství.",
+      metaDescription: "Vinylové podlahy v dekoru dub. Desítky odstínů, kalkulačka balení a příslušenství.",
     },
   },
   priceGuide: {

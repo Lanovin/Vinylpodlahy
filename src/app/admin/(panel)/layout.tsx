@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdmin } from "@/lib/auth";
-import { alerts, leads, orders, sampleRequests } from "@/lib/db/repos";
+import { alerts, leads, orders } from "@/lib/db/repos";
 import { logoutAction } from "../actions";
 import { LogoMark } from "@/components/layout/Logo";
 import { AdminNav } from "@/components/admin/AdminNav";
@@ -15,7 +15,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     alerts: alerts.open().length,
     orders: orders.all().filter((o) => o.status === "new").length,
     leads: leads.all().filter((l) => l.status === "new").length,
-    samples: sampleRequests.all().filter((s) => s.status === "new").length,
   };
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr] bg-bg">

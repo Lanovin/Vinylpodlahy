@@ -9,7 +9,7 @@ const jost = Jost({ subsets: ["latin", "latin-ext"], weight: ["300", "400", "500
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinylpodlahy.cz"),
   title: { default: "vinylpodlahy.cz — Vinylové a SPC podlahy s kalkulačkou projektu", template: "%s | vinylpodlahy.cz" },
-  description: "Vinylové a SPC podlahy. Přijďte s místností, odejděte s kompletním košíkem: balení, podložka, lišty i doprava spočítané na vaše metry. Vzorky zdarma.",
+  description: "Vinylové a SPC podlahy. Přijďte s místností, odejděte s kompletním košíkem: balení, podložka, lišty i doprava spočítané na vaše metry.",
   openGraph: { type: "website", locale: "cs_CZ", siteName: "vinylpodlahy.cz" },
 };
 

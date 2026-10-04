@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { alerts, calculations, feedRuns, leads, orders, products, sampleRequests, suppliers } from "@/lib/db/repos";
+import { alerts, calculations, feedRuns, leads, orders, products, suppliers } from "@/lib/db/repos";
 import { Card, PageHead, Status } from "@/components/admin/ui";
 import { acknowledgeAlertAction } from "../actions";
 import { fmtCzk, fmtDate } from "@/lib/format";
@@ -12,7 +12,7 @@ export default function Dashboard() {
     ["Aktivní produkty", prods.filter((p) => p.status === "active").length, `${prods.filter((p) => p.status === "paused").length} pozastaveno`],
     ["Nové objednávky", os.filter((o) => o.status === "new").length, `${fmtCzk(os.reduce((s, o) => s + o.quote.total, 0))} celkem`],
     ["Poptávky montáže", leads.all().filter((l) => l.status === "new").length, `${leads.all().length} celkem`],
-    ["Žádosti o vzorky", sampleRequests.all().filter((s) => s.status === "new").length, `${calculations.all().length} uložených kalkulací`],
+    ["Uložené kalkulace", calculations.all().length, "sdílené odkazy a kalkulace na e-mail"],
   ] as const;
   const lastRuns = feedRuns.all().slice(0, 5);
   return (

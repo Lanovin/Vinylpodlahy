@@ -6,14 +6,13 @@ import { quickPacks } from "@/lib/calc";
 import { estimateProductShipping } from "@/lib/shipping";
 import { fmtCzk, fmtInt, fmtNum2 } from "@/lib/format";
 import { useCart } from "@/store/cart";
-import { SampleButton } from "./SampleButton";
 import { ArrowRight, Check, Cube, Hammer, Minus, Plus, Ruler, Truck } from "@/components/ui/icons";
 import { ProductCalcLink, TryInRoom, useProductUi } from "@/components/visualizer/TryInRoom";
 import { preloadVisualizer } from "@/components/visualizer/VisualizerDialog";
 
 /**
  * Nákupní box karty produktu. Hierarchie: 1) „Spočítat cenu“ (kalkulačka s touto podlahou — balení, podložka,
- * lišty, doprava), 2) „Do košíku“ s mini-kalkulačkou m² → balení, 3) méně výrazné: Byt ve 3D, Vzorek zdarma, Poptat pokládku.
+ * lišty, doprava), 2) „Do košíku“ s mini-kalkulačkou m² → balení, 3) méně výrazné: Byt ve 3D, Poptat pokládku.
  */
 export function BuyBox({ p, settings }: { p: PublicProduct; settings: PublicSettings }) {
   const { area, setArea, areaM2, openViz } = useProductUi();
@@ -59,9 +58,8 @@ export function BuyBox({ p, settings }: { p: PublicProduct; settings: PublicSett
         </div>
 
         {/* 3) Vedlejší akce — menší, bez barvy */}
-        <div className="mt-3 grid grid-cols-2 gap-2">
+        <div className="mt-3">
           <TryInRoom className="btn-outline btn-sm w-full !px-2"><Cube className="h-4 w-4 shrink-0" /> Byt ve 3D</TryInRoom>
-          <SampleButton productId={p.id} max={settings.samples.max} size="sm" compact className="w-full [&>button]:w-full [&>button]:!px-2" />
         </div>
         <Link href={`/montaz?product=${p.slug}`} className="mt-1 flex items-center justify-center gap-1.5 h-11 text-sm text-ink-soft hover:text-ink"><Hammer className="h-4 w-4" /> Poptat pokládku</Link>
 

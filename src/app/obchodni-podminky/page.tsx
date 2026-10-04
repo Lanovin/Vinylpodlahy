@@ -27,7 +27,7 @@ export default function Page() {
     {
       id: "zbozi-a-ceny", title: "Zboží a ceny",
       body: <>
-        <p>U každého zboží uvádíme hlavní vlastnosti, cenu za m² i za balení, dostupnost v m² a orientační dodací lhůtu. Fotografie dekorů a interiérů jsou ilustrační — barva se na displeji může lišit, proto nabízíme vzorky zdarma.</p>
+        <p>U každého zboží uvádíme hlavní vlastnosti, cenu za m² i za balení, dostupnost v m² a orientační dodací lhůtu. Fotografie dekorů a interiérů jsou ilustrační — barva se na displeji může lišit.</p>
         <p>Všechny ceny jsou konečné, uvedené v Kč <strong>včetně DPH</strong>. Cenu dopravy, případné vynášky a rozdělení do zásilek vidíte v košíku a v pokladně ještě před odesláním objednávky. Jiné poplatky neúčtujeme.</p>
         <p>Ceny se mohou měnit podle cen dodavatelů. Pro kupujícího platí cena uvedená v okamžiku odeslání objednávky. Pokud dojde ke zjevné chybě v ceně (např. překlep v řádu), nejde o platnou nabídku a objednávku s takovou cenou nepotvrdíme.</p>
       </>,
@@ -89,10 +89,9 @@ export default function Page() {
       </>,
     },
     {
-      id: "sluzby", title: "Vzorky zdarma, kalkulace a pokládka",
+      id: "sluzby", title: "Kalkulace a pokládka",
       body: <>
         <ul>
-          <li><strong>Vzorky zdarma</strong> posíláme bezplatně a nemusíte je vracet. Na vzorky se nevztahují ustanovení o kupní smlouvě a nezakládají povinnost nic koupit.</li>
           <li><strong>Kalkulace</strong> (množství balení, příslušenství, dopravy) je orientační pomůcka vycházející z vámi zadaných rozměrů. Za správnost zadaných rozměrů odpovídá kupující; před objednáním doporučujeme změřit místnosti znovu.</li>
           <li><strong>Pokládku</strong> neprovádíme. Na vaši žádost předáme poptávku spolupracujícímu podlaháři, který vám pošle vlastní nabídku. Smlouva o pokládce vzniká přímo mezi vámi a podlahářem.</li>
         </ul>

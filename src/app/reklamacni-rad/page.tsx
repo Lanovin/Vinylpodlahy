@@ -41,7 +41,7 @@ export default function Page() {
           <li>poškození mechanické (poškrábání, otlaky od nábytku bez podložek), chemické nebo ohněm po převzetí,</li>
           <li>vady způsobené pokládkou v rozporu s návodem výrobce — např. bez aklimatizace dílců, na vlhký, nerovný nebo nevhodný podklad, bez dilatačních spár, s nevhodnou podložkou nebo lepidlem,</li>
           <li>nevhodná údržba (agresivní čisticí prostředky, stojící voda u podlah, které nejsou voděodolné),</li>
-          <li>drobné odchylky odstínu a kresby mezi výrobními šaržemi a oproti fotografii či vzorku, které jsou u dekorů přirozené. Doporučujeme objednat celé množství najednou.</li>
+          <li>drobné odchylky odstínu a kresby mezi výrobními šaržemi a oproti fotografii, které jsou u dekorů přirozené. Doporučujeme objednat celé množství najednou.</li>
         </ul>
       </>,
     },

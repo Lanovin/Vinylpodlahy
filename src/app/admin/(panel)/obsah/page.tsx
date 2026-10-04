@@ -18,7 +18,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         <Card><h2 className="text-lg mb-4">Úvodní stránka — hero</h2><div className="grid md:grid-cols-2 gap-4">
           <F name="hero.title" label="Hlavní nadpis" value={c.hero.title} /><F name="hero.image" label="Obrázek (cesta v /public)" value={c.hero.image} />
           <div className="md:col-span-2"><F name="hero.subtitle" label="Podtitulek" value={c.hero.subtitle} rows={2} /></div>
-          <F name="hero.ctaPrimary" label="Tlačítko kalkulačky" value={c.hero.ctaPrimary} /><F name="hero.ctaSecondary" label="Odkaz na vzorky" value={c.hero.ctaSecondary} /><F name="hero.ctaTertiary" label="Odkaz do 3D bytu" value={c.hero.ctaTertiary} />
+          <F name="hero.ctaPrimary" label="Tlačítko kalkulačky" value={c.hero.ctaPrimary} /><F name="hero.ctaTertiary" label="Odkaz do 3D bytu" value={c.hero.ctaTertiary} />
         </div></Card>
         <Card><h2 className="text-lg mb-4">Úvod a výhody</h2><div className="grid gap-4">
           <F name="homeIntro.title" label="Nadpis úvodu" value={c.homeIntro.title} /><F name="homeIntro.text" label="Text úvodu" value={c.homeIntro.text} rows={3} />

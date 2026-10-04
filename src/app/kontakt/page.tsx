@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Site } from "@/components/layout/Site";
-import { content as contentRepo, settings as settingsRepo } from "@/lib/db/repos";
-import { plural } from "@/lib/format";
+import { content as contentRepo } from "@/lib/db/repos";
 import { Mail, Phone } from "@/components/ui/icons";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +9,6 @@ export const metadata: Metadata = { title: "Kontakt", description: "Poradíme s 
 
 export default function Page() {
   const c = contentRepo.get();
-  const max = settingsRepo.get().samples.max;
   return (
     <Site>
       <div className="container py-8 md:py-14 grid lg:grid-cols-12 gap-8 lg:gap-10">
@@ -32,7 +30,7 @@ export default function Page() {
           </div>
         </div>
         <div className="lg:col-span-6 grid grid-cols-2 gap-3 sm:gap-4 content-start">
-          {[["Spočítat cenu", "Balení, podložka, lišty — na vaše metry.", "/kalkulacka"], ["Byt ve 3D", "Vyzkoušejte dekor v bytě.", "/vizualizace"], ["Vzorky zdarma", `Až ${max} ${plural(max, "dekor", "dekory", "dekorů")} domů.`, "/vzorky"], ["Doprava a platba", "Ceník podle hmotnosti.", "/doprava"]].map(([t, d, h]) => (
+          {[["Spočítat cenu", "Balení, podložka, lišty — na vaše metry.", "/kalkulacka"], ["Byt ve 3D", "Vyzkoušejte dekor v bytě.", "/vizualizace"], ["Doprava a platba", "Ceník podle hmotnosti.", "/doprava"]].map(([t, d, h]) => (
             <Link key={h} href={h} className="card card-hover p-4 sm:p-5"><p className="text-lg leading-tight">{t}</p><p className="text-sm text-muted mt-1">{d}</p></Link>
           ))}
         </div>

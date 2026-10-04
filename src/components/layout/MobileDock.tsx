@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { Cube, Ruler } from "@/components/ui/icons";
 
 /** Stránky s vlastní spodní lištou nebo tam, kde by odváděla od nákupu. Nad cookie lištou díky --cookie-h (CookieBanner). */
-const HIDDEN = ["/kalkulacka", "/kalkulace", "/vizualizace", "/kosik", "/pokladna", "/objednavka", "/podlaha/", "/vzorky", "/montaz", "/admin"];
+const HIDDEN = ["/kalkulacka", "/kalkulace", "/vizualizace", "/kosik", "/pokladna", "/objednavka", "/podlaha/", "/montaz", "/admin"];
 
 /**
  * Spodní lišta na telefonu: kalkulačka a 3D byt na jedno ťuknutí z jakékoli stránky.

@@ -66,11 +66,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <Site>
-      <ProductUiProvider product={p} products={tryList} sampleMax={cfg.samples.max}>
+      <ProductUiProvider product={p} products={tryList}>
       <div className="container pt-3 md:pt-10">
         <nav className="text-xs text-muted mb-3 md:mb-4 hidden sm:block"><Link href="/" className="hover:text-ink">Domů</Link> / <Link href="/podlahy" className="hover:text-ink">Podlahy</Link> / <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="hover:text-ink">{p.collection}</Link> / <span className="text-ink">{p.decor}</span></nav>
         <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="sm:hidden inline-flex items-center gap-1 h-9 text-sm text-muted"><ChevronRight className="h-4 w-4 rotate-180" /> {p.brand} · {p.collection}</Link>
-        {paused && <div className="notice notice-warn mb-6">Produkt je dočasně pozastaven — čekáme na potvrzení nové ceny od dodavatele. Nechte si poslat vzorek, nebo se podívejte na podobné dekory.</div>}
+        {paused && <div className="notice notice-warn mb-6">Produkt je dočasně pozastaven — čekáme na potvrzení nové ceny od dodavatele. Podívejte se na podobné dekory.</div>}
         <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12">
           <div className="lg:col-span-7">
             <ProductGallery images={[p.images.hero ?? "", p.images.card ?? "", ...(p.images.gallery.filter((g) => g !== p.images.hero && g !== p.images.card))]} alt={`${p.brand} ${p.name}`}>
@@ -108,7 +108,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <section className="container py-10 md:py-16">
           <h2 className="h3 mb-5 md:mb-8">Podobné dekory</h2>
           <div className="flex gap-3 overflow-x-auto snap-x scroll-px-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-x-4 sm:gap-y-10 sm:overflow-visible">
-            {related.map((r) => <div key={r.id} className="w-[46%] shrink-0 snap-start sm:w-auto grid"><ProductCard p={r} sampleMax={cfg.samples.max} /></div>)}
+            {related.map((r) => <div key={r.id} className="w-[46%] shrink-0 snap-start sm:w-auto grid"><ProductCard p={r} /></div>)}
           </div>
         </section>
       )}

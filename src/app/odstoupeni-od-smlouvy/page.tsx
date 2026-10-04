@@ -67,7 +67,7 @@ export default function Page() {
           <li>zboží, které podléhá rychlé zkáze, nebo zboží, které bylo po dodání nenávratně smíseno s jiným zbožím,</li>
           <li>zboží v uzavřeném obalu, které z hygienických důvodů nelze vrátit, pokud jste obal porušili.</li>
         </ul>
-        <p>Pokud by se na konkrétní zboží výjimka vztahovala, upozorníme vás na to před uzavřením smlouvy. Vzorky zdarma se nevracejí.</p>
+        <p>Pokud by se na konkrétní zboží výjimka vztahovala, upozorníme vás na to před uzavřením smlouvy.</p>
         <p>Právo odstoupit do 14 dnů nemají kupující, kteří nakupují v rámci podnikání (s IČO).</p>
       </>,
     },

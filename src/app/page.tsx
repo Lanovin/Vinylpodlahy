@@ -4,7 +4,7 @@ import { Site } from "@/components/layout/Site";
 import { Section } from "@/components/ui/Section";
 import { ProductCard } from "@/components/product/ProductCard";
 import { HeroStart } from "@/components/calculator/HeroStart";
-import { ArrowRight, Cube, Ruler, Truck, Swatch, Hammer } from "@/components/ui/icons";
+import { ArrowRight, Cube, Ruler, Truck, Hammer } from "@/components/ui/icons";
 import { content as contentRepo, products, settings as settingsRepo } from "@/lib/db/repos";
 import { toPublicProduct } from "@/lib/public";
 import { LANDINGS } from "@/lib/catalog";
@@ -19,7 +19,7 @@ const LANDING_IMG: Record<string, string> = {
   "vinyl-na-podlahove-topeni": "/media/inspiration/light-hall.webp",
   "vinylove-podlahy-dub": "/media/inspiration/herringbone.webp",
 };
-const USP_ICONS = [Ruler, Truck, Swatch, Hammer];
+const USP_ICONS = [Ruler, Truck, Hammer];
 /** Orientační ceny: na očích jen typy podlah, příslušenství a pokládka se rozbalí. */
 const PRICE_ROWS_VISIBLE = 3;
 /** „Doprava zdarma od 25 m²“ v textech z adminu: číslo vždy podle nastavení dopravy. */
@@ -45,9 +45,8 @@ export default function HomePage() {
           <h1 className="display fade-up">{c.hero.title}</h1>
           <p className="lead lead-light max-w-xl mx-auto mt-3 md:mt-5 fade-up fade-up-2">{c.hero.subtitle}</p>
           <HeroStart cta={c.hero.ctaPrimary} className="mt-6 md:mt-10 fade-up fade-up-3" />
-          <div className="mt-3 md:mt-5 grid grid-cols-2 sm:flex sm:justify-center gap-2 sm:gap-3 max-w-2xl mx-auto fade-up fade-up-3">
+          <div className="mt-3 md:mt-5 flex justify-center gap-2 sm:gap-3 max-w-2xl mx-auto fade-up fade-up-3">
             <Link href="/vizualizace" className="btn btn-outline-light px-3"><Cube className="h-4 w-4 shrink-0" /> {c.hero.ctaTertiary}</Link>
-            <Link href="/vzorky" className="btn btn-outline-light px-3"><Swatch className="h-4 w-4 shrink-0" /> {c.hero.ctaSecondary}</Link>
           </div>
         </div>
       </section>
@@ -80,7 +79,7 @@ export default function HomePage() {
 
       {/* VÝHODY — na telefonu jen ikona a nadpis */}
       <Section>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-6">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-6 md:gap-6">
           {c.usps.map((u, i) => { const Icon = USP_ICONS[i % USP_ICONS.length]; return (
             <div key={u.title} className="border-t border-ink pt-4 md:pt-5">
               <Icon className="h-6 w-6 md:h-7 md:w-7 mb-3 md:mb-4" />
@@ -98,7 +97,7 @@ export default function HomePage() {
           <Link href="/podlahy" className="btn btn-outline hidden sm:inline-flex">Celý katalog</Link>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-y-10 mt-6 md:mt-10">
-          {featured.map((p, i) => <div key={p.id} className={i >= 4 ? "hidden lg:block" : "contents"}><ProductCard p={p} sampleMax={cfg.samples.max} /></div>)}
+          {featured.map((p, i) => <div key={p.id} className={i >= 4 ? "hidden lg:block" : "contents"}><ProductCard p={p} /></div>)}
         </div>
         <Link href="/podlahy" className="btn btn-outline w-full mt-8 sm:hidden">Celý katalog</Link>
       </Section>
@@ -138,19 +137,6 @@ export default function HomePage() {
           </div>
         </div>
       </Section>
-
-      {/* VZORKY */}
-      <section className="relative text-white">
-        <Image src="/media/inspiration/dark-lounge.webp" alt="" fill sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-ink/70" />
-        <div className="relative container py-14 md:py-28 grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-          <div>
-            <h2 className="h2">Vyzkoušejte vzorek doma.</h2>
-            <p className="lead lead-light mt-3">Až {cfg.samples.max} vzorků zdarma, bez závazku.</p>
-          </div>
-          <div className="md:text-right"><Link href="/vzorky" className="btn btn-outline-light btn-lg w-full sm:w-auto">Vybrat vzorky</Link></div>
-        </div>
-      </section>
 
       {/* O NÁS + krátký text pro vyhledávače */}
       <Section>

@@ -5,12 +5,11 @@ import type { FloorType } from "@/lib/types";
 import { fmtCzk, fmtInt, fmtMm } from "@/lib/format";
 import { Cube } from "@/components/ui/icons";
 import { USAGE_SHORT } from "@/components/ui/terms";
-import { SampleButton } from "./SampleButton";
 
 /** Krátké popisky typu pro úzkou kartu (2 sloupce na telefonu). */
 const TYPE_SHORT: Record<FloorType, string> = { spc: "SPC", "vinyl-hdf": "Vinyl HDF", "vinyl-composite": "Kompozit", "vinyl-glue": "Lepený" };
 
-export function ProductCard({ p, sampleMax, reason }: { p: PublicProduct; sampleMax: number; reason?: string }) {
+export function ProductCard({ p, reason }: { p: PublicProduct; reason?: string }) {
   const low = p.stockM2 > 0 && p.stockM2 < 30;
   return (
     <article className="group flex flex-col min-w-0">
@@ -43,9 +42,6 @@ export function ProductCard({ p, sampleMax, reason }: { p: PublicProduct; sample
         <p className="mt-2 text-lg leading-none">{fmtCzk(p.pricePerM2)}<span className="text-sm text-muted"> / m²</span></p>
         <p className="text-sm text-muted mt-1">{fmtCzk(p.pricePerPack)} / bal.</p>
         {low && <p className="text-xs text-warn mt-1">Posledních {fmtInt(Math.floor(p.stockM2))} m²</p>}
-        <div className="mt-auto pt-3">
-          <SampleButton productId={p.id} max={sampleMax} size="sm" compact className="w-full" />
-        </div>
       </div>
     </article>
   );

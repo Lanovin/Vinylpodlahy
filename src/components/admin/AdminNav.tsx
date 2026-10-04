@@ -7,7 +7,7 @@ const ITEMS = [
   { href: "/admin", label: "Přehled", key: "alerts" },
   { href: "/admin/objednavky", label: "Objednávky", key: "orders" },
   { href: "/admin/poptavky", label: "Poptávky montáže", key: "leads" },
-  { href: "/admin/vzorky", label: "Vzorky a e-maily", key: "samples" },
+  { href: "/admin/emaily", label: "E-mailová fronta" },
   { href: "/admin/kalkulace", label: "Kalkulace" },
   { href: "/admin/produkty", label: "Produkty" },
   { href: "/admin/cenotvorba", label: "Cenotvorba" },

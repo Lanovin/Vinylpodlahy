@@ -3,16 +3,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { Menu, Search, ShoppingBag, Swatch, X, ChevronDown, Cube, Ruler } from "@/components/ui/icons";
+import { Menu, Search, ShoppingBag, X, ChevronDown, Cube, Ruler } from "@/components/ui/icons";
 import { Logo } from "./Logo";
 import { useCart, useHydrated } from "@/store/cart";
 import { LANDINGS } from "@/lib/catalog";
 
-/** Jednotné názvy: Kalkulačka, Byt ve 3D, Vzorky zdarma, Pokládka, Doprava a platba. `xl` = na užším desktopu se nevejde (vzorky mají ikonu v hlavičce). */
+/** Jednotné názvy: Kalkulačka, Byt ve 3D, Pokládka, Doprava a platba. `xl` = na užším desktopu se nevejde. */
 const NAV: { href: string; label: string; xl?: boolean }[] = [
   { href: "/kalkulacka", label: "Kalkulačka" },
   { href: "/vizualizace", label: "Byt ve 3D" },
-  { href: "/vzorky", label: "Vzorky zdarma", xl: true },
   { href: "/montaz", label: "Pokládka" },
   { href: "/doprava", label: "Doprava a platba" },
   { href: "/kontakt", label: "Kontakt", xl: true },
@@ -27,9 +26,7 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
   const router = useRouter();
   const hydrated = useHydrated();
   const items = useCart((s) => s.items);
-  const samples = useCart((s) => s.samples);
   const cartCount = hydrated ? items.length : 0; // počet položek, ne balení (24 balení podlahy = 1 položka)
-  const sampleCount = hydrated ? samples.length : 0;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -70,13 +67,9 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70 whitespace-nowrap", n.xl && "hidden xl:inline", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
           ))}
         </nav>
-        {/* Na telefonu jen hledání, košík a menu (44 px na palec); vzorky jsou v menu a na kartách */}
+        {/* Na telefonu jen hledání, košík a menu (44 px na palec) */}
         <div className="flex items-center -mr-2 sm:mr-0 md:gap-1">
           <button className="h-11 w-10 sm:w-11 grid place-items-center hover:opacity-70" aria-label="Hledat" aria-expanded={searchOpen} onClick={() => setSearchOpen((v) => !v)}><Search className="h-5 w-5" /></button>
-          <Link href="/vzorky" className="relative h-11 w-11 hidden sm:grid place-items-center hover:opacity-70" aria-label="Vzorky zdarma">
-            <Swatch className="h-5 w-5" />
-            {sampleCount > 0 && <span className="absolute top-1 right-0.5 h-4 min-w-4 px-1 rounded-full bg-sage text-white text-[10px] leading-4 text-center">{sampleCount}</span>}
-          </Link>
           <Link href="/kosik" className="relative h-11 w-10 sm:w-11 grid place-items-center hover:opacity-70" aria-label="Košík">
             <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && <span className="absolute top-1 right-0 h-4 min-w-4 px-1 rounded-full bg-accent text-white text-[10px] leading-4 text-center">{cartCount}</span>}
@@ -115,7 +108,7 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             {LANDINGS.map((l) => (<Link key={l.slug} href={`/${l.slug}`} onClick={close} className="block py-2.5 pl-4 text-base text-ink-soft">{l.navLabel}</Link>))}
             <Link href="/prislusenstvi" onClick={close} className="block py-2.5 pl-4 text-base text-ink-soft border-b border-line">Příslušenství</Link>
             {NAV.filter((n) => n.href !== "/kalkulacka" && n.href !== "/vizualizace").map((n) => (
-              <Link key={n.href} href={n.href} onClick={close} className="flex items-center justify-between py-3 border-b border-line">{n.label}{n.href === "/vzorky" && sampleCount > 0 && <span className="h-5 min-w-5 px-1.5 rounded-full bg-sage text-white text-xs leading-5 text-center">{sampleCount}</span>}</Link>
+              <Link key={n.href} href={n.href} onClick={close} className="flex items-center justify-between py-3 border-b border-line">{n.label}</Link>
             ))}
           </nav>
         </div>

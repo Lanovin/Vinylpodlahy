@@ -32,7 +32,6 @@ export function Footer({ content }: { content: SiteContent }) {
           <ul className="text-sm">
             <li><Link href="/kalkulacka" className={LINK}>Kalkulačka</Link></li>
             <li><Link href="/vizualizace" className={LINK}>Byt ve 3D</Link></li>
-            <li><Link href="/vzorky" className={LINK}>Vzorky zdarma</Link></li>
             <li><Link href="/montaz" className={LINK}>Pokládka</Link></li>
             <li><Link href="/doprava" className={LINK}>Doprava a platba</Link></li>
             <li><Link href="/kosik" className={LINK}>Košík</Link></li>

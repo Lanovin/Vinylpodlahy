@@ -20,7 +20,7 @@ export const CONSENT_CATEGORIES: ConsentCategory[] = [
     legal: "Nevyžadují souhlas — jsou nezbytné pro službu, o kterou jste požádali (§ 89 odst. 3 zákona o elektronických komunikacích).",
     items: [
       { name: CONSENT_COOKIE, provider: "vinylpodlahy.cz", purpose: "Zapamatuje si vaši volbu cookies.", expiry: "12 měsíců", type: "cookie" },
-      { name: "vinylpodlahy-cart", provider: "vinylpodlahy.cz", purpose: "Obsah košíku a vybrané vzorky.", expiry: "do smazání v prohlížeči", type: "localStorage" },
+      { name: "vinylpodlahy-cart", provider: "vinylpodlahy.cz", purpose: "Obsah košíku.", expiry: "do smazání v prohlížeči", type: "localStorage" },
       { name: "vp-wizard-v2", provider: "vinylpodlahy.cz", purpose: "Rozpracovaná kalkulace, aby přežila obnovení stránky.", expiry: "do zavření karty", type: "sessionStorage" },
       { name: "vp-viz-quality", provider: "vinylpodlahy.cz", purpose: "Zvolená náročnost 3D vizualizace (jen při ruční volbě).", expiry: "do smazání v prohlížeči", type: "localStorage" },
       { name: "vp_admin", provider: "vinylpodlahy.cz", purpose: "Přihlášení do administrace (jen pro provozovatele).", expiry: "12 hodin", type: "cookie" },

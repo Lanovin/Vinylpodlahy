@@ -20,7 +20,7 @@ export function useProductUi(): ProductUi {
 const parseArea = (v: string) => { const n = parseFloat(v.replace(",", ".")); return Number.isFinite(n) && n > 0 ? n : null; };
 
 /** Obal karty produktu — drží plochu a jeden dialog s modelovým bytem (tento dekor, jeho kolekce a stejný odstín). */
-export function ProductUiProvider({ product, products, sampleMax, children }: { product: PublicProduct; products: PublicProduct[]; sampleMax: number; children: React.ReactNode }) {
+export function ProductUiProvider({ product, products, children }: { product: PublicProduct; products: PublicProduct[]; children: React.ReactNode }) {
   const [area, setArea] = useState("");
   const [open, setOpen] = useState(false);
   const areaM2 = parseArea(area);
@@ -34,7 +34,6 @@ export function ProductUiProvider({ product, products, sampleMax, children }: { 
         title="Byt ve 3D"
         products={products}
         initialProductId={product.id}
-        sampleMax={sampleMax}
         // Cena jde spočítat pro jakýkoli zvolený dekor (plocha z karty platí pro byt, ne pro dekor); detail jiné podlahy je vedlejší.
         renderActions={(p, { layout, compact }) => (
           <div className={compact ? "flex flex-row-reverse items-center gap-1.5" : "flex flex-col gap-2"}>

@@ -11,7 +11,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   const { saved } = await searchParams;
   return (
     <>
-      <PageHead title="Nastavení" text="Pojistky pipeline, doprava a vzorky. DPH je pevně 21 %." />
+      <PageHead title="Nastavení" text="Pojistky pipeline a doprava. DPH je pevně 21 %." />
       <Saved show={!!saved} />
       <form action={saveSettingsAction} className="space-y-4">
         <Card><h2 className="text-lg mb-4">Pojistky feedu</h2><div className="grid md:grid-cols-3 gap-4">
@@ -32,7 +32,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         <Card><h2 className="text-lg mb-4">Odhad hmotnosti, když ji feed neposlal (kg/m²)</h2><div className="grid md:grid-cols-4 gap-4">
           <N name="w.spc" label="SPC" value={s.weightEstimateKgPerM2.spc} /><N name="w.vinyl-hdf" label="Vinyl na HDF" value={s.weightEstimateKgPerM2["vinyl-hdf"]} /><N name="w.vinyl-composite" label="Vinyl na kompozitu" value={s.weightEstimateKgPerM2["vinyl-composite"]} /><N name="w.vinyl-glue" label="Lepený vinyl" value={s.weightEstimateKgPerM2["vinyl-glue"]} />
         </div></Card>
-        <Card><h2 className="text-lg mb-4">Vzorky</h2><div className="grid md:grid-cols-3 gap-4"><N name="samples.min" label="Minimum vzorků" value={s.samples.min} /><N name="samples.max" label="Maximum vzorků" value={s.samples.max} /></div></Card>
         <button className="btn btn-primary btn-lg">Uložit nastavení</button>
       </form>
     </>

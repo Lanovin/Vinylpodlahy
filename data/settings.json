@@ -33,10 +33,6 @@
     "carryUpParcelPrice": 290,
     "carryUpPalletPricePerFloor": 690
   },
-  "samples": {
-    "min": 1,
-    "max": 5
-  },
   "weightEstimateKgPerM2": {
     "spc": 13,
     "vinyl-hdf": 9.5,

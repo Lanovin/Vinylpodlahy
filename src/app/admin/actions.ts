@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { checkCredentials, clearSession, requireAdmin, setSession } from "@/lib/auth";
-import { accessories, alerts, content, emailQueue, leads, orders, pricingRules, products, sampleRequests, settings, suppliers } from "@/lib/db/repos";
+import { accessories, alerts, content, emailQueue, leads, orders, pricingRules, products, settings, suppliers } from "@/lib/db/repos";
 import { repriceAll, syncAll, syncSupplier } from "@/lib/feed/sync";
 import { writeDemoFeeds, writeDemoFeedsWithChanges } from "@/lib/seed/run";
 import { newId } from "@/lib/db/store";
@@ -30,7 +30,7 @@ export async function saveContentAction(formData: FormData) {
   const g = (k: string) => String(formData.get(k) ?? "");
   const next: SiteContent = {
     ...c,
-    hero: { ...c.hero, title: g("hero.title"), subtitle: g("hero.subtitle"), ctaPrimary: g("hero.ctaPrimary"), ctaSecondary: g("hero.ctaSecondary"), ctaTertiary: g("hero.ctaTertiary"), image: g("hero.image") || c.hero.image },
+    hero: { ...c.hero, title: g("hero.title"), subtitle: g("hero.subtitle"), ctaPrimary: g("hero.ctaPrimary"), ctaTertiary: g("hero.ctaTertiary"), image: g("hero.image") || c.hero.image },
     homeIntro: { title: g("homeIntro.title"), text: g("homeIntro.text") },
     about: { title: g("about.title"), text: g("about.text") },
     usps: c.usps.map((u, i) => ({ title: g(`usp.${i}.title`) || u.title, text: g(`usp.${i}.text`) || u.text })),
@@ -152,16 +152,10 @@ export async function acknowledgeAlertAction(formData: FormData) {
   all();
 }
 
-// --- Leady, vzorky, objednávky ------------------------------------------------
+// --- Leady, e-maily, objednávky ------------------------------------------------
 export async function setLeadStatusAction(formData: FormData) {
   await requireAdmin();
   leads.update(String(formData.get("id")), { status: String(formData.get("status")) as "new" | "contacted" | "closed" });
-  all();
-}
-
-export async function setSampleStatusAction(formData: FormData) {
-  await requireAdmin();
-  sampleRequests.update(String(formData.get("id")), { status: String(formData.get("status")) as "new" | "sent" | "done" });
   all();
 }
 
@@ -188,7 +182,6 @@ export async function saveSettingsAction(formData: FormData) {
     freeShippingFromM2: n("freeShippingFromM2", s.freeShippingFromM2),
     stockSafetyPct: n("stockSafetyPct", s.stockSafetyPct),
     priceJumpAlertPct: n("priceJumpAlertPct", s.priceJumpAlertPct),
-    samples: { min: n("samples.min", s.samples.min), max: n("samples.max", s.samples.max) },
     shipping: { ...s.shipping, parcelMaxKg: n("parcelMaxKg", s.shipping.parcelMaxKg), parcelPrice: n("parcelPrice", s.shipping.parcelPrice), parcelAdditionalPrice: n("parcelAdditionalPrice", s.shipping.parcelAdditionalPrice), palletThresholdKg: n("palletThresholdKg", s.shipping.palletThresholdKg), carryUpParcelPrice: n("carryUpParcelPrice", s.shipping.carryUpParcelPrice), carryUpPalletPricePerFloor: n("carryUpPalletPricePerFloor", s.shipping.carryUpPalletPricePerFloor), palletTiers: tiers },
     weightEstimateKgPerM2: { spc: n("w.spc", s.weightEstimateKgPerM2.spc), "vinyl-hdf": n("w.vinyl-hdf", s.weightEstimateKgPerM2["vinyl-hdf"]), "vinyl-composite": n("w.vinyl-composite", s.weightEstimateKgPerM2["vinyl-composite"]), "vinyl-glue": n("w.vinyl-glue", s.weightEstimateKgPerM2["vinyl-glue"]) },
   };

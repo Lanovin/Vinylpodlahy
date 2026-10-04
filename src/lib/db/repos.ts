@@ -1,6 +1,6 @@
 import type {
   Accessory, Alert, Calculation, EmailQueueItem, FeedRun, InstallLead, Order, PricingRule, Product,
-  SampleRequest, Settings, SiteContent, Supplier, EmailUnsubscribe,
+  Settings, SiteContent, Supplier,
 } from "@/lib/types";
 import { readCollection, updateCollection, writeCollection } from "./store";
 import { DEFAULT_SETTINGS, DEFAULT_CONTENT } from "@/lib/defaults";
@@ -73,15 +73,7 @@ export const calculations = {
   add(calc: Calculation) { updateCollection<Calculation[]>("calculations", [], (l) => [calc, ...l].slice(0, 5000)); },
 };
 
-// --- Vzorky + e-mailová fronta ---------------------------------------------
-export const sampleRequests = {
-  all(): SampleRequest[] { return readCollection<SampleRequest[]>("sample-requests", []); },
-  add(r: SampleRequest) { updateCollection<SampleRequest[]>("sample-requests", [], (l) => [r, ...l]); },
-  update(id: string, patch: Partial<SampleRequest>) {
-    updateCollection<SampleRequest[]>("sample-requests", [], (l) => l.map((r) => (r.id === id ? { ...r, ...patch } : r)));
-  },
-};
-
+// --- E-mailová fronta ---------------------------------------------------------
 export const emailQueue = {
   all(): EmailQueueItem[] { return readCollection<EmailQueueItem[]>("email-queue", []); },
   addMany(items: EmailQueueItem[]) { updateCollection<EmailQueueItem[]>("email-queue", [], (l) => [...l, ...items]); },
@@ -89,22 +81,6 @@ export const emailQueue = {
     updateCollection<EmailQueueItem[]>("email-queue", [], (l) =>
       l.map((e) => (e.id === id ? { ...e, sentAt: new Date().toISOString() } : e)));
   },
-  /** Zruší (odebere z fronty) ještě neodeslané e-maily daných typů pro adresu. Vrací počet zrušených. */
-  cancelPending(email: string, types: readonly EmailQueueItem["type"][]) {
-    const to = email.trim().toLowerCase();
-    let n = 0;
-    updateCollection<EmailQueueItem[]>("email-queue", [], (l) => l.filter((e) => {
-      const drop = !e.sentAt && e.to.trim().toLowerCase() === to && types.includes(e.type);
-      if (drop) n++;
-      return !drop;
-    }));
-    return n;
-  },
-};
-
-export const unsubscribes = {
-  all(): EmailUnsubscribe[] { return readCollection<EmailUnsubscribe[]>("unsubscribes", []); },
-  add(u: EmailUnsubscribe) { updateCollection<EmailUnsubscribe[]>("unsubscribes", [], (l) => [u, ...l]); },
 };
 
 // --- Poptávky montáže -------------------------------------------------------

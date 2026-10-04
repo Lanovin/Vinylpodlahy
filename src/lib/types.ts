@@ -179,7 +179,6 @@ export interface Settings {
     carryUpParcelPrice: number;
     carryUpPalletPricePerFloor: number;
   };
-  samples: { min: number; max: number };
   /** Odhad hmotnosti (kg/m²) pro produkty, kterým feed neposlal hmotnost balení. */
   weightEstimateKgPerM2: Record<FloorType, number>;
 }
@@ -294,39 +293,10 @@ export interface Calculation {
   productSnapshot: { name: string; pricePerM2: number; pricePerPack: number; m2PerPack: number };
 }
 
-export interface SampleRequest {
-  id: string;
-  createdAt: string;
-  email: string;
-  name: string;
-  phone: string;
-  street: string;
-  city: string;
-  zip: string;
-  productIds: string[];
-  calculationId: string | null;
-  /** Historické pole (dřív jeden společný souhlas). Nově = stejná hodnota jako marketingConsent. */
-  consent: boolean;
-  /** Nepovinný souhlas s navazujícími e-maily (rady, sleva). Zaslání vzorků samo o sobě souhlas nepotřebuje (plnění smlouvy). */
-  marketingConsent?: boolean;
-  marketingConsentAt?: string | null;
-  status: "new" | "sent" | "done";
-}
-
-/** Odhlášení z marketingových e-mailů (odkaz /odhlaseni v e-mailech). */
-export interface EmailUnsubscribe {
-  email: string;
-  createdAt: string;
-  /** Kolik naplánovaných marketingových e-mailů se zrušilo. */
-  cancelled: number;
-}
-
-export type EmailType = "sample-confirm" | "sample-reminder-calc" | "sample-discount" | "calc-share";
+export type EmailType = "calc-share";
 
 export interface EmailQueueItem {
   id: string;
-  /** U e-mailů ke vzorkům id žádosti; u „calc-share“ (kalkulace na e-mail) prázdné. */
-  sampleRequestId: string;
   to: string;
   type: EmailType;
   dueAt: string;
@@ -466,7 +436,7 @@ export interface Alert {
 }
 
 export interface SiteContent {
-  hero: { title: string; subtitle: string; ctaPrimary: string; ctaSecondary: string; ctaTertiary: string; image: string };
+  hero: { title: string; subtitle: string; ctaPrimary: string; ctaTertiary: string; image: string };
   usps: { title: string; text: string }[];
   homeIntro: { title: string; text: string };
   steps: { title: string; text: string }[];
