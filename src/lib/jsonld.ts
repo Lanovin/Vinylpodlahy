@@ -127,3 +127,33 @@ export function productLd(p: PublicProduct) {
     },
   });
 }
+
+/** Drobečková navigace: stejné položky jako viditelný `<nav>`; `path` je cesta webu, ne absolutní URL. */
+export function breadcrumbLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, item: absUrl(it.path) })),
+  };
+}
+
+/** Katalog nebo landing page jako kolekce produktů. Seznam odpovídá kanonické (nefiltrované) podobě stránky. */
+export function collectionLd(c: { name: string; description?: string; path: string; products: Pick<PublicProduct, "slug" | "brand" | "name">[] }) {
+  const url = absUrl(c.path);
+  const shown = c.products.slice(0, 100);
+  return compact({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${url}#collection`,
+    name: c.name,
+    description: c.description,
+    url,
+    inLanguage: "cs-CZ",
+    isPartOf: { "@id": ldId("website") },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: c.products.length,
+      itemListElement: shown.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: absUrl(`/podlaha/${p.slug}`), name: `${p.brand} ${p.name}` })),
+    },
+  });
+}

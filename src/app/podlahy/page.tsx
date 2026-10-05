@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { CatalogView } from "@/components/catalog/CatalogView";
-import type { SearchParams } from "@/lib/catalog";
+import { CATALOG_META_DESCRIPTION, type SearchParams } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Vinylové a SPC podlahy — katalog s filtry", description: "Katalog vinylových a SPC podlah s filtry podle typu, tloušťky, nášlapné vrstvy, třídy zátěže, ceny za m² a dostupnosti v m².", alternates: { canonical: "/podlahy" } };
+export const metadata: Metadata = { title: "Vinylové a SPC podlahy — katalog s filtry", description: CATALOG_META_DESCRIPTION, alternates: { canonical: "/podlahy" } };
 
 export default async function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
   return <CatalogView sp={await searchParams} />;

@@ -7,10 +7,12 @@ import { FilterPanel, type Facets } from "./FilterPanel";
 import { SortSelect } from "./SortSelect";
 import { ScrollRow } from "./ScrollRow";
 import { activeChips, catalogHref, clearedFilters } from "./activeFilters";
-import { applyFilters, EMPTY_FILTERS, parseFilters, type CatalogFilters, type LandingDef, type SearchParams, LANDINGS } from "@/lib/catalog";
+import { applyFilters, CATALOG_META_DESCRIPTION, EMPTY_FILTERS, parseFilters, type CatalogFilters, type LandingDef, type SearchParams, LANDINGS } from "@/lib/catalog";
 import { content as contentRepo, products } from "@/lib/db/repos";
 import { toPublicProduct } from "@/lib/public";
 import { plural } from "@/lib/format";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbLd, collectionLd } from "@/lib/jsonld";
 
 function facetsOf(list: ReturnType<typeof toPublicProduct>[]): Facets {
   const f: Facets = { type: {}, lock: {}, thickness: {}, wear: {}, usage: {}, tone: {}, waterproof: 0, floorHeating: 0 };
@@ -52,6 +54,9 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
   const title = text?.h1 ?? (searching ? `Hledání: „${filters.q}“` : "Vinylové a SPC podlahy");
   const path = landing ? `/${landing.slug}` : "/podlahy";
   const chips = activeChips(filters, locked);
+  // Strukturovaná data popisují kanonickou (nefiltrovanou) podobu stránky, ne aktuální výběr filtrů.
+  const canonicalList = applyFilters(all, parseFilters({}, landing?.preset ?? {}));
+  const crumbs = [{ name: "Domů", path: "/" }, { name: "Podlahy", path: "/podlahy" }, ...(landing ? [{ name: text?.h1 ?? landing.navLabel, path }] : [])];
   // „Zrušit vše“ ve štítcích ruší filtry i hledání; na landing page vede na její čistou adresu (řazení zůstává).
   const clearAllHref = catalogHref(path, { ...EMPTY_FILTERS, sort: filters.sort }, locked);
 
@@ -73,6 +78,8 @@ export function CatalogView({ sp, landing }: { sp: SearchParams; landing?: Landi
 
   return (
     <Site>
+      <JsonLd data={breadcrumbLd(crumbs)} />
+      <JsonLd data={collectionLd({ name: text?.h1 ?? "Vinylové a SPC podlahy", description: text?.metaDescription ?? CATALOG_META_DESCRIPTION, path, products: canonicalList })} />
       <div className="container pt-4 md:pt-10">
         <nav className="hidden md:block text-xs text-muted mb-4" aria-label="Drobečková navigace"><Link href="/" className="hover:text-ink">Domů</Link> / <Link href="/podlahy" className="hover:text-ink">Podlahy</Link>{landing && <> / <span className="text-ink">{text?.h1}</span></>}</nav>
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

@@ -132,6 +132,9 @@ export const LANDINGS: LandingDef[] = [
   { slug: "vinylove-podlahy-dub", preset: { q: "dub" }, locked: ["q"], navLabel: "Dekor dub", seoTitle: "Proč dubový dekor" },
 ];
 
+/** Meta description katalogu `/podlahy` (i popis kolekce v JSON-LD). */
+export const CATALOG_META_DESCRIPTION = "Katalog vinylových a SPC podlah s filtry podle typu, tloušťky, nášlapné vrstvy, třídy zátěže, ceny za m² a dostupnosti v m².";
+
 export function landingBySlug(slug: string) {
   return LANDINGS.find((l) => l.slug === slug) ?? null;
 }
