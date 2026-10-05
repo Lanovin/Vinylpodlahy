@@ -10,6 +10,8 @@ import { content as contentRepo, products, settings as settingsRepo } from "@/li
 import { toPublicProduct } from "@/lib/public";
 import { LANDINGS } from "@/lib/catalog";
 import { fmtInt } from "@/lib/format";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationLd, websiteLd } from "@/lib/jsonld";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -39,6 +41,8 @@ export default function HomePage() {
 
   return (
     <Site overlay>
+      <JsonLd data={organizationLd(c.contact)} />
+      <JsonLd data={websiteLd()} />
       {/* HERO — celoplošná fotka a rovnou první krok kalkulačky (metry); vedle cesta do 3D bytu */}
       <section className="relative flex items-center justify-center text-white md:min-h-[86svh]">
         <Image src={c.hero.image} alt="" fill priority sizes="100vw" className="object-cover" />

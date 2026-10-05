@@ -6,3 +6,6 @@ export const SITE_NAME = "vinylpodlahy.cz";
 export function absUrl(path: string) {
   return /^https?:\/\//i.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
+
+/** Profily firmy (Facebook, Instagram, Google Business, Heureka…) pro `sameAs` v JSON-LD. TODO: doplnit, až budou. */
+export const SOCIAL_PROFILES: string[] = [];

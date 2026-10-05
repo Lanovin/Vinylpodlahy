@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Site } from "@/components/layout/Site";
 import { content as contentRepo } from "@/lib/db/repos";
 import { Mail, Phone } from "@/components/ui/icons";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationLd } from "@/lib/jsonld";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Kontakt", description: "Poradíme s výběrem vinylové nebo SPC podlahy, s výpočtem množství i s dopravou.", alternates: { canonical: "/kontakt" } };
@@ -11,6 +13,7 @@ export default function Page() {
   const c = contentRepo.get();
   return (
     <Site>
+      <JsonLd data={organizationLd(c.contact)} />
       <div className="container py-8 md:py-14 grid lg:grid-cols-12 gap-8 lg:gap-10">
         <div className="lg:col-span-6">
           <p className="eyebrow mb-3">Kontakt</p>
