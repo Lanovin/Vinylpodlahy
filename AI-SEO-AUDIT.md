@@ -97,7 +97,7 @@ Implementováno devět commitů (`bb08cb2` … `acac229`), každé ID samostatn�
 - Všech 11 AI user-agentů (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-User, Claude-SearchBot, PerplexityBot, Perplexity-User, Google-Extended, Applebot-Extended, CCBot) dostalo HTTP 200 a identické HTML s jedním `<h1>`.
 - JSON-LD je v HTML bez JS: úvodní stránka (OnlineStore, WebSite), kontakt (OnlineStore), `/podlahy` a landing (BreadcrumbList, CollectionPage), produkt (Product, BreadcrumbList). Všechny bloky jsou validní JSON, `@context` je schema.org, `Product` má `name`, `image`, `offers.price`, `priceCurrency`, `availability`, `Breadcrumb` má správné pozice a absolutní URL.
 - Kontrola úniku: ve schema není nákupní cena, marže, SKU dodavatele ani zástupný text („doplňte“, telefon z nul).
-- Skripty (`robots.txt`): 51 URL v sitemapě, 41 s `lastmod`, žádná bez `www`, `/vzorky` tam není.
+- Sitemapa: 51 URL, 41 s `lastmod`, žádná bez `www`, `/vzorky` tam není.
 - **Neověřeno** (nemám nástroj/přístup): Google Rich Results Test a validator.schema.org je potřeba spustit ručně na nasazené URL. Hodnotu `price` jsem zvolil za balení s `eligibleQuantity` v m²; pokud Merchant Center chce cenu za m², upravíme.
 - Poznámka k prostředí: `tsc` a `next build` padaly na zastaralých vygenerovaných souborech `.next/types/validator.ts` a `.next/dev/types/validator.ts` (odkazují na smazané stránky vzorků; v gitu nejsou). Přesunul jsem je do scratchpadu; `next dev` je vytvoří znovu. Na Vercelu se to neprojeví.
 
