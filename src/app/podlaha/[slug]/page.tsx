@@ -11,6 +11,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbLd, productLd } from "@/lib/jsonld";
 import { LOCK_TERM, TYPE_TERM, USAGE_SHORT, type TermId } from "@/components/ui/terms";
 import { products, settings as settingsRepo } from "@/lib/db/repos";
+import { SITE_NAME } from "@/lib/site";
 import { toPublicProduct, toPublicSettings } from "@/lib/public";
 import { DECOR_TONE_LABEL, FLOOR_TYPE_LABEL, LOCK_LABEL } from "@/lib/types";
 import { fmtCzk, fmtKg, fmtMm, fmtNum2 } from "@/lib/format";
@@ -28,7 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const p = products.bySlug(slug);
   if (!p) return {};
-  return { title: `${p.brand} ${p.name} — ${fmtCzk(p.pricePerM2)}/m²`, description: `${FLOOR_TYPE_LABEL[p.type]} ${fmtMm(p.thicknessMm)}, nášlap ${fmtMm(p.wearLayerMm)}, třída ${p.usageClass}. ${fmtCzk(p.pricePerM2)}/m², ${fmtCzk(p.pricePerPack)}/balení. Dostupnost ${fmtNum2(p.stockM2)} m².`, alternates: { canonical: `/podlaha/${p.slug}` } };
+  const image = p.images.hero ?? p.images.card;
+  return { title: `${p.brand} ${p.name} — ${fmtCzk(p.pricePerM2)}/m²`, description: `${FLOOR_TYPE_LABEL[p.type]} ${fmtMm(p.thicknessMm)}, nášlap ${fmtMm(p.wearLayerMm)}, třída ${p.usageClass}. ${fmtCzk(p.pricePerM2)}/m², ${fmtCzk(p.pricePerPack)}/balení. Dostupnost ${fmtNum2(p.stockM2)} m².`, alternates: { canonical: `/podlaha/${p.slug}` }, ...(image && { openGraph: { type: "website", locale: "cs_CZ", siteName: SITE_NAME, url: `/podlaha/${p.slug}`, images: [{ url: image, alt: `${p.brand} ${p.name}` }] }, twitter: { card: "summary_large_image" as const, images: [image] } }) };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
