@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Byt ve 3D — vyzkoušejte podlahu v modelovém bytě",
   description: "Modelový byt 2+kk ve 3D: obývák s kuchyní, ložnice, koupelna i předsíň. Přepínejte dekory, způsob kladení a barvu stěn a uvidíte podlahu ve skutečném rozměru lamel, ve dne i večer.",
+  alternates: { canonical: "/vizualizace" },
 };
 
 const TONE_ORDER: DecorTone[] = ["light-oak", "grey", "dark-wood", "stone"];

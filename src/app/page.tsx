@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Site } from "@/components/layout/Site";
@@ -11,6 +12,7 @@ import { LANDINGS } from "@/lib/catalog";
 import { fmtInt } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const LANDING_IMG: Record<string, string> = {
   "spc-vinylove-podlahy": "/media/inspiration/minimal-oak.webp",

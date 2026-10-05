@@ -5,7 +5,7 @@ import { content as contentRepo } from "@/lib/db/repos";
 import { Mail, Phone } from "@/components/ui/icons";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Kontakt", description: "Poradíme s výběrem vinylové nebo SPC podlahy, s výpočtem množství i s dopravou." };
+export const metadata: Metadata = { title: "Kontakt", description: "Poradíme s výběrem vinylové nebo SPC podlahy, s výpočtem množství i s dopravou.", alternates: { canonical: "/kontakt" } };
 
 export default function Page() {
   const c = contentRepo.get();

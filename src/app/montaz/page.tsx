@@ -6,7 +6,7 @@ import { calculations, content, products } from "@/lib/db/repos";
 import { Check, Cube, Ruler } from "@/components/ui/icons";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Pokládka podlahy — poptávka podlaháře", description: "Pokládka vinylové a SPC podlahy orientačně 220–260 Kč/m². Zadejte PSČ a plochu, ověřený podlahář z okolí se ozve s cenou do 2 pracovních dnů." };
+export const metadata: Metadata = { title: "Pokládka podlahy — poptávka podlaháře", description: "Pokládka vinylové a SPC podlahy orientačně 220–260 Kč/m². Zadejte PSČ a plochu, ověřený podlahář z okolí se ozve s cenou do 2 pracovních dnů.", alternates: { canonical: "/montaz" } };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ product?: string; calc?: string; area?: string; ok?: string }> }) {
   const sp = await searchParams;

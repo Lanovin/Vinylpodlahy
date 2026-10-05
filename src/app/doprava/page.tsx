@@ -5,7 +5,7 @@ import { settings as settingsRepo } from "@/lib/db/repos";
 import { fmtCzk } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Doprava a platba", description: "Doprava podle hmotnosti: balík nebo paleta. Ke krajnici, vynáška jako příplatek. Doprava zdarma nad limit m²." };
+export const metadata: Metadata = { title: "Doprava a platba", description: "Doprava podle hmotnosti: balík nebo paleta. Ke krajnici, vynáška jako příplatek. Doprava zdarma nad limit m².", alternates: { canonical: "/doprava" } };
 
 export default function Page() {
   const s = settingsRepo.get();

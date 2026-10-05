@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Kalkulačka projektu — metry, rozpočet, místnost, cena celého projektu",
   description: "Zadejte metry a odpovězte na 3 otázky. Vybereme až 9 podlah, které dávají smysl, a u každé rovnou spočítáme celý projekt: balení vč. odřezků, podložku, lišty, lepidlo i dopravu.",
+  alternates: { canonical: "/kalkulacka" },
 };
 
 const parseNum = (v?: string) => { if (!v) return null; const n = parseFloat(v.replace(",", ".")); return Number.isFinite(n) && n > 0 ? n : null; };

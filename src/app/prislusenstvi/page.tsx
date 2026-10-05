@@ -11,7 +11,7 @@ import type { AccessoryKind } from "@/lib/types";
 import { days, fmtCzk, slugify } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Příslušenství k vinylovým podlahám", description: "Podložky, soklové a přechodové lišty, lepidla, tmely a čisticí sady. Kalkulačka projektu spočítá potřebné množství automaticky." };
+export const metadata: Metadata = { title: "Příslušenství k vinylovým podlahám", description: "Podložky, soklové a přechodové lišty, lepidla, tmely a čisticí sady. Kalkulačka projektu spočítá potřebné množství automaticky.", alternates: { canonical: "/prislusenstvi" } };
 
 const ORDER: AccessoryKind[] = ["underlay", "skirting", "transition", "floor-adhesive", "glue", "silicone", "cleaning"];
 
