@@ -3,11 +3,12 @@ import { Jost } from "next/font/google";
 import "./globals.css";
 import { Gtm } from "@/components/layout/Gtm";
 import { CookieBanner } from "@/components/layout/CookieBanner";
+import { SITE_URL } from "@/lib/site";
 
 const jost = Jost({ subsets: ["latin", "latin-ext"], weight: ["300", "400", "500"], variable: "--font-jost", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinylpodlahy.cz"),
+  metadataBase: new URL(SITE_URL),
   title: { default: "vinylpodlahy.cz — Vinylové a SPC podlahy s kalkulačkou projektu", template: "%s | vinylpodlahy.cz" },
   description: "Vinylové a SPC podlahy. Přijďte s místností, odejděte s kompletním košíkem: balení, podložka, lišty i doprava spočítané na vaše metry.",
   openGraph: { type: "website", locale: "cs_CZ", siteName: "vinylpodlahy.cz" },
