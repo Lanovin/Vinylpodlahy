@@ -7,6 +7,8 @@ import { BuyBox } from "@/components/product/BuyBox";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductUiProvider, TryInRoom } from "@/components/visualizer/TryInRoom";
 import { Term } from "@/components/ui/Term";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { productLd } from "@/lib/jsonld";
 import { LOCK_TERM, TYPE_TERM, USAGE_SHORT, type TermId } from "@/components/ui/terms";
 import { products, settings as settingsRepo } from "@/lib/db/repos";
 import { toPublicProduct, toPublicSettings } from "@/lib/public";
@@ -67,6 +69,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <Site>
       <ProductUiProvider product={p} products={tryList}>
+      <JsonLd data={productLd(p)} />
       <div className="container pt-3 md:pt-10">
         <nav className="text-xs text-muted mb-3 md:mb-4 hidden sm:block"><Link href="/" className="hover:text-ink">Domů</Link> / <Link href="/podlahy" className="hover:text-ink">Podlahy</Link> / <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="hover:text-ink">{p.collection}</Link> / <span className="text-ink">{p.decor}</span></nav>
         <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="sm:hidden inline-flex items-center gap-1 h-9 text-sm text-muted"><ChevronRight className="h-4 w-4 rotate-180" /> {p.brand} · {p.collection}</Link>

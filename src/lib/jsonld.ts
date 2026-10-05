@@ -1,5 +1,6 @@
-import type { SiteContent } from "./types";
-import { SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "./site";
+import { DECOR_TONE_LABEL, FLOOR_TYPE_LABEL, LOCK_LABEL, type SiteContent } from "./types";
+import type { PublicProduct } from "./public";
+import { absUrl, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "./site";
 
 /**
  * JSON-LD se skládá ze stejných dat, ze kterých se renderují stránky (admin → Texty webu, produkty z feedu).
@@ -67,4 +68,62 @@ export function websiteLd() {
     publisher: { "@id": ldId("organization") },
     potentialAction: { "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/podlahy?q={search_term_string}` }, "query-input": "required name=search_term_string" },
   };
+}
+
+const prop = (name: string, value: string | number, unitCode?: string) => ({ "@type": "PropertyValue", name, value, unitCode });
+const yesNo = (v: boolean) => (v ? "ano" : "ne");
+
+/**
+ * Karta produktu. Používá jen veřejnou podobu produktu (`PublicProduct`) — žádná nákupní cena, marže ani SKU dodavatele.
+ * `sku` je veřejný slug (interní `id` obsahuje jméno dodavatele). Hodnocení ani recenze se neuvádějí (žádné neexistují).
+ * Cena je za balení (to se kupuje), cena za m² je ve vlastnostech. Pozastavený produkt je bez nabídky (cena čeká na potvrzení).
+ */
+export function productLd(p: PublicProduct) {
+  const url = absUrl(`/podlaha/${p.slug}`);
+  const name = `${p.brand} ${p.name}`;
+  const images = [p.images.hero, p.images.card, ...p.images.gallery].filter((x): x is string => !!x);
+  const inStock = p.stockM2 > 0;
+  return compact({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${url}#product`,
+    name,
+    description: p.description,
+    url,
+    sku: p.slug,
+    image: [...new Set(images)].map(absUrl),
+    brand: { "@type": "Brand", name: p.brand },
+    category: FLOOR_TYPE_LABEL[p.type],
+    additionalProperty: [
+      prop("Typ podlahy", FLOOR_TYPE_LABEL[p.type]),
+      prop("Kolekce", p.collection),
+      prop("Odstín", DECOR_TONE_LABEL[p.decorTone]),
+      prop("Tloušťka", p.thicknessMm, "MMT"),
+      prop("Nášlapná vrstva", p.wearLayerMm, "MMT"),
+      prop("Třída zátěže", p.usageClass),
+      prop("Pokládka", LOCK_LABEL[p.lock]),
+      prop("Podlahové topení", yesNo(p.floorHeating)),
+      prop("Voděodolná", yesNo(p.waterproof)),
+      prop("Integrovaná podložka", yesNo(p.integratedUnderlay)),
+      prop("Hrany s fází (V-drážka)", yesNo(p.bevel)),
+      prop("Rozměr lamely (délka × šířka)", `${p.plankLengthMm} × ${p.plankWidthMm} mm`),
+      prop("Plocha v balení", p.m2PerPack, "MTK"),
+      prop("Hmotnost balení", p.packWeightKg, "KGM"),
+      prop("Cena za m² vč. DPH", p.pricePerM2),
+    ],
+    offers: p.status === "paused" ? undefined : {
+      "@type": "Offer",
+      url,
+      priceCurrency: "CZK",
+      price: p.pricePerPack,
+      priceSpecification: { "@type": "PriceSpecification", price: p.pricePerPack, priceCurrency: "CZK", valueAddedTaxIncluded: true },
+      eligibleQuantity: { "@type": "QuantitativeValue", value: p.m2PerPack, unitCode: "MTK", unitText: "m²" },
+      description: `Cena za balení ${p.m2PerPack} m² vč. DPH (${p.pricePerM2} Kč/m²).`,
+      availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      inventoryLevel: inStock ? { "@type": "QuantitativeValue", value: Math.floor(p.stockM2), unitCode: "MTK", unitText: "m²" } : undefined,
+      deliveryLeadTime: inStock ? { "@type": "QuantitativeValue", value: p.deliveryDays, unitText: "pracovních dnů" } : undefined,
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", "@id": ldId("organization"), name: SITE_NAME, url: SITE_URL },
+    },
+  });
 }
