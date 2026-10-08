@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import { decodeBake, type BakeData } from "./bakeFormat";
+import type { BakeData } from "./bakeFormat";
 import type { BakeLayout } from "./layout";
-import type { LightingMode } from "./lighting";
 
 /**
  * Předpočítané světlo v prohlížeči: načtení souboru, lightmapy a atributy vrcholů, úprava shaderů.
@@ -75,8 +74,12 @@ const FRAG_MAIN = /* glsl */ `
 
 // Odlesk z prostředí s korekcí na kvádr místnosti (box projection).
 const ENV_FROM = "reflectVec = transformDirectionByInverseViewMatrix( reflectVec, viewMatrix );";
-const ENV_PARS = THREE.ShaderChunk.envmap_physical_pars_fragment.replace(ENV_FROM, "reflectVec = boxProject( transformDirectionByInverseViewMatrix( reflectVec, viewMatrix ) );");
-if (!THREE.ShaderChunk.envmap_physical_pars_fragment.includes(ENV_FROM)) console.warn("[vizualizace] box projection: shader chunk changed");
+// Rozptýlené světlo z prostředí se s předpočítaným světlem nahrazuje (viz FRAG_MAIN), takže se nemá ani číst.
+const IRR_FROM = "vec3 getIBLIrradiance( const in vec3 normal ) {";
+const ENV_PARS = THREE.ShaderChunk.envmap_physical_pars_fragment
+  .replace(ENV_FROM, "reflectVec = boxProject( transformDirectionByInverseViewMatrix( reflectVec, viewMatrix ) );")
+  .replace(IRR_FROM, `${IRR_FROM}\n\tif ( uBakeOn > 0.5 ) return vec3( 0.0 );`);
+if (!THREE.ShaderChunk.envmap_physical_pars_fragment.includes(ENV_FROM) || !THREE.ShaderChunk.envmap_physical_pars_fragment.includes(IRR_FROM)) console.warn("[vizualizace] box projection: shader chunk changed");
 
 /** Doplní do materiálu čtení předpočítaného světla (zachová případný dřívější onBeforeCompile). */
 export function patchBakeMaterial(m: THREE.MeshStandardMaterial, kind: "lm" | "vtx", U: BakeUniforms) {
@@ -96,14 +99,6 @@ export function patchBakeMaterial(m: THREE.MeshStandardMaterial, kind: "lm" | "v
   };
   m.customProgramCacheKey = () => `${prevKey()}|bake-${kind}`;
   m.needsUpdate = true;
-}
-
-export async function fetchBake(mode: LightingMode, signal?: AbortSignal): Promise<BakeData> {
-  const res = await fetch(`/visualizer/bake-${mode}.bin`, { signal });
-  if (!res.ok || !res.body) throw new Error(`bake ${mode}: HTTP ${res.status}`);
-  if (typeof DecompressionStream === "undefined") throw new Error("DecompressionStream unsupported");
-  const buf = await new Response(res.body.pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
-  return decodeBake(buf);
 }
 
 function rgbaHalf(src: Uint16Array, w: number, h: number) {

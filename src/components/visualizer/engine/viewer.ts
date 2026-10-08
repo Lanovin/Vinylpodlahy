@@ -1,12 +1,14 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { buildApartment, type CameraPreset, type RoomInfo, type ViewId } from "./apartment";
-import { applyBake, createBakeUniforms, disposeBake, fetchBake, patchBakeMaterial, prepareBake, type BakeSet } from "./bake";
+import { loadBake, loadExterior, prefetchBake } from "./assets";
+import { applyBake, createBakeUniforms, disposeBake, patchBakeMaterial, prepareBake, type BakeSet } from "./bake";
 import { buildFloorTile, type DecorSpec, type FloorTile } from "./floorTile";
 import { EXTERIOR, SUN_COLOR, SUN_DIR, SUN_E, SUN_RADIUS, type LightingMode } from "./lighting";
 import { PhotoPipeline } from "./post";
-import { detectQuality, QUALITY, type Detection, type Quality, type QualityChoice } from "./quality";
+import { detectQuality, exteriorSize, QUALITY, type Detection, type Quality, type QualityChoice } from "./quality";
 import { FloorReflection } from "./reflection";
+import { preloadTextures } from "./textures";
 
 export type { ViewId } from "./apartment";
 export type Lighting = LightingMode;
@@ -48,6 +50,9 @@ export interface Viewer {
 
 interface CamState { pos: THREE.Vector3; target: THREE.Vector3; fov: number; level: number }
 
+/** Značky pro DevTools (Performance → Timings): kde se tráví čas při startu. */
+const mark = (label: string) => { try { performance.mark(`viz:${label}`); } catch { /* ignore */ } };
+
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const halton = (i: number, b: number) => { let f = 1, r = 0; while (i > 0) { f /= b; r += f * (i % b); i = Math.floor(i / b); } return r; };
@@ -79,7 +84,39 @@ function backdropMaterial(tex: THREE.Texture) {
   });
 }
 
+/** Tichý výhled z oken, než se načte panorama (nebo když se nenačte): světlá obloha. */
+function placeholderSky() {
+  const t = new THREE.DataTexture(new Uint8Array([56, 62, 66, 255]), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.needsUpdate = true;
+  return t;
+}
+
+/** Prostředí „pokoj“ (RoomEnvironment) pro náhradní osvětlení; shadery se kompilují souběžně, ne při tvorbě. */
+async function buildRoomEnv(renderer: THREE.WebGLRenderer, pmrem: THREE.PMREMGenerator, size: number, hdr: boolean) {
+  const envScene = new RoomEnvironment();
+  // Program závisí na cíli vykreslování (PMREM kreslí do cílové textury bez tónového mapování).
+  const probe = new THREE.WebGLRenderTarget(4, 4, { type: hdr ? THREE.HalfFloatType : THREE.UnsignedByteType });
+  const prev = renderer.getRenderTarget();
+  const prevTone = renderer.toneMapping;
+  renderer.setRenderTarget(probe);
+  renderer.toneMapping = THREE.NoToneMapping;
+  const done = renderer.compileAsync(envScene, new THREE.PerspectiveCamera()).catch(() => undefined);
+  renderer.setRenderTarget(prev);
+  renderer.toneMapping = prevTone;
+  await done;
+  probe.dispose();
+  // Řez stěn z pohledu „celý byt“ (clipping plane) by oříznul i toto prostředí.
+  const clip = renderer.clippingPlanes;
+  renderer.clippingPlanes = [];
+  const env = pmrem.fromScene(envScene, 0.04, 0.1, 100, { size }).texture;
+  renderer.clippingPlanes = clip;
+  envScene.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh) { m.geometry.dispose(); (Array.isArray(m.material) ? m.material : [m.material]).forEach((x) => x.dispose()); } });
+  return env;
+}
+
 export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, opts: ViewerOptions = {}): Viewer {
+  mark("start");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
   const chosen = opts.quality ?? "auto";
   const detection: Detection = typeof chosen === "object" ? { level: chosen.level, reason: "vlastní nastavení" } : chosen === "auto" ? detectQuality(renderer) : { level: chosen, reason: "ruční volba" };
@@ -91,6 +128,14 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
   renderer.shadowMap.needsUpdate = true;
+  // Stahování světla a výhledu z oken i generování textur (worker) se rozjede hned: síť a druhé jádro
+  // pracují, zatímco hlavní vlákno staví scénu a kompiluje shadery.
+  const dayLoad = loadBake("day");
+  const extLoad = loadExterior(exteriorSize(Q));
+  const texLoad = preloadTextures();
+  dayLoad.catch(() => undefined);
+  extLoad.catch(() => undefined);
+
   const maxSide = Math.min(renderer.capabilities.maxTextureSize, Q.floorSide);
   const aniso = Math.min(Q.aniso, renderer.capabilities.getMaxAnisotropy());
   const post = new PhotoPipeline(renderer, { bloom: 0.07, vignette: 0.14, samples: Q.msaa });
@@ -101,27 +146,46 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   const pmrem = new THREE.PMREMGenerator(renderer);
   // Stejná velikost jako u prostředí nasnímaného z pokoje (cubeRT níže): shadery se pak sdílejí a nekompilují dvakrát.
   const ENV_SIZE = 128;
-  const roomEnv = pmrem.fromScene(new RoomEnvironment(), 0.04, 0.1, 100, { size: ENV_SIZE }).texture;
+  // Prázdné prostředí stačí na přeložení shaderů (tvar programu závisí jen na typu a velikosti prostředí);
+  // skutečný „pokoj“ se dopočítá souběžně s překladem (buildRoomEnv).
+  let roomEnv: THREE.Texture = pmrem.fromScene(new THREE.Scene(), 0, 0.1, 100, { size: ENV_SIZE }).texture;
   let capturedEnv: THREE.Texture | null = null;
   scene.environment = roomEnv;
   scene.environmentIntensity = 0.55;
 
-  const apt = buildApartment();
+  let disposed = false;
+  mark("setup");
+
+  // Textury jsou zatím zástupné (pixely dopočítají workery), ale tvar shaderů to nemění — byt se staví
+  // a shadery překládají souběžně s generováním.
+  const apt = buildApartment({ lean: Q.lean });
+  mark("apartment");
   scene.add(apt.root);
   const bakeUniforms = createBakeUniforms();
   for (const m of apt.layout.lmMeshes) patchBakeMaterial(m.material as THREE.MeshStandardMaterial, "lm", bakeUniforms);
   for (const m of apt.layout.vtxMeshes) patchBakeMaterial(m.material as THREE.MeshStandardMaterial, "vtx", bakeUniforms);
   const refl = new FloorReflection(renderer, post.hdr, Q.reflDiv);
   refl.patch(apt.floorMaterial);
+  // Podlaha dostane zástupné textury hned, aby se její shader přeložil spolu s ostatními (skutečná dlaždice
+  // se generuje později a tvar programu nezmění).
+  const floorPh = new THREE.DataTexture(new Uint8Array([156, 143, 124, 255]), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+  floorPh.colorSpace = THREE.SRGBColorSpace;
+  floorPh.needsUpdate = true;
+  const bumpPh = new THREE.DataTexture(new Uint8Array([255, 255, 255, 255]), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+  bumpPh.needsUpdate = true;
+  apt.floorMaterial.map = floorPh;
+  apt.floorMaterial.bumpMap = bumpPh;
   // Podlaha se do vlastního odrazu nekreslí (jinak by četla texturu, do které se právě kreslí).
   const floorMeshes = apt.layout.lmMeshes.filter((m) => m.material === apt.floorMaterial);
   const overviewHide: THREE.Object3D[] = [], overviewShow: THREE.Object3D[] = [];
   apt.root.traverse((o) => { if (o.userData.overview === "hide") overviewHide.push(o); else if (o.userData.overview === "show") overviewShow.push(o); });
 
   // Výhled z oken: plochy těsně za okenními otvory, barvu počítá shader podle směru pohledu
-  // (panorama v nekonečnu). Načte se spolu se světlem.
+  // (panorama v nekonečnu). Materiál je od začátku shader s náhradní oblohou (program se překládá spolu
+  // s ostatními); panorama se do něj vloží, až se stáhne.
   const backdrop = new THREE.Group();
-  let backdropMat: THREE.Material = new THREE.MeshBasicMaterial({ color: 0xdfe6ec, side: THREE.DoubleSide });
+  const skyTex = placeholderSky();
+  const backdropMat = backdropMaterial(skyTex);
   for (const p of apt.portals) {
     const w = p.u.length() + 0.12, h = p.v.length() + 0.12;
     const q = new THREE.Mesh(new THREE.PlaneGeometry(w, h), backdropMat);
@@ -132,7 +196,6 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   }
   scene.add(backdrop);
   overviewHide.push(backdrop);
-  const setBackdropMat = (m: THREE.Material) => { backdropMat.dispose(); backdropMat = m; backdrop.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = m; }); };
 
   const sunDir = new THREE.Vector3(...SUN_DIR).normalize();
   const sun = new THREE.DirectionalLight(new THREE.Color().setRGB(...SUN_COLOR), SUN_E);
@@ -166,7 +229,6 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   let anim: { from: CamState; to: CamState; t0: number; dur: number; next: ViewId } | null = null;
   let dirty = true;
   let ready = false;
-  let disposed = false;
   let raf = 0;
   let visible = true;
   let cur: CamState = { pos: new THREE.Vector3(), target: new THREE.Vector3(), fov: 50, level: 1 };
@@ -181,6 +243,10 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   const bakes: Partial<Record<LightingMode, BakeSet>> = {};
   const bakeLoads: Partial<Record<LightingMode, Promise<BakeSet | null>>> = {};
   let bakeActive: LightingMode | null = null;
+  /** Předpočítané světlo se ještě načítá — scéna se do té doby staví (a shadery překládají) už pro jeho režim. */
+  let bakePending = true;
+  /** Slunce svítí (den); večer zůstává ve scéně s nulovou intenzitou, aby se programy shaderů při přepnutí nezměnily. */
+  let sunOn = true;
 
   const vfov = (hfov: number) => clamp((2 * Math.atan(Math.tan((hfov * Math.PI) / 360) / camera.aspect) * 180) / Math.PI, 36, 80);
 
@@ -225,15 +291,23 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
   let wb: [number, number, number] = [1, 1, 1];
   function lightState() {
     const baked = !overview && bakeActive !== null;
+    // Režim s předpočítaným světlem (už načteným, nebo se právě načítá): světla bez příspěvku se ze scény
+    // vyřadí, ať je shader nepočítá pro každý pixel (25 bodových světel by zdržovalo i s nulovou intenzitou).
+    const lean = !overview && (baked || bakePending);
     // Vyvážení bílé patří k předpočítanému světlu; pohled „celý byt“ má náhradní neutrální osvětlení.
     if (baked) post.setWhiteBalance(...wb); else post.setWhiteBalance(1, 1, 1);
     bakeUniforms.uBakeOn.value = baked ? 1 : 0;
     if (!baked) bakeUniforms.uBoxOn.value = 0;
     const eve = lighting === "evening";
-    bounce.intensity = baked ? 0 : eve ? 0.12 : 0.9;
+    bounce.visible = !lean;
+    bounce.intensity = eve ? 0.12 : 0.9;
     scene.environment = baked && capturedEnv ? capturedEnv : roomEnv;
     scene.environmentIntensity = baked ? (capturedEnv ? 1 : 0.35) : eve ? 0.08 : 0.55;
-    for (const { l, e } of lampLights) l.intensity = !baked && (e.mode === "always" || eve) ? e.intensity : 0;
+    for (const { l, e } of lampLights) {
+      const on = !lean && (e.mode === "always" || eve);
+      l.visible = on;
+      l.intensity = on ? e.intensity : 0;
+    }
     for (const o of overviewHide) o.visible = !overview;
     // Řez stěn jen v pohledu „celý byt“; měkké stíny pod nábytkem všude, kde chybí předpočítané světlo.
     for (const o of overviewShow) o.visible = overview || (!!o.userData.blob && !baked);
@@ -242,7 +316,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     const bg = scene.background as THREE.Color;
     if (overview) bg.set(0xf6f3ee).multiplyScalar(post.hdr ? 1.34 : 1); else bg.set(0x1d1c1a);
     post.setVignette(overview ? 0 : 0.14);
-    renderer.shadowMap.needsUpdate = true;
+    if (sunOn) renderer.shadowMap.needsUpdate = true;
     dirty = true;
   }
 
@@ -316,8 +390,8 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       const a = n * 2.399963, rr = SUN_RADIUS * Math.sqrt((n % Q.accum) / Q.accum);
       sunJit.copy(sunDir).addScaledVector(su, Math.cos(a) * rr).addScaledVector(sv, Math.sin(a) * rr).normalize();
     }
-    const jit = !restart && post.hdr;
-    if (jit || sunJittered) renderer.shadowMap.needsUpdate = true;
+    const jit = !restart && post.hdr && sunOn;
+    if (sunOn && (jit || sunJittered)) renderer.shadowMap.needsUpdate = true;
     sunJittered = jit;
     sun.position.copy(apt.center).addScaledVector(sunJit, 22);
     apply(cur);
@@ -355,7 +429,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     // Průměrování až po krátké pauze (při tažení by jen zdržovalo).
     if (post.hdr && post.frames < Q.accum && now - lastChange > 90) {
       frame(false);
-      if (post.frames === Q.accum) opts.onSettled?.();
+      if (post.frames === Q.accum) { opts.onSettled?.(); hintEvening(); }
     }
   }
 
@@ -499,11 +573,9 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     const rot = f.diagonal ? Math.PI / 4 : 0;
     if (disposed || my !== floorRequest) return;
     for (const t of [e.map, e.bump]) { t.repeat.set(1 / e.tile.tileW, 1 / e.tile.tileH); t.rotation = rot; t.center.set(0, 0); }
-    const first = !apt.floorMaterial.map;
     apt.floorMaterial.map = e.map;
     apt.floorMaterial.bumpMap = e.bump;
     apt.floorMaterial.bumpScale = f.bevel ? 1.6 : 0.7;
-    if (first) apt.floorMaterial.needsUpdate = true;
     // Odražené světlo podle průměrné barvy dekoru (tmavá podlaha = tmavší místnost).
     const c = new THREE.Color().setRGB(p.base[0] / 255, p.base[1] / 255, p.base[2] / 255, THREE.SRGBColorSpace);
     bakeUniforms.uFloorD.value.set(c.r - apt.floorAlbedo0[0], c.g - apt.floorAlbedo0[1], c.b - apt.floorAlbedo0[2]);
@@ -518,8 +590,12 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     dirty = true;
   }
 
-  function loadBake(mode: LightingMode) {
-    bakeLoads[mode] ??= fetchBake(mode)
+  /** Světlo pro režim: stažení (sdílené s předběžným načtením), dekódování a příprava map a atributů. */
+  const early: Partial<Record<LightingMode, ReturnType<typeof loadBake>>> = { day: dayLoad };
+  function loadLight(mode: LightingMode) {
+    const src = early[mode] ?? loadBake(mode);
+    delete early[mode]; // rozdekódovaná data (~6,5 MB) nemají zůstat v paměti, až se z nich připraví textury
+    bakeLoads[mode] ??= src
       .then((d) => (disposed ? null : (bakes[mode] = prepareBake(apt.layout, d))))
       .catch((err) => { console.warn("[vizualizace] předpočítané světlo nedostupné:", err); return null; });
     return bakeLoads[mode]!;
@@ -529,9 +605,11 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     const set = bakes[l];
     if (set) { applyBake(apt.layout, set, bakeUniforms); bakeActive = l; } else bakeActive = null;
     const eve = l === "evening";
-    sun.visible = !eve;
-    const bm = backdropMat as THREE.ShaderMaterial;
-    if (bm.isShaderMaterial) bm.uniforms.uScale.value.set(1, 1, 1).multiplyScalar(EXTERIOR.display).multiply(eve ? new THREE.Vector3(...EXTERIOR.evening) : new THREE.Vector3(1, 1, 1));
+    // Slunce se večer jen zhasne (intenzita 0, stínová mapa se nepřepočítává) — zůstává ve scéně, takže se
+    // programy shaderů nemění a přepnutí den / večer nevyžaduje nový překlad.
+    sunOn = !eve;
+    sun.intensity = eve ? 0 : SUN_E;
+    backdropMat.uniforms.uScale.value.set(1, 1, 1).multiplyScalar(EXTERIOR.display).multiply(eve ? new THREE.Vector3(...EXTERIOR.evening) : new THREE.Vector3(1, 1, 1));
     for (const g of apt.glowing) g.mat.emissiveIntensity = g.mode === "always" || eve ? g.strength : 0;
     for (const e of apt.emitters) for (const s of e.shades) s.emissiveIntensity = e.mode === "always" || eve ? 1.3 : 0;
     renderer.toneMappingExposure = EXPOSURE[l];
@@ -546,7 +624,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       wb = [g[0] / gl, g[1] / gl, g[2] / gl];
     }
     lightState();
-    // Večer bez slunce = jiné shadery; kompilují se souběžně, dokud se nic nekreslí.
+    // Bez předpočítaného světla (selhalo načtení) jsou programy jiné; jinak je překlad jen kontrola z mezipaměti.
     if (ready) { await prewarm(); if (!disposed) captureEnv(); }
   }
 
@@ -554,37 +632,66 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
     lighting = l;
     if (bakes[l] || !ready) { if (ready) void applyLighting(l); return; }
     opts.onBusy?.(true);
-    loadBake(l).then(async () => {
+    loadLight(l).then(async () => {
       if (disposed || lighting !== l) { if (!disposed) opts.onBusy?.(false); return; }
       await applyLighting(l);
       if (!disposed) opts.onBusy?.(false);
     });
   }
 
-  // Start: světlo pro den a výhled z oken; do té doby zůstává plátno skryté (indikátor načítání).
-  const extTex = new THREE.TextureLoader().loadAsync(`/visualizer/exterior-${Q.exterior === "auto" ? (window.innerWidth >= 900 ? "l" : "s") : Q.exterior}.jpg`).then((t) => {
-    t.colorSpace = THREE.SRGBColorSpace;
-    t.anisotropy = Math.min(4, aniso);
-    return t;
-  }).catch(() => null);
-  // První podlaha má být hotová dřív než shadery (materiál podlahy se s texturou překládá).
-  Promise.all([loadBake("day"), extTex, Promise.race([firstFloor, new Promise((r) => setTimeout(r, 6000))])]).then(async ([, tex]) => {
-    if (disposed) { tex?.dispose(); return; }
-    if (tex) setBackdropMat(backdropMaterial(tex));
+  /** Světlo pro druhý režim se v klidu stáhne předem (jen komprimované, ~2 MB), ať je přepnutí den / večer hned. */
+  let eveHinted = false;
+  function hintEvening() {
+    if (eveHinted || Q.level === "low") return;
+    eveHinted = true;
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (conn?.saveData) return;
+    setTimeout(() => { if (!disposed) void prefetchBake(lighting === "day" ? "evening" : "day").catch(() => undefined); }, 1500);
+  }
+
+  let extTex: THREE.Texture | null = null;
+  // Stav světel musí platit už při prvním překladu shaderů (od něj závisí jejich tvar).
+  lightState();
+  cur = camFor(apt.views[view], 0, 0, 1);
+  // Start: překlad shaderů (a prostředí „pokoj“) běží hned, souběžně s generováním textur a podlahy a se
+  // stahováním světla a výhledu. Plátno zůstává skryté (indikátor načítání), dokud není všechno hotové.
+  (async () => {
+    const envReady = buildRoomEnv(renderer, pmrem, ENV_SIZE, post.hdr).then((e) => {
+      if (disposed) { e.dispose(); return; }
+      roomEnv.dispose();
+      roomEnv = e;
+      if (scene.environment !== capturedEnv) scene.environment = e;
+    });
+    await Promise.all([prewarm(), envReady.catch(() => undefined)]);
+    if (disposed) return;
+    mark("compiled");
+    // Textury, první podlaha (nejvýš 6 s) a světlo; potom výhled z oken.
+    await Promise.all([texLoad, Promise.race([firstFloor, new Promise((r) => setTimeout(r, 6000))]), loadLight(lighting)]);
+    const img = await extLoad.catch(() => null);
+    if (disposed) return;
+    if (img) {
+      extTex = new THREE.Texture(img);
+      extTex.colorSpace = THREE.SRGBColorSpace;
+      extTex.anisotropy = Math.min(4, aniso);
+      extTex.needsUpdate = true;
+      backdropMat.uniforms.tExt.value = extTex;
+      skyTex.dispose();
+    }
+    mark("light");
+    bakePending = false;
     await applyLighting(lighting);
     if (disposed) return;
     await prewarm();
     if (disposed) return;
     ready = true;
     setView(view, true);
+    mark("ready");
     readyAt = performance.now();
     dirty = true;
     opts.onReady?.();
     if (!bakes[lighting]) setLighting(lighting);
-  }).catch((err) => { console.warn("[vizualizace] start selhal:", err); if (!disposed) opts.onLost?.(); });
+  })().catch((err) => { console.warn("[vizualizace] start selhal:", err); if (!disposed) opts.onLost?.(); });
 
-  lightState();
-  cur = camFor(apt.views[view], 0, 0, 1);
   raf = requestAnimationFrame(tick);
 
   return {
@@ -611,7 +718,7 @@ export function createViewer(canvas: HTMLCanvasElement, overlay: HTMLElement, op
       for (const e of tiles.values()) { e.map.dispose(); e.bump.dispose(); }
       tiles.clear();
       for (const s of Object.values(bakes)) if (s) disposeBake(s);
-      extTex.then((t) => t?.dispose());
+      extTex?.dispose(); skyTex.dispose(); floorPh.dispose(); bumpPh.dispose();
       apt.dispose();
       backdrop.traverse((o) => (o as THREE.Mesh).geometry?.dispose()); backdropMat.dispose();
       roomEnv.dispose(); capturedEnv?.dispose(); cubeRT.dispose(); pmrem.dispose();

@@ -28,12 +28,14 @@ export interface Quality {
   aniso: number;
   /** Velikost obrázku výhledu z oken (velký má 2887 px, malý 1650 px). */
   exterior: "l" | "s" | "auto";
+  /** Zjednodušené materiály: látky bez třpytu (sheen) a bez normálové mapy — méně shaderů, levnější pixely. */
+  lean: boolean;
 }
 
 export const QUALITY: Record<QualityLevel, Quality> = {
-  high: { level: "high", maxPixels: 2.6e6, maxDpr: 1.75, msaa: 4, accum: 20, shadowSize: 2048, reflDiv: 2, floorSide: 2560, boardPpm: 520, aniso: 16, exterior: "l" },
-  medium: { level: "medium", maxPixels: 1.4e6, maxDpr: 2, msaa: 2, accum: 12, shadowSize: 1536, reflDiv: 2, floorSide: 2048, boardPpm: 420, aniso: 8, exterior: "auto" },
-  low: { level: "low", maxPixels: 0.75e6, maxDpr: 1.5, msaa: 0, accum: 8, shadowSize: 1024, reflDiv: 3, floorSide: 1536, boardPpm: 320, aniso: 4, exterior: "s" },
+  high: { level: "high", maxPixels: 2.6e6, maxDpr: 1.75, msaa: 4, accum: 20, shadowSize: 2048, reflDiv: 2, floorSide: 2560, boardPpm: 520, aniso: 16, exterior: "l", lean: false },
+  medium: { level: "medium", maxPixels: 1.4e6, maxDpr: 2, msaa: 2, accum: 12, shadowSize: 1536, reflDiv: 2, floorSide: 2048, boardPpm: 420, aniso: 8, exterior: "auto", lean: false },
+  low: { level: "low", maxPixels: 0.75e6, maxDpr: 1.5, msaa: 0, accum: 8, shadowSize: 1024, reflDiv: 3, floorSide: 1536, boardPpm: 320, aniso: 4, exterior: "s", lean: true },
 };
 
 export const LEVEL_ORDER: QualityLevel[] = ["high", "medium", "low"];
@@ -43,6 +45,15 @@ export const LEVEL_LABEL: Record<QualityLevel, string> = { high: "Plná", medium
 export const lowerLevel = (l: QualityLevel): QualityLevel | null => LEVEL_ORDER[LEVEL_ORDER.indexOf(l) + 1] ?? null;
 
 export interface Detection { level: QualityLevel; reason: string }
+
+/** Dotykové zařízení (telefon, tablet) — „hrubý“ ukazatel. */
+export const isTouchDevice = () => typeof window !== "undefined" && (window.matchMedia?.("(pointer: coarse)").matches ?? false);
+
+/** Která velikost výhledu z oken se stáhne: velký obrázek jen tam, kde je k čemu (velká obrazovka s myší). */
+export function exteriorSize(q: Pick<Quality, "exterior">): "l" | "s" {
+  if (q.exterior !== "auto") return q.exterior;
+  return window.innerWidth >= 900 && !isTouchDevice() ? "l" : "s";
+}
 
 interface NavigatorHints { deviceMemory?: number; connection?: { saveData?: boolean } }
 
@@ -66,13 +77,20 @@ export function detectQuality(renderer: THREE.WebGLRenderer): Detection {
   const mem = nav.deviceMemory ?? 8;
   const cores = nav.hardwareConcurrency || 4;
   const phone = Math.min(window.screen.width, window.screen.height) < 700;
-  const touch = window.matchMedia?.("(pointer: coarse)").matches ?? false;
+  const touch = isTouchDevice();
   const cap = renderer.capabilities;
   const oldMobileGpu = /mali-(4|t[0-8])|adreno.{0,8}\b[2-5]\d\d\b|powervr|sgx|apple a[3-9]\b|intel.{0,12}(gma|hd graphics [2-4]\d{2,3}\b)/.test(gpu);
+  // Střední mobilní čipy (Mali-G3x/G5x, Adreno 6xx nižší řady): na plné rozlišení a stíny nestačí.
+  const midMobileGpu = /mali-g(3\d|5\d)\b|adreno.{0,8}\b6[0-4]\d\b|powervr.{0,8}(ge|gm)/.test(gpu);
 
   if (cap.maxTextureSize < 4096 || oldMobileGpu) return { level: "low", reason: "starší grafický čip" };
   if (mem <= 2 || cores <= 2) return { level: "low", reason: "málo paměti nebo jader" };
-  if (phone || touch) return { level: mem <= 3 ? "low" : "medium", reason: "mobilní zařízení" };
+  if (phone || touch) {
+    if (mem <= 3 || midMobileGpu) return { level: "low", reason: "mobilní zařízení" };
+    // Tablet bez jistoty o výkonu (málo paměti, neznámý čip) dostane úsporný režim; Apple a výkonné Android čipy vyvážený.
+    const strong = /apple/.test(gpu) || mem >= 6;
+    return { level: phone || strong ? "medium" : "low", reason: "mobilní zařízení" };
+  }
   if (mem <= 4) return { level: "medium", reason: "průměrný počítač" };
   return { level: "high", reason: "výkonný počítač" };
 }

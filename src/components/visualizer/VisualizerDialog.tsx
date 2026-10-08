@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "@/components/ui/icons";
+import { prefetchVisualizerAssets } from "./engine/assets";
 import type { RoomVisualizerProps } from "./RoomVisualizer";
 
 const Loading = () => (
@@ -14,7 +15,11 @@ const Loading = () => (
 // three.js (≈ 150 kB gzip) se stáhne až při otevření vizualizace.
 const RoomVisualizer = dynamic(() => import("./RoomVisualizer"), { ssr: false, loading: Loading });
 
-export function preloadVisualizer() { void import("./RoomVisualizer"); }
+/** Chystá se otevření 3D (najetí, dotyk): stáhne se kód a rovnou i soubory s předpočítaným světlem. */
+export function preloadVisualizer() {
+  void import("./RoomVisualizer");
+  prefetchVisualizerAssets();
+}
 
 /** Vizualizace vložená do stránky: samostatná /vizualizace, nebo `inline` uvnitř jiného obsahu (kalkulačka). */
 export function VisualizerEmbed({ inline = false, ...props }: Omit<RoomVisualizerProps, "variant"> & { inline?: boolean }) {

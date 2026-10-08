@@ -101,8 +101,9 @@ function interior(p: THREE.Vector3) {
     || inO(D3, { x0: D3.a, x1: D3.b, z0: 5.8, z1: 5.9 }) || inO(D4, { x0: 10.4, x1: 10.44, z0: D4.a, z1: D4.b });
 }
 
-export function buildApartment(): Apartment {
-  const M = createMaterials();
+/** `lean`: zjednodušené materiály pro slabá zařízení (viz kit.ts); výpočet světla ve skriptu staví vždy plné. */
+export function buildApartment(opts: { lean?: boolean } = {}): Apartment {
+  const M = createMaterials(opts.lean);
   const root = new THREE.Group();
   const blobTex = blobTexture();
   const pl = plaster();

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { preload } from "react-dom";
 import { Site } from "@/components/layout/Site";
 import { VisualizerEmbed } from "@/components/visualizer/VisualizerDialog";
+import { vizAsset } from "@/components/visualizer/engine/assets";
 import { layoutFromSlug } from "@/components/visualizer/decor";
 import { viewFromSlug } from "@/components/visualizer/engine/views";
 import { products } from "@/lib/db/repos";
@@ -19,6 +21,8 @@ const TONE_ORDER: DecorTone[] = ["light-oak", "grey", "dark-wood", "stone"];
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ podlaha?: string; mistnost?: string; klad?: string }> }) {
   const sp = await searchParams;
+  // Světlo pro denní režim se začne stahovat spolu se stránkou, souběžně s kódem 3D; engine ho jen převezme.
+  preload(vizAsset("bake-day.bin"), { as: "fetch", crossOrigin: "anonymous" });
   const list = products.visible().filter((p) => p.stockM2 > 0)
     .sort((a, b) => TONE_ORDER.indexOf(a.decorTone) - TONE_ORDER.indexOf(b.decorTone) || a.pricePerM2 - b.pricePerM2)
     .map(toPublicProduct);

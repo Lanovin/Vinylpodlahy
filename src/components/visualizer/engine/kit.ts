@@ -29,16 +29,22 @@ export function std(color: THREE.ColorRepresentation, roughness = 0.8, metalness
 const lin = (hex: number) => { const c = new THREE.Color(hex); return [c.r, c.g, c.b] as [number, number, number]; };
 const scaleLin = (c: [number, number, number], k: number): [number, number, number] => [c[0] * k, c[1] * k, c[2] * k];
 
-/** Látka: jemná vazba v normálové mapě, sametový lesk na hranách (sheen). */
-function fabricMat(hex: number, kind: FabricKind, rough = 0.92, sheen = 0.55) {
+/**
+ * Látka: jemná vazba v normálové mapě, sametový lesk na hranách (sheen). Zjednodušená varianta (`lean`)
+ * je obyčejný standardní materiál jen s barevnou mapou — menší shader a levnější pixely na slabém zařízení.
+ */
+function fabricMat(hex: number, kind: FabricKind, lean: boolean, rough = 0.92, sheen = 0.55) {
   const { map, normal } = fabric(kind);
+  if (map) map.repeat.setScalar(4);
+  if (normal) normal.repeat.setScalar(4);
+  const albedo = scaleLin(lin(hex), FABRIC_MEAN);
+  if (lean) return meta(std(hex, rough, 0, { map }), { albedo });
   const c = new THREE.Color(hex);
   const m = new THREE.MeshPhysicalMaterial({
     color: hex, roughness: rough, map, normalMap: normal, normalScale: new THREE.Vector2(0.45, 0.45),
     sheen, sheenRoughness: 0.7, sheenColor: c.clone().lerp(new THREE.Color(0xffffff), 0.35),
   });
-  if (map) { map.repeat.setScalar(4); normal!.repeat.setScalar(4); }
-  return meta(m, { albedo: scaleLin(lin(hex), FABRIC_MEAN) });
+  return meta(m, { albedo });
 }
 
 /** Dřevo (dýha, masiv): barva z textury, póry matnější. */
@@ -53,7 +59,7 @@ function woodMat(tone: WoodTone, rough = 0.62) {
   return meta(m, { albedo: [c.r, c.g, c.b] });
 }
 
-export function createMaterials() {
+export function createMaterials(lean = false) {
   const pl = plaster();
   if (pl.map) { pl.map.repeat.setScalar(1.25); pl.normal!.repeat.setScalar(1.25); }
   const qz = quartz();
@@ -73,17 +79,17 @@ export function createMaterials() {
     oak: woodMat("oak"),
     oakLight: woodMat("oakLight"),
     walnut: woodMat("walnut", 0.5),
-    linen: fabricMat(0xebe6dc, "linen", 0.95, 0.25),
-    sheet: fabricMat(0xf3f1ec, "weave", 0.9, 0.3),
-    sofa: fabricMat(0xbcb2a4, "weave", 0.92, 0.35),
-    boucle: fabricMat(0xe6dfd2, "boucle", 0.98, 0.35),
-    sage: fabricMat(0x8a9a80, "linen", 0.95, 0.25),
-    ochre: fabricMat(0xc2934f, "velvet", 0.75, 0.9),
-    rust: fabricMat(0xa5633f, "velvet", 0.75, 0.9),
-    charcoalFabric: fabricMat(0x55524e, "boucle"),
-    cream: fabricMat(0xeee6d8, "weave"),
-    knit: fabricMat(0xb9a58a, "knit", 0.98, 0.35),
-    headboard: fabricMat(0xb5a998, "weave"),
+    linen: fabricMat(0xebe6dc, "linen", lean, 0.95, 0.25),
+    sheet: fabricMat(0xf3f1ec, "weave", lean, 0.9, 0.3),
+    sofa: fabricMat(0xbcb2a4, "weave", lean, 0.92, 0.35),
+    boucle: fabricMat(0xe6dfd2, "boucle", lean, 0.98, 0.35),
+    sage: fabricMat(0x8a9a80, "linen", lean, 0.95, 0.25),
+    ochre: fabricMat(0xc2934f, "velvet", lean, 0.75, 0.9),
+    rust: fabricMat(0xa5633f, "velvet", lean, 0.75, 0.9),
+    charcoalFabric: fabricMat(0x55524e, "boucle", lean),
+    cream: fabricMat(0xeee6d8, "weave", lean),
+    knit: fabricMat(0xb9a58a, "knit", lean, 0.98, 0.35),
+    headboard: fabricMat(0xb5a998, "weave", lean),
     kitchenFront: std(0xe0dbd2, 0.42),
     kitchenDark: std(0x3b423f, 0.5),
     counter: meta(std(qz ? 0xffffff : 0xe9e6e0, 0.2, 0, { map: qz }), { albedo: lin(0xe6e3dc) }),

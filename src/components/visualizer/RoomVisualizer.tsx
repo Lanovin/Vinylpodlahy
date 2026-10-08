@@ -8,6 +8,7 @@ import type { PublicProduct } from "@/lib/public";
 import { DECOR_TONE_LABEL, LAYOUT_LABEL, type DecorTone, type LayoutMode } from "@/lib/types";
 import { fmtCzk } from "@/lib/format";
 import { ArrowRight, ChevronDown, Download, Minus, Moon, Plus, Refresh, Share, Sun, X } from "@/components/ui/icons";
+import { prefetchVisualizerAssets } from "./engine/assets";
 import { FALLBACK_PALETTE, paletteFromImage, toHex, tunePalette } from "./engine/palette";
 import { LEVEL_LABEL, lowerLevel, type Detection, type QualityChoice, type QualityLevel } from "./engine/quality";
 import type { Lighting, Viewer } from "./engine/viewer";
@@ -109,6 +110,7 @@ export default function RoomVisualizer({ products, initialProductId, initialView
   useEffect(() => {
     let disposed = false;
     let v: Viewer | null = null;
+    prefetchVisualizerAssets();
     import("./engine/viewer")
       .then(({ createViewer }) => {
         if (disposed || !canvasRef.current || !overlayRef.current) return;
