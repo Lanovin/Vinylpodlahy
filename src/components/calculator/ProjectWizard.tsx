@@ -187,7 +187,11 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
   const selected = effectiveId ? products.find((p) => p.id === effectiveId) ?? null : null;
   const selectedResult = selected && hasArea ? projectFor.get(selected.id) ?? calculateProject(selected, roomsForCalc, options, accessories, settings) : null;
 
-  const go = (s: number) => { setStep(s); setMaxStep((m) => Math.max(m, s)); setShareUrl(null); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  /** Výběr z jedné možnosti (rozpočet, odstín) rovnou posune dál; krátká prodleva, aby bylo vidět, co se vybralo. */
+  const autoNext = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const go = (s: number) => { clearTimeout(autoNext.current); setStep(s); setMaxStep((m) => Math.max(m, s)); setShareUrl(null); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const goSoon = (s: number) => { clearTimeout(autoNext.current); autoNext.current = setTimeout(() => go(s), 320); };
+  useEffect(() => () => clearTimeout(autoNext.current), []);
   const next = () => go(locked && step === 0 ? RESULT : Math.min(RESULT, step + 1));
   const back = () => go(locked && step === RESULT ? 0 : Math.max(0, step - 1));
   const patchAnswers = (p: Partial<WizardAnswers>) => { setShareUrl(null); setAnswers((a) => ({ ...a, ...p })); };
@@ -222,7 +226,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
     const url = `${window.location.origin}/kalkulace/${id}`;
     setShareUrl(url);
     // Na telefonu rovnou nativní sdílení (WhatsApp, e-mail…); odkaz zůstane vidět i pro zkopírování.
-    if (navigator.share) { try { await navigator.share({ title: "Kalkulace podlahy", url }); } catch { /* zrušeno */ } }
+    if (navigator.share) { try { await navigator.share({ title: "Podlaha na klíč", url }); } catch { /* zrušeno */ } }
   }
   async function onAddToCart() {
     if (!selectedResult) return;
@@ -250,7 +254,7 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
 
   return (
     <div className="pb-28 lg:pb-10">
-      {step === 0 ? intro : <h1 className="sr-only">Kalkulačka projektu</h1>}
+      {step === 0 ? intro : <h1 className="sr-only">Podlaha na klíč</h1>}
       {/* Průběh: na telefonu tenký pruh otázek (s větší dotykovou plochou), od tabletu pilulky s názvy */}
       {!locked && step < RESULT && (
         <ol className="flex gap-1.5 sm:hidden -my-2" aria-label="Průběh">
@@ -282,13 +286,13 @@ function WizardInner({ products, accessories, settings, initial, lockedProductId
           <StepArea rooms={rooms} update={updateRoom} setKind={setKind} add={addRoom} remove={(id) => { setShareUrl(null); setRooms((rs) => rs.filter((r) => r.id !== id)); }} totalArea={totalArea} totalWithWaste={totalWithWaste} locked={locked} freeFromM2={settings.freeShippingFromM2} onSubmit={() => canContinue && next()} />
         )}
         {step === 1 && (
-          <StepBudget value={answers.budget} onPick={(b) => patchAnswers({ budget: b })} totalArea={totalArea} estimates={budgetEst} priceGuide={priceGuide} open={guideOpen} setOpen={setGuideOpen} />
+          <StepBudget value={answers.budget} onPick={(b) => { patchAnswers({ budget: b }); if (b) goSoon(2); }} totalArea={totalArea} estimates={budgetEst} priceGuide={priceGuide} open={guideOpen} setOpen={setGuideOpen} />
         )}
         {step === 2 && (
           <StepExtras answers={answers} patch={patchAnswers} />
         )}
         {step === 3 && (
-          <StepStyle value={answers.style} onPick={(s) => patchAnswers({ style: s })} onSkip={() => { patchAnswers({ style: null }); go(RESULT); }}
+          <StepStyle value={answers.style} onPick={(s) => { patchAnswers({ style: s }); if (s) goSoon(RESULT); }} onSkip={() => { patchAnswers({ style: null }); go(RESULT); }}
             onChoose={(p) => { patchAnswers({ style: p.decorTone }); setPinnedId(p.id); setSelectedId(p.id); go(RESULT); }} onLayout={setLayoutAll}
             initialView={kinds.length ? VIEW_FOR_ROOM[kinds[0]] : "living"} layout={rooms[0]?.layout ?? "straight"} products={suitable} />
         )}
@@ -369,7 +373,7 @@ function StepArea({ rooms, update, setKind, add, remove, totalArea, totalWithWas
             <div className="relative h-14 w-16 rounded-sm overflow-hidden bg-bg shrink-0">{locked.images.swatch && <Image src={locked.images.swatch} alt="" fill sizes="64px" className="object-cover" />}</div>
             <div className="flex-1 min-w-0 leading-tight"><p className="truncate">{locked.brand} {locked.decor}</p><p className="text-sm text-muted mt-0.5">{fmtCzk(locked.pricePerM2)}/m² · {fmtCzk(locked.pricePerPack)}/bal.</p></div>
           </div>
-          <Link href="/kalkulacka" className="inline-flex items-center gap-1 h-10 text-sm text-muted hover:text-ink">Nevím — poradit s výběrem <ArrowRight className="h-3.5 w-3.5" /></Link>
+          <Link href="/kalkulacka" className="inline-flex items-center gap-1 h-10 text-sm text-muted hover:text-ink">Nevím, poraďte mi s výběrem <ArrowRight className="h-3.5 w-3.5" /></Link>
         </div>
       )}
       <div className="mt-5 sm:mt-6 grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-6">
@@ -386,7 +390,7 @@ function StepArea({ rooms, update, setKind, add, remove, totalArea, totalWithWas
             <ul className="text-sm text-ink-soft space-y-2">
               <li>Na odřezky přidáme 5 % (diagonálně 10 %, rybí kost 15 %), balení zaokrouhlíme nahoru a 1 přidáme do rezervy.</li>
               <li>Podložku, lišty, lepidlo i tmel spočítáme z obvodu a dveří.</li>
-              <li>Doprava podle hmotnosti — zásilka s podlahou nad {fmtInt(freeFromM2)} m² zdarma.</li>
+              <li>Doprava podle hmotnosti. Zásilka s podlahou nad {fmtInt(freeFromM2)} m² zdarma.</li>
             </ul>
           </div>
         </aside>
@@ -441,7 +445,7 @@ function RoomCard({ r, first, canRemove, askKind, update, setKind, remove }: { r
       {more && (
         <div className="grid grid-cols-2 gap-3 mt-1 fade-up">
           <Field label="Počet dveří"><NumberInput whole emptyAs={0} enterKeyHint="next" value={r.doors} onValue={(v) => update(r.id, { doors: Math.min(50, v ?? 0) })} /></Field>
-          <Field label="Obvod (m) — na lišty"><NumberInput enterKeyHint="go" placeholder={perimeterAuto ? `${perimeterAuto} (dopočteno)` : "dopočítáme"} value={r.perimeterM} onValue={(v) => update(r.id, { perimeterM: v })} /></Field>
+          <Field label="Obvod (m) na lišty"><NumberInput enterKeyHint="go" placeholder={perimeterAuto ? `${perimeterAuto} (dopočteno)` : "dopočítáme"} value={r.perimeterM} onValue={(v) => update(r.id, { perimeterM: v })} /></Field>
         </div>
       )}
       {area > 0 && <p className="text-sm text-muted mt-2">{fmtNum2(area)} m² + {waste} % na odřezky = {fmtNum2(area * (1 + LAYOUT_WASTE[r.layout]))} m²</p>}
@@ -450,13 +454,13 @@ function RoomCard({ r, first, canRemove, askKind, update, setKind, remove }: { r
 }
 
 interface BudgetEstimate { lo: number; hi: number; floorLo: number; floorHi: number; n: number }
-const range = (lo: number, hi: number) => (lo === hi ? fmtCzk(lo) : `${fmtInt(lo)}–${fmtCzk(hi)}`);
+const range = (lo: number, hi: number) => (lo === hi ? fmtCzk(lo) : `${fmtInt(lo)} až ${fmtCzk(hi)}`);
 
 /* Krok 2 — rozpočet */
 function StepBudget({ value, onPick, totalArea, estimates, priceGuide, open, setOpen }: { value: WizardAnswers["budget"]; onPick: (b: WizardAnswers["budget"]) => void; totalArea: number; estimates: Map<string, BudgetEstimate>; priceGuide: Props["priceGuide"]; open: boolean; setOpen: (v: boolean) => void }) {
   return (
     <div>
-      <StepHead n={2} title="Jaký máte rozpočet za m²?" text={totalArea > 0 ? `U každého pásma cena celého projektu pro ${fmtNum2(totalArea)} m² — podlaha, podložka, lišty i doprava. Rozpočet jen řadí nabídku.` : undefined} />
+      <StepHead n={2} title="Jaký máte rozpočet za m²?" text={totalArea > 0 ? `U každého pásma cena celého projektu pro ${fmtNum2(totalArea)} m²: podlaha, podložka, lišty i doprava. Rozpočet jen řadí nabídku.` : undefined} />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mt-5 sm:mt-8">
         {BUDGET_OPTIONS.map((b) => {
           const e = estimates.get(b.value);
@@ -489,7 +493,7 @@ function StepExtras({ answers, patch }: { answers: WizardAnswers; patch: (p: Par
   ];
   return (
     <div>
-      <StepHead n={3} title="Něco speciálního?" text="Nepovinné — zaškrtněte, co platí." />
+      <StepHead n={3} title="Něco speciálního?" text="Nepovinné, zaškrtněte, co platí." />
       <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-3 mt-5 sm:mt-8">
         {items.map((it) => <OptionCard key={it.key} check selected={answers[it.key]} onClick={() => patch({ [it.key]: !answers[it.key] })} label={it.label} hint={it.hint} />)}
       </div>
@@ -514,7 +518,7 @@ function StepStyle({ value, onPick, onSkip, onChoose, onLayout, products, initia
         })}
       </div>
       <button type="button" className="mt-2.5 sm:mt-3 w-full card min-h-12 px-4 py-3 border-2 border-dashed border-line hover:border-ink transition-colors flex items-center justify-between gap-2 text-left" onClick={onSkip}>
-        Barva nerozhoduje — ukažte vše vhodné <ArrowRight className="h-4 w-4 shrink-0" />
+        Barva nerozhoduje, ukažte vše vhodné <ArrowRight className="h-4 w-4 shrink-0" />
       </button>
 
       {products.length > 0 && (
@@ -581,7 +585,7 @@ function StepResult(p: ResultProps) {
   const vizButton = shown > 0 && (
     <button type="button" onClick={() => setVizFor(selected?.id ?? rec.results[0].product.id)} onMouseEnter={preloadVisualizer} onPointerDown={preloadVisualizer} className="w-full sm:w-auto flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3 text-left hover:border-ink transition-colors">
       <Cube className="h-6 w-6 shrink-0 text-accent" />
-      <span><span className="block">Byt ve 3D</span><span className="block text-xs text-muted">Porovnejte dekory — u každého cena celého projektu</span></span>
+      <span><span className="block">Byt ve 3D</span><span className="block text-xs text-muted">Porovnejte dekory, u každého cena celého projektu</span></span>
       <ArrowRight className="h-4 w-4 ml-auto shrink-0" />
     </button>
   );
@@ -611,7 +615,7 @@ function StepResult(p: ResultProps) {
 
         {shown === 0 ? (
           <div className="panel mt-8">
-            <p className="text-ink-soft">Zkuste uvolnit některý požadavek — nejčastěji pomůže vypnout „Budu pokládat sám“ nebo podlahové topení.</p>
+            <p className="text-ink-soft">Zkuste uvolnit některý požadavek, nejčastěji pomůže vypnout „Budu pokládat sám“ nebo podlahové topení.</p>
             <div className="mt-4 flex flex-wrap gap-2"><button type="button" className="btn btn-outline" onClick={() => goTo(2)}>Upravit požadavky</button><button type="button" className="btn btn-outline" onClick={() => goTo(0)}>Upravit místnosti</button><Link href="/podlahy" className="btn btn-ghost">Celý katalog</Link></div>
           </div>
         ) : (
@@ -636,10 +640,10 @@ function StepResult(p: ResultProps) {
                         <p className="text-lg leading-tight mt-0.5"><Link href={`/podlaha/${r.product.slug}`} className="hover:underline underline-offset-4" onClick={(e) => e.stopPropagation()}>{r.product.decor}</Link></p>
                         <p className="text-xs sm:text-sm text-muted mt-0.5 truncate sm:whitespace-normal">{FLOOR_TYPE_LABEL[r.product.type]} · {String(r.product.thicknessMm).replace(".", ",")} mm · nášlap {String(r.product.wearLayerMm).replace(".", ",")} mm · tř. {r.product.usageClass}{r.product.integratedUnderlay ? " · s podložkou" : ""}</p>
                         {r.reason && <p className="mt-1.5 text-xs sm:text-sm text-ink-soft leading-snug border-l-2 border-accent pl-2.5 line-clamp-2 sm:line-clamp-none">{r.reason}</p>}
-                        <p className="mt-2 text-xl leading-none tabular-nums">{pr ? fmtCzk(projectTotal(pr)) : "—"} <span className="text-xs text-muted">celý projekt</span></p>
+                        <p className="mt-2 text-xl leading-none tabular-nums">{pr ? fmtCzk(projectTotal(pr)) : "…"} <span className="text-xs text-muted">celý projekt</span></p>
                         <p className="text-xs text-muted mt-1">{pr ? `z toho podlaha ${fmtCzk(floor)} (${pr.packs} bal.) · ` : ""}{fmtCzk(r.product.pricePerM2)}/m²{overBudget && <span className="text-warn"> · nad rozpočet</span>}</p>
                         <p className="text-xs text-muted mt-0.5">{pr ? `${shippingNote(pr)} · ` : ""}dodání {r.product.deliveryDays} dní</p>
-                        {!enough && <p className="text-xs text-warn mt-1">Skladem jen {fmtInt(r.product.stockM2)} m² — zbytek doobjednáme</p>}
+                        {!enough && <p className="text-xs text-warn mt-1">Skladem jen {fmtInt(r.product.stockM2)} m², zbytek doobjednáme</p>}
                       </div>
                     </div>
                     <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex gap-2 justify-end">
@@ -663,7 +667,7 @@ function StepResult(p: ResultProps) {
         <div id="rozpis" className="panel lg:sticky lg:top-24 fade-up scroll-mt-20">
           <p className="eyebrow">Rozpis projektu</p>
           {!selected || !selectedResult ? (
-            <p className="text-muted mt-3">Vyberte podlahu z nabídky — rozpis se objeví tady.</p>
+            <p className="text-muted mt-3">Vyberte podlahu z nabídky a rozpis se objeví tady.</p>
           ) : (
             <>
               <h3 className="h3 mt-1">{selected.brand} {selected.decor}</h3>

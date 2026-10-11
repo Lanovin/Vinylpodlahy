@@ -15,16 +15,16 @@ export const EMPTY_ANSWERS: WizardAnswers = {
   diyClick: false,
 };
 
-/** Index kroku „Nabídka“ v průvodci kalkulačky (Metry, Rozpočet, Požadavky, Barva, Nabídka). */
+/** Index kroku „Nabídka“ v průvodci Podlaha na klíč (Metry, Rozpočet, Požadavky, Barva, Nabídka). */
 export const WIZARD_RESULT_STEP = 4;
 
 export const ROOM_OPTIONS: { value: RoomKind; label: string; hint: string }[] = [
   { value: "living", label: "Obývací pokoj", hint: "Střední zátěž, záleží na vzhledu" },
   { value: "bedroom", label: "Ložnice", hint: "Nízká zátěž, teplý a tichý došlap" },
-  { value: "kitchen", label: "Kuchyň", hint: "Voda a pády nádobí — jen voděodolné, žádné HDF" },
-  { value: "bathroom", label: "Koupelna", hint: "Stojící voda — SPC, kompozit nebo lepený vinyl, žádné HDF" },
-  { value: "hallway", label: "Chodba / předsíň", hint: "Písek a boty — třída 32 a výš" },
-  { value: "commercial", label: "Komerční prostor", hint: "Kancelář, obchod — třída 33 a výš" },
+  { value: "kitchen", label: "Kuchyň", hint: "Voda a pády nádobí. Jen voděodolné, žádné HDF" },
+  { value: "bathroom", label: "Koupelna", hint: "Stojící voda. SPC, kompozit nebo lepený vinyl, žádné HDF" },
+  { value: "hallway", label: "Chodba / předsíň", hint: "Písek a boty, třída 32 a výš" },
+  { value: "commercial", label: "Komerční prostor", hint: "Kancelář a obchod, třída 33 a výš" },
 ];
 
 /** Krátké názvy pro čipy typu místnosti (kalkulačka i úvodní formulář). */
@@ -36,8 +36,8 @@ export function isRoomKind(v: unknown): v is RoomKind {
 
 export const BUDGET_OPTIONS: { value: BudgetBand; label: string; hint: string; min: number; max: number | null }[] = [
   { value: "lt400", label: "do 400 Kč/m²", hint: "Ekonomická volba, lepený vinyl a základní SPC", min: 0, max: 400 },
-  { value: "400-700", label: "400–700 Kč/m²", hint: "Nejčastější výběr — SPC click s podložkou", min: 400, max: 700 },
-  { value: "700-1000", label: "700–1 000 Kč/m²", hint: "Silnější nášlap, vyšší třída zátěže", min: 700, max: 1000 },
+  { value: "400-700", label: "400 až 700 Kč/m²", hint: "SPC click s podložkou", min: 400, max: 700 },
+  { value: "700-1000", label: "700 až 1 000 Kč/m²", hint: "Silnější nášlap, vyšší třída zátěže", min: 700, max: 1000 },
   { value: "gt1000", label: "nad 1 000 Kč/m²", hint: "Prémiové kolekce, nášlap 0,55 mm, rybí kost", min: 1000, max: null },
 ];
 
@@ -108,8 +108,8 @@ export function recommend(all: Product[], a: WizardAnswers, opts: { needM2?: num
   if (a.budget && pool.length > 0 && inBudget < Math.min(9, pool.length)) {
     const label = BUDGET_OPTIONS.find((b) => b.value === a.budget)?.label ?? "";
     relaxed.push(inBudget === 0
-      ? `V rozpočtu ${label} teď nemáme žádnou vhodnou podlahu — ukazujeme cenově nejbližší.`
-      : `V rozpočtu ${label} ${inBudget === 1 ? "je" : inBudget < 5 ? "jsou" : "je"} ${inBudget} z ${pool.length} vhodných podlah — doplnili jsme cenově nejbližší.`);
+      ? `V rozpočtu ${label} teď nemáme žádnou vhodnou podlahu, ukazujeme cenově nejbližší.`
+      : `V rozpočtu ${label} ${inBudget === 1 ? "je" : inBudget < 5 ? "jsou" : "je"} ${inBudget} z ${pool.length} vhodných podlah, doplnili jsme cenově nejbližší.`);
   }
 
   const scored: GuideResult[] = pool.map((p) => {

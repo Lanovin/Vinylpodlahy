@@ -129,7 +129,7 @@ export function FilterPanel({ filters, facets, locked, total }: Props) {
         <Group title="Nášlapná vrstva" term="wear">
           <div className="grid grid-cols-3 gap-2 pt-1">{[0.3, 0.4, 0.55].map((w) => <Chip key={w} label={mm(w)} count={facets.wear[w] ?? 0} checked={filters.wear.includes(w as 0.3)} onChange={() => toggle("wear", w as 0.3)} />)}</div>
         </Group>
-        <Group title="Třída zátěže" term="usage">{([23, 31, 32, 33, 42] as const).map((u) => <Opt key={u} label={`${u} — ${USAGE_SHORT[u]}`} count={facets.usage[u] ?? 0} checked={filters.usage.includes(u)} onChange={() => toggle("usage", u)} />)}</Group>
+        <Group title="Třída zátěže" term="usage">{([23, 31, 32, 33, 42] as const).map((u) => <Opt key={u} label={`${u}: ${USAGE_SHORT[u]}`} count={facets.usage[u] ?? 0} checked={filters.usage.includes(u)} onChange={() => toggle("usage", u)} />)}</Group>
         <Group title="Integrovaná podložka" term="ixpe"><Tri value={filters.integratedUnderlay} onChange={(v) => setTri("integratedUnderlay", v)} /></Group>
         <Group title="Dostupnost">
           <Opt label="Aspoň 30 m² skladem" checked={filters.minStock === 30} onChange={() => push({ ...filters, minStock: filters.minStock === 30 ? null : 30 })} />

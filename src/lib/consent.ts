@@ -29,7 +29,7 @@ export const CONSENT_CATEGORIES: ConsentCategory[] = [
   {
     key: "analytics",
     title: "Analytické",
-    text: "Statistiky návštěvnosti v Google Analytics (přes Google Tag Manager): které stránky a nástroje se používají. Google přitom zpracovává identifikátor zařízení a zkrácenou IP adresu.",
+    text: "Statistiky návštěvnosti v Google Analytics (přes Google Tag Manager): které stránky a nástroje se používají. Google přitom zpracovává identifikátor zařízení a údaje o prohlížeči; z IP adresy odvodí jen přibližnou polohu a samotnou adresu v Google Analytics 4 neukládá.",
     legal: "Jen s vaším souhlasem.",
     items: [
       { name: "_ga, _ga_*", provider: "Google (Google Analytics 4)", purpose: "Rozlišení návštěvníků a relací pro statistiky.", expiry: "až 2 roky", type: "cookie" },

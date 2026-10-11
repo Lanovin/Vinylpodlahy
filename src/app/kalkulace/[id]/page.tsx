@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           {p?.images.hero && <div className="hidden sm:block relative aspect-[16/9] rounded-md overflow-hidden mt-6"><Image src={p.images.hero} alt="" fill sizes="60vw" className="object-cover" /></div>}
           <h2 className="h3 lg:mt-8 mb-3">Místnosti</h2>
           <table className="spec"><thead><tr><th>Místnost</th><th>Plocha</th><th>Kladení</th><th>Dveře</th></tr></thead><tbody>
-            {calc.result.rooms.map((r) => { const src = calc.rooms.find((x) => x.id === r.id); return <tr key={r.id}><td>{r.name}{src?.floorHeating && <span className="tag tag-sage ml-2">topení</span>}</td><td>{fmtNum2(r.areaM2)} m² <span className="text-muted text-xs">(+{r.wastePct} % → {fmtNum2(r.areaWithWasteM2)})</span></td><td>{src ? LAYOUT_LABEL[src.layout] : "—"}</td><td>{r.doors}</td></tr>; })}
+            {calc.result.rooms.map((r) => { const src = calc.rooms.find((x) => x.id === r.id); return <tr key={r.id}><td>{r.name}{src?.floorHeating && <span className="tag tag-sage ml-2">topení</span>}</td><td>{fmtNum2(r.areaM2)} m² <span className="text-muted text-xs">(+{r.wastePct} % → {fmtNum2(r.areaWithWasteM2)})</span></td><td>{src ? LAYOUT_LABEL[src.layout] : "-"}</td><td>{r.doors}</td></tr>; })}
           </tbody></table>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href={`/kalkulacka?calc=${calc.id}`} className="btn btn-outline">Upravit kalkulaci</Link>
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <p className="eyebrow">Rozpis</p>
             <div className="mt-4"><CalcResultView result={current ?? calc.result} /></div>
             {priceChanged && <p className="notice notice-info text-sm mt-4">Od uložení se změnily ceny: původně {fmtCzk(before)}, nyní {fmtCzk(now ?? 0)}{calc.result.shipping ? "" : " (bez dopravy)"}. Do košíku vkládáme aktuální ceny.</p>}
-            {!current && <p className="notice notice-warn text-sm mt-4">Tato podlaha je momentálně pozastavena nebo nedostupná. Otevřete kalkulaci a vyberte jiný dekor — rozměry zůstanou.</p>}
+            {!current && <p className="notice notice-warn text-sm mt-4">Tato podlaha je momentálně pozastavena nebo nedostupná. Otevřete kalkulaci a vyberte jiný dekor, rozměry zůstanou.</p>}
             <div className="mt-6"><SavedCalcActions calcId={calc.id} result={current ?? calc.result} disabled={!current} /></div>
           </div>
         </div>

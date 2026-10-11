@@ -9,7 +9,7 @@
     <PRICE>245</PRICE>
     <STOCK>640</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
-    <WEIGHT>26</WEIGHT>
+    <WEIGHT>17</WEIGHT>
     <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubprirodni.webp</IMGURL>
     
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
@@ -34,7 +34,7 @@
     <PRICE>245</PRICE>
     <STOCK>388</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
-    <WEIGHT>26</WEIGHT>
+    <WEIGHT>17</WEIGHT>
     <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubbeleny.webp</IMGURL>
     
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
@@ -59,7 +59,7 @@
     <PRICE>245</PRICE>
     <STOCK>220</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
-    <WEIGHT>26</WEIGHT>
+    <WEIGHT>17</WEIGHT>
     <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubpopelavy.webp</IMGURL>
     <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-kayo-akahori-1164389329-35571117.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
@@ -84,7 +84,7 @@
     <PRICE>245</PRICE>
     <STOCK>176</STOCK>
     <DELIVERY_DATE>3</DELIVERY_DATE>
-    <WEIGHT>26</WEIGHT>
+    <WEIGHT>17</WEIGHT>
     <IMGURL>file://data/feeds/demo-images/qua-basicspc-dubkavovy.webp</IMGURL>
     <IMGURL_ALTERNATIVE>file://fotky_podlahy/pexels-irfansimsar-36252681.jpg</IMGURL_ALTERNATIVE>
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>
@@ -109,7 +109,7 @@
     <PRICE>245</PRICE>
     <STOCK>44</STOCK>
     <DELIVERY_DATE>10</DELIVERY_DATE>
-    <WEIGHT>26</WEIGHT>
+    <WEIGHT>17</WEIGHT>
     <IMGURL>file://data/feeds/demo-images/qua-basicspc-betonsvetly.webp</IMGURL>
     
     <PARAM><PARAM_NAME>Kolekce</PARAM_NAME><VAL>Basic SPC 4</VAL></PARAM>

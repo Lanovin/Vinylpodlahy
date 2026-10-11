@@ -12,7 +12,7 @@ const num = (v: string) => { const n = parseFloat(v.trim().replace(",", ".")); r
 /** Do pole pustíme jen číslice a jeden oddělovač (čárka/tečka). */
 const clean = (v: string) => v.replace(/[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1");
 
-/** Start kalkulačky přímo v hero: typ místnosti a metry hned, otázky až na další stránce. */
+/** Start podlahy na klíč přímo na úvodní stránce: typ místnosti a metry hned, otázky až na další stránce. */
 export function HeroStart({ cta, className }: { cta: string; className?: string }) {
   const router = useRouter();
   const [mode, setMode] = useState<"dims" | "area">("dims");
@@ -28,13 +28,13 @@ export function HeroStart({ cta, className }: { cta: string; className?: string 
 
   return (
     <form
-      className={clsx("text-ink text-left mx-auto max-w-2xl min-w-0 bg-white/95 backdrop-blur rounded-lg shadow-card p-4 sm:p-5", className)}
+      className={clsx("text-ink text-left mx-auto max-w-2xl min-w-0 bg-white border border-line rounded-lg shadow-card p-4 sm:p-6", className)}
       onSubmit={(e) => {
         e.preventDefault();
         // Tlačítko není nikdy šedé — při nevyplněném poli jen skočíme do něj.
         if (!area) { (mode === "area" ? aRef : !num(l) ? lRef : wRef).current?.focus(); return; }
         const q = new URLSearchParams(mode === "dims" ? { l: String(num(l)), w: String(num(w)) } : { area: String(num(a)) });
-        // Bez zvoleného typu místnosti se kalkulačka na něj zeptá (nedomýšlíme „obývák“).
+        // Bez zvoleného typu místnosti se průvodce na něj zeptá (nedomýšlíme „obývák“).
         if (room) q.set("room", room);
         router.push(`/kalkulacka?${q}`);
       }}

@@ -30,7 +30,7 @@ export async function saveContentAction(formData: FormData) {
   const g = (k: string) => String(formData.get(k) ?? "");
   const next: SiteContent = {
     ...c,
-    hero: { ...c.hero, title: g("hero.title"), subtitle: g("hero.subtitle"), ctaPrimary: g("hero.ctaPrimary"), ctaTertiary: g("hero.ctaTertiary"), image: g("hero.image") || c.hero.image },
+    hero: { ...c.hero, title: g("hero.title"), subtitle: g("hero.subtitle"), ctaPrimary: g("hero.ctaPrimary"), image: g("hero.image") || c.hero.image },
     homeIntro: { title: g("homeIntro.title"), text: g("homeIntro.text") },
     about: { title: g("about.title"), text: g("about.text") },
     usps: c.usps.map((u, i) => ({ title: g(`usp.${i}.title`) || u.title, text: g(`usp.${i}.text`) || u.text })),

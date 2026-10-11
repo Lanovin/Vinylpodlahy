@@ -36,7 +36,7 @@ export default function Page() {
       id: "objednavka", title: "Objednávka a uzavření smlouvy",
       body: <>
         <ol>
-          <li>Zboží vložíte do košíku (ručně nebo z kalkulačky), v pokladně vyplníte dodací údaje a zkontrolujete souhrn: zboží, zásilky, dopravu, termíny a cenu celkem. Až do odeslání můžete vše měnit a opravovat.</li>
+          <li>Zboží vložíte do košíku (ručně nebo z Podlahy na klíč), v pokladně vyplníte dodací údaje a zkontrolujete souhrn: zboží, zásilky, dopravu, termíny a cenu celkem. Až do odeslání můžete vše měnit a opravovat.</li>
           <li>Objednávku odešlete tlačítkem <strong>„Objednat s povinností platby“</strong>. Předtím musíte potvrdit, že jste se seznámili s těmito podmínkami.</li>
           <li>Po odeslání zobrazíme rekapitulaci a pošleme e-mail s přijetím objednávky. <strong>Kupní smlouva vzniká</strong> potvrzením objednávky z naší strany (e-mail s platebními údaji), zpravidla do 1 pracovního dne.</li>
           <li>Objednávku můžeme odmítnout nebo s vámi dohodnout změnu, pokud zboží mezitím přestal dodavatel nabízet, výrazně se změnila jeho cena nebo nejsou objednávkové údaje úplné. O tom vás bez zbytečného odkladu informujeme; případnou platbu vrátíme.</li>

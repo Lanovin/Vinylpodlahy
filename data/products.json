@@ -16,7 +16,7 @@
     "plankWidthMm": 183,
     "bevel": false,
     "m2PerPack": 2.23,
-    "packWeightKg": 26,
+    "packWeightKg": 17,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": false,
@@ -50,7 +50,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:17.205Z",
-    "updatedAt": "2026-10-03T15:07:17.205Z"
+    "updatedAt": "2026-10-09T12:19:47.394Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-dubbeleny",
@@ -69,7 +69,7 @@
     "plankWidthMm": 183,
     "bevel": false,
     "m2PerPack": 2.23,
-    "packWeightKg": 26,
+    "packWeightKg": 17,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": false,
@@ -103,7 +103,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:18.414Z",
-    "updatedAt": "2026-10-03T15:07:18.414Z"
+    "updatedAt": "2026-10-09T12:19:47.394Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-dubpopelavy",
@@ -122,7 +122,7 @@
     "plankWidthMm": 183,
     "bevel": false,
     "m2PerPack": 2.23,
-    "packWeightKg": 26,
+    "packWeightKg": 17,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": false,
@@ -160,7 +160,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:19.658Z",
-    "updatedAt": "2026-10-03T15:07:19.658Z"
+    "updatedAt": "2026-10-09T12:19:47.395Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-dubkavovy",
@@ -179,7 +179,7 @@
     "plankWidthMm": 183,
     "bevel": false,
     "m2PerPack": 2.23,
-    "packWeightKg": 26,
+    "packWeightKg": 17,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": false,
@@ -217,7 +217,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:21.404Z",
-    "updatedAt": "2026-10-03T15:07:21.404Z"
+    "updatedAt": "2026-10-09T12:19:47.395Z"
   },
   {
     "id": "p_floortrade_qua-basicspc-betonsvetly",
@@ -236,7 +236,7 @@
     "plankWidthMm": 305,
     "bevel": false,
     "m2PerPack": 2.23,
-    "packWeightKg": 26,
+    "packWeightKg": 17,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": false,
@@ -270,7 +270,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:23.098Z",
-    "updatedAt": "2026-10-03T15:07:23.098Z"
+    "updatedAt": "2026-10-09T12:19:47.396Z"
   },
   {
     "id": "p_floortrade_cas-composit-dubprovence",
@@ -623,7 +623,7 @@
     "plankWidthMm": 180,
     "bevel": true,
     "m2PerPack": 2.2,
-    "packWeightKg": 30,
+    "packWeightKg": 21,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -657,7 +657,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:33.548Z",
-    "updatedAt": "2026-10-03T15:07:33.548Z"
+    "updatedAt": "2026-10-09T12:19:47.483Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubmedovy",
@@ -676,7 +676,7 @@
     "plankWidthMm": 180,
     "bevel": true,
     "m2PerPack": 2.2,
-    "packWeightKg": 30,
+    "packWeightKg": 21,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -714,7 +714,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:34.780Z",
-    "updatedAt": "2026-10-03T15:07:34.780Z"
+    "updatedAt": "2026-10-09T12:19:47.483Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubkourovy",
@@ -733,7 +733,7 @@
     "plankWidthMm": 180,
     "bevel": true,
     "m2PerPack": 2.2,
-    "packWeightKg": 30,
+    "packWeightKg": 21,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -767,7 +767,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:36.602Z",
-    "updatedAt": "2026-10-03T15:07:36.602Z"
+    "updatedAt": "2026-10-09T12:19:47.484Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-orechtmavy",
@@ -786,7 +786,7 @@
     "plankWidthMm": 180,
     "bevel": true,
     "m2PerPack": 2.2,
-    "packWeightKg": 30,
+    "packWeightKg": 21,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -824,7 +824,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:37.683Z",
-    "updatedAt": "2026-10-03T15:07:37.683Z"
+    "updatedAt": "2026-10-09T12:19:47.484Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-dubsedy",
@@ -843,7 +843,7 @@
     "plankWidthMm": 180,
     "bevel": true,
     "m2PerPack": 2.2,
-    "packWeightKg": 30,
+    "packWeightKg": 21,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -877,7 +877,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:39.309Z",
-    "updatedAt": "2026-10-03T15:07:39.309Z"
+    "updatedAt": "2026-10-09T12:19:47.485Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-betonsedy",
@@ -896,7 +896,7 @@
     "plankWidthMm": 305,
     "bevel": true,
     "m2PerPack": 2.2,
-    "packWeightKg": 30,
+    "packWeightKg": 21,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -934,7 +934,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:40.503Z",
-    "updatedAt": "2026-10-03T15:07:40.503Z"
+    "updatedAt": "2026-10-09T12:19:47.486Z"
   },
   {
     "id": "p_vinylia_lum-gluedown-dubvanilkovy",
@@ -1275,7 +1275,7 @@
     "plankWidthMm": 228,
     "bevel": true,
     "m2PerPack": 2.46,
-    "packWeightKg": 34,
+    "packWeightKg": 26,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -1309,7 +1309,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:49.049Z",
-    "updatedAt": "2026-10-03T15:07:49.049Z"
+    "updatedAt": "2026-10-09T12:19:47.489Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-wenge",
@@ -1328,7 +1328,7 @@
     "plankWidthMm": 228,
     "bevel": true,
     "m2PerPack": 2.46,
-    "packWeightKg": 34,
+    "packWeightKg": 26,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -1366,7 +1366,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:50.243Z",
-    "updatedAt": "2026-10-03T15:07:50.243Z"
+    "updatedAt": "2026-10-09T12:19:47.489Z"
   },
   {
     "id": "p_vinylia_ter-rigidsto-kamenantracit",
@@ -1385,7 +1385,7 @@
     "plankWidthMm": 457,
     "bevel": true,
     "m2PerPack": 2.46,
-    "packWeightKg": 34,
+    "packWeightKg": 26,
     "weightEstimated": false,
     "floorHeating": true,
     "integratedUnderlay": true,
@@ -1423,7 +1423,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:51.938Z",
-    "updatedAt": "2026-10-03T15:07:51.938Z"
+    "updatedAt": "2026-10-09T12:19:47.489Z"
   },
   {
     "id": "p_nordic_nor-naturehd-dubalpsky",
@@ -1548,7 +1548,7 @@
     "plankWidthMm": 190,
     "bevel": true,
     "m2PerPack": 1.84,
-    "packWeightKg": 17.5,
+    "packWeightKg": 16.6,
     "weightEstimated": true,
     "floorHeating": true,
     "integratedUnderlay": false,
@@ -1582,7 +1582,7 @@
     "pauseReason": null,
     "isNew": false,
     "createdAt": "2026-10-03T15:07:57.004Z",
-    "updatedAt": "2026-10-03T15:07:57.004Z"
+    "updatedAt": "2026-10-09T12:19:47.512Z"
   },
   {
     "id": "p_nordic_nor-naturehd-dubantik",

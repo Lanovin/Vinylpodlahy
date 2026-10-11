@@ -67,7 +67,7 @@ export function Checkout() {
     const customer = business ? { ...rest, business, company, ico, dic } : { ...rest, business: false };
     const res = await fetch("/api/orders", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ customer, items, carryUp, installRequested, calculationId }) }).catch(() => null);
     setBusy(false);
-    if (!res) return setErr("Objednávku se nepodařilo odeslat — zkontrolujte připojení a zkuste to znovu.");
+    if (!res) return setErr("Objednávku se nepodařilo odeslat. Zkontrolujte připojení a zkuste to znovu.");
     if (!res.ok) {
       const d = (await res.json().catch(() => ({}))) as { error?: string; field?: string };
       if (d.field && d.field in FIELD_MSG) return fail(d.field as Field);

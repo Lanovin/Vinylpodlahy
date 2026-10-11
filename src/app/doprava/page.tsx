@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Site } from "@/components/layout/Site";
-import { settings as settingsRepo } from "@/lib/db/repos";
+import { products, settings as settingsRepo } from "@/lib/db/repos";
 import { fmtCzk } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -9,24 +9,30 @@ export const metadata: Metadata = { title: "Doprava a platba", description: "Dop
 
 export default function Page() {
   const s = settingsRepo.get();
+  // Hmotnost SPC se bere z nabídky (kg/m² = hmotnost balení / m² v balení), ne z ručně psaného čísla.
+  const spcKgM2 = products.visible().filter((p) => p.type === "spc" && !p.weightEstimated && p.m2PerPack > 0).map((p) => p.packWeightKg / p.m2PerPack).sort((a, b) => a - b);
+  const lo = Math.round(spcKgM2[0] ?? s.weightEstimateKgPerM2.spc);
+  const hi = Math.round(spcKgM2[spcKgM2.length - 1] ?? s.weightEstimateKgPerM2.spc);
+  const mid = spcKgM2.length ? spcKgM2[Math.floor(spcKgM2.length / 2)] : s.weightEstimateKgPerM2.spc;
+  const kg30 = Math.round((30 * mid) / 10) * 10;
   return (
     <Site>
       <div className="container py-8 md:py-14 max-w-3xl">
         <p className="eyebrow mb-3">Doprava a platba</p>
         <h1 className="h2">Dopravu počítáme z hmotnosti. Bez překvapení.</h1>
-        <p className="lead mt-4">SPC váží 12–14 kg/m², takže 30 m² je skoro 400 kg — to už je paleta. Cenu dopravy proto vidíte už v kalkulačce a v košíku.</p>
+        <p className="lead mt-4">SPC váží zhruba {lo === hi ? lo : `${lo} až ${hi}`} kg/m², takže 30 m² je kolem {kg30} kg, to už je paleta. Cenu dopravy proto vidíte už v Podlaze na klíč a v košíku.</p>
         <h2 className="h3 mt-10 md:mt-12 mb-4">Ceník</h2>
         <table className="spec"><tbody>
           <tr><th>Balík do {s.shipping.parcelMaxKg} kg</th><td>{fmtCzk(s.shipping.parcelPrice)}</td></tr>
           <tr><th>Každý další balík</th><td>{fmtCzk(s.shipping.parcelAdditionalPrice)}</td></tr>
           {s.shipping.palletTiers.map((t) => <tr key={t.label}><th>{t.label}</th><td>{fmtCzk(t.price)}</td></tr>)}
           <tr><th>Doprava zdarma</th><td>zásilka s {s.freeShippingFromM2} m² podlahy a více</td></tr>
-          <tr><th>Vynáška — balík</th><td>{fmtCzk(s.shipping.carryUpParcelPrice)} / zásilka</td></tr>
-          <tr><th>Vynáška — paleta</th><td>{fmtCzk(s.shipping.carryUpPalletPricePerFloor)} za patro (s výtahem jako 1 patro)</td></tr>
+          <tr><th>Vynáška balíku</th><td>{fmtCzk(s.shipping.carryUpParcelPrice)} / zásilka</td></tr>
+          <tr><th>Vynáška palety</th><td>{fmtCzk(s.shipping.carryUpPalletPricePerFloor)} za patro (s výtahem jako 1 patro)</td></tr>
         </tbody></table>
         <p className="text-sm text-muted mt-3">Nad {s.shipping.palletThresholdKg} kg jede zboží na paletě.</p>
         <h2 className="h3 mt-10 md:mt-12 mb-3">Kam přesně zboží dovezeme</h2>
-        <p className="text-ink-soft leading-relaxed"><strong className="text-ink">Ke krajnici, ne do bytu.</strong> Do patra ho vyneseme za příplatek — stačí zaškrtnout vynášku v košíku. Řidič vám předem zavolá.</p>
+        <p className="text-ink-soft leading-relaxed"><strong className="text-ink">Ke krajnici, ne do bytu.</strong> Do patra ho vyneseme za příplatek, stačí zaškrtnout vynášku v košíku. Řidič vám předem zavolá.</p>
         <h2 className="h3 mt-10 md:mt-12 mb-3">Více dodavatelů = více zásilek</h2>
         <p className="text-ink-soft leading-relaxed">Každý dodavatel posílá ze svého skladu, s vlastní cenou dopravy a termínem. Rozdělení vidíte v košíku ještě před objednáním.</p>
         <h2 className="h3 mt-10 md:mt-12 mb-3">Platba</h2>

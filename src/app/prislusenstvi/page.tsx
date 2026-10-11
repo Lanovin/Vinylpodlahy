@@ -11,7 +11,7 @@ import type { AccessoryKind } from "@/lib/types";
 import { days, fmtCzk, slugify } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Příslušenství k vinylovým podlahám", description: "Podložky, soklové a přechodové lišty, lepidla, tmely a čisticí sady. Kalkulačka projektu spočítá potřebné množství automaticky.", alternates: { canonical: "/prislusenstvi" } };
+export const metadata: Metadata = { title: "Příslušenství k vinylovým podlahám", description: "Podložky, soklové a přechodové lišty, lepidla, tmely a čisticí sady. Podlaha na klíč spočítá potřebné množství automaticky.", alternates: { canonical: "/prislusenstvi" } };
 
 const ORDER: AccessoryKind[] = ["underlay", "skirting", "transition", "floor-adhesive", "glue", "silicone", "cleaning"];
 
@@ -42,7 +42,7 @@ export default function Page() {
           {kinds.map((kind) => <a key={kind} href={`#${slugify(SECTION_LABEL[kind])}`} className="tag h-10 shrink-0 px-3.5 text-sm normal-case tracking-normal whitespace-nowrap hover:border-ink">{SECTION_LABEL[kind]}</a>)}
         </nav>
         <div className="panel mt-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 bg-accent-soft border-transparent">
-          <p className="flex-1 text-ink-soft">Kalkulačka spočítá podložku, lišty i lepidlo na míru.</p>
+          <p className="flex-1 text-ink-soft">Podlaha na klíč spočítá podložku, lišty i lepidlo na míru.</p>
           <Link href="/kalkulacka" className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat cenu</Link>
         </div>
         {kinds.map((kind) => {

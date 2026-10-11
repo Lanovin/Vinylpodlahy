@@ -35,7 +35,7 @@ function SuggestionRow({ s, onAdd }: { s: AccessorySuggestion; onAdd: () => void
       <span className="h-9 w-9 rounded-full bg-sage-soft text-sage grid place-items-center shrink-0"><Layers className="h-5 w-5" /></span>
       <div className="flex-1 min-w-48">
         <p className="leading-snug">Doplnit k podlaze {fmtNum2(s.m2)} m²: {parts.join(", ")} <span className="tabular-nums whitespace-nowrap">(+{fmtCzk(s.total)})</span></p>
-        <p className="text-xs text-muted mt-0.5">{s.productName}{skirting ? " · lišty: odhad z plochy (obvod ≈ 4 × √plocha), přesně spočítá kalkulačka" : ""}</p>
+        <p className="text-xs text-muted mt-0.5">{s.productName}{skirting ? " · lišty: odhad z plochy (obvod ≈ 4 × √plocha), přesně je spočítá Podlaha na klíč" : ""}</p>
       </div>
       <button type="button" className="btn btn-primary shrink-0" onClick={onAdd}><Plus className="h-4 w-4" /> Přidat</button>
     </div>

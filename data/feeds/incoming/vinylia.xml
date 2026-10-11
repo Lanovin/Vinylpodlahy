@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<products generated="2026-10-03T15:07:11.857Z">
+<products generated="2026-10-09T12:19:47.251Z">
   <product sku="TER-RIGIDSTO-DUBSKANDINÁVSKÝ" kind="floor">
     <name>Rigid Stone 5.5 Dub skandinávský</name>
     <brand>Terrano</brand>
@@ -15,7 +15,7 @@
     <plank_width_mm>180</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.2</pack_m2>
-    <pack_kg>30</pack_kg>
+    <pack_kg>21</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>486</stock_m2>
@@ -40,7 +40,7 @@
     <plank_width_mm>180</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.2</pack_m2>
-    <pack_kg>30</pack_kg>
+    <pack_kg>21</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>312</stock_m2>
@@ -65,7 +65,7 @@
     <plank_width_mm>180</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.2</pack_m2>
-    <pack_kg>30</pack_kg>
+    <pack_kg>21</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>198</stock_m2>
@@ -90,7 +90,7 @@
     <plank_width_mm>180</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.2</pack_m2>
-    <pack_kg>30</pack_kg>
+    <pack_kg>21</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>92</stock_m2>
@@ -115,7 +115,7 @@
     <plank_width_mm>180</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.2</pack_m2>
-    <pack_kg>30</pack_kg>
+    <pack_kg>21</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>264</stock_m2>
@@ -140,7 +140,7 @@
     <plank_width_mm>305</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.2</pack_m2>
-    <pack_kg>30</pack_kg>
+    <pack_kg>21</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>140</stock_m2>
@@ -315,7 +315,7 @@
     <plank_width_mm>228</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.46</pack_m2>
-    <pack_kg>34</pack_kg>
+    <pack_kg>26</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>520</stock_m2>
@@ -340,7 +340,7 @@
     <plank_width_mm>228</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.46</pack_m2>
-    <pack_kg>34</pack_kg>
+    <pack_kg>26</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>240</stock_m2>
@@ -365,7 +365,7 @@
     <plank_width_mm>457</plank_width_mm>
     <bevel>1</bevel>
     <pack_m2>2.46</pack_m2>
-    <pack_kg>34</pack_kg>
+    <pack_kg>26</pack_kg>
     <underfloor_heating>1</underfloor_heating>
     <integrated_underlay>1</integrated_underlay>
     <stock_m2>310</stock_m2>

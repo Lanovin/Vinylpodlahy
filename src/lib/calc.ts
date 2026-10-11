@@ -122,7 +122,7 @@ export function calculateProject(
     warnings.push("U místností zadaných jen plochou je obvod odhadnut (čtvercový půdorys). Pro přesný počet lišt doplňte obvod.");
   }
   if (anyFloorHeating && !product.floorHeating) {
-    warnings.push("Vybraná podlaha není výrobcem schválena na podlahové topení. Zvažte jiný dekor — filtr „Podlahové topení“ v katalogu.");
+    warnings.push("Vybraná podlaha není výrobcem schválena na podlahové topení. Zvažte jiný dekor, pomůže filtr „Podlahové topení“ v katalogu.");
   }
 
   const packsWithoutReserve = totalWithWaste > 0 ? Math.ceil(totalWithWaste / product.m2PerPack) : 0;
@@ -131,7 +131,7 @@ export function calculateProject(
 
   if (packs > 0 && coveredArea > product.stockM2) {
     warnings.push(
-      `Aktuálně je u dodavatele dostupných ${product.stockM2.toFixed(2).replace(".", ",")} m², projekt potřebuje ${coveredArea.toFixed(2).replace(".", ",")} m². Zbytek by se doobjednával s delší lhůtou — ozveme se vám s termínem.`,
+      `Aktuálně je u dodavatele dostupných ${product.stockM2.toFixed(2).replace(".", ",")} m², projekt potřebuje ${coveredArea.toFixed(2).replace(".", ",")} m². Zbytek by se doobjednával s delší lhůtou. Ozveme se vám s termínem.`,
     );
   }
   if (product.weightEstimated) {
@@ -156,7 +156,7 @@ export function calculateProject(
   if (options.includeUnderlay && totalArea > 0) {
     const need = underlayNeed(product);
     if (need !== "needed") {
-      const detail = need === "integrated" ? "Podlaha má integrovanou podložku — není potřeba." : "Lepená podlaha se klade přímo na podklad — podložka se nepoužívá.";
+      const detail = need === "integrated" ? "Podlaha má integrovanou podložku, není potřeba." : "Lepená podlaha se klade přímo na podklad, podložka se nepoužívá.";
       lines.push({ kind: "accessory", refId: "underlay", name: "Podložka", detail, qty: 0, unit: "role", unitPrice: 0, lineTotal: 0, skipped: "integrated" });
     } else {
       const u = pickUnderlay(accessoriesList, anyFloorHeating, product.supplierId);
@@ -168,7 +168,7 @@ export function calculateProject(
           qty, unit: u.unit, unitPrice: u.pricePerUnit, lineTotal: qty * u.pricePerUnit,
         });
       } else {
-        warnings.push("Podložka momentálně není v nabídce — přidejte ji prosím zvlášť.");
+        warnings.push("Podložka momentálně není v nabídce, přidejte ji prosím zvlášť.");
       }
     }
   }
@@ -188,12 +188,12 @@ export function calculateProject(
       const g = pickKind(accessoriesList, "glue", product.supplierId);
       if (g) {
         const gq = Math.ceil(skirtingMeters / 20);
-        lines.push({ kind: "accessory", refId: g.id, name: g.name, detail: `${gq} ks — 1 ks na každých 20 m lišt`, qty: gq, unit: g.unit, unitPrice: g.pricePerUnit, lineTotal: gq * g.pricePerUnit });
+        lines.push({ kind: "accessory", refId: g.id, name: g.name, detail: `${gq} ks, 1 ks na každých 20 m lišt`, qty: gq, unit: g.unit, unitPrice: g.pricePerUnit, lineTotal: gq * g.pricePerUnit });
       }
       const si = pickKind(accessoriesList, "silicone", product.supplierId);
       if (si) {
         const sq = Math.ceil(skirtingMeters / 15);
-        lines.push({ kind: "accessory", refId: si.id, name: si.name, detail: `${sq} ks — 1 ks na každých 15 m lišt`, qty: sq, unit: si.unit, unitPrice: si.pricePerUnit, lineTotal: sq * si.pricePerUnit });
+        lines.push({ kind: "accessory", refId: si.id, name: si.name, detail: `${sq} ks, 1 ks na každých 15 m lišt`, qty: sq, unit: si.unit, unitPrice: si.pricePerUnit, lineTotal: sq * si.pricePerUnit });
       }
     }
   }
@@ -205,7 +205,7 @@ export function calculateProject(
       const q = Math.ceil(totalAreaWithWaste(totalArea, totalWithWaste) / fa.coverage);
       lines.push({ kind: "accessory", refId: fa.id, name: fa.name, detail: `${q} × ${fa.coverageLabel} pro lepenou pokládku`, qty: q, unit: fa.unit, unitPrice: fa.pricePerUnit, lineTotal: q * fa.pricePerUnit });
     } else {
-      warnings.push("Lepený vinyl vyžaduje disperzní lepidlo — momentálně není v nabídce, přidejte ho zvlášť.");
+      warnings.push("Lepený vinyl vyžaduje disperzní lepidlo, momentálně není v nabídce, přidejte ho zvlášť.");
     }
   }
 
@@ -213,7 +213,7 @@ export function calculateProject(
   if (options.includeTransitions && totalDoors > 0) {
     const t = pickTransition(accessoriesList, product);
     if (t) {
-      lines.push({ kind: "accessory", refId: t.id, name: t.name, detail: `${totalDoors} ks — 1 ks na každé dveře`, qty: totalDoors, unit: t.unit, unitPrice: t.pricePerUnit, lineTotal: totalDoors * t.pricePerUnit });
+      lines.push({ kind: "accessory", refId: t.id, name: t.name, detail: `${totalDoors} ks, 1 ks na každé dveře`, qty: totalDoors, unit: t.unit, unitPrice: t.pricePerUnit, lineTotal: totalDoors * t.pricePerUnit });
     }
   }
 

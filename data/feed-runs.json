@@ -1,5 +1,59 @@
 [
   {
+    "id": "run_mv0xniyjb12xv2",
+    "supplierId": "nordic",
+    "startedAt": "2026-10-09T12:19:47.499Z",
+    "finishedAt": "2026-10-09T12:19:47.515Z",
+    "status": "ok",
+    "stats": {
+      "inFeed": 10,
+      "added": 0,
+      "updated": 1,
+      "unchanged": 6,
+      "missing": 0,
+      "pausedPriceJump": 0,
+      "imagesProcessed": 0
+    },
+    "error": null,
+    "snapshotFile": "data/feeds/snapshots/nordic/2026-10-09T12-19-47-509Z.json"
+  },
+  {
+    "id": "run_mv0xniy2h8oepk",
+    "supplierId": "vinylia",
+    "startedAt": "2026-10-09T12:19:47.434Z",
+    "finishedAt": "2026-10-09T12:19:47.498Z",
+    "status": "ok",
+    "stats": {
+      "inFeed": 20,
+      "added": 0,
+      "updated": 9,
+      "unchanged": 6,
+      "missing": 0,
+      "pausedPriceJump": 0,
+      "imagesProcessed": 0
+    },
+    "error": null,
+    "snapshotFile": "data/feeds/snapshots/vinylia/2026-10-09T12-19-47-479Z.json"
+  },
+  {
+    "id": "run_mv0xniw80ncy5a",
+    "supplierId": "floortrade",
+    "startedAt": "2026-10-09T12:19:47.277Z",
+    "finishedAt": "2026-10-09T12:19:47.432Z",
+    "status": "ok",
+    "stats": {
+      "inFeed": 15,
+      "added": 0,
+      "updated": 5,
+      "unchanged": 6,
+      "missing": 0,
+      "pausedPriceJump": 0,
+      "imagesProcessed": 0
+    },
+    "error": null,
+    "snapshotFile": "data/feeds/snapshots/floortrade/2026-10-09T12-19-47-340Z.json"
+  },
+  {
     "id": "run_musj0tbnjgockd",
     "supplierId": "nordic",
     "startedAt": "2026-10-03T15:07:54.576Z",

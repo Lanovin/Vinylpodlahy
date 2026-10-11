@@ -9,8 +9,8 @@ import { Cube, Ruler } from "@/components/ui/icons";
 const HIDDEN = ["/kalkulacka", "/kalkulace", "/vizualizace", "/kosik", "/pokladna", "/objednavka", "/podlaha/", "/montaz", "/admin"];
 
 /**
- * Spodní lišta na telefonu: kalkulačka a 3D byt na jedno ťuknutí z jakékoli stránky.
- * Na úvodní stránce až pod hero (tam je formulář kalkulačky), při psaní do formuláře se schová.
+ * Spodní lišta na telefonu: podlaha na klíč a 3D byt na jedno ťuknutí z jakékoli stránky.
+ * Na úvodní stránce až pod formulářem (ten je hlavní vstup), při psaní do formuláře se schová.
  */
 export function MobileDock() {
   const pathname = usePathname();
@@ -20,7 +20,7 @@ export function MobileDock() {
 
   useEffect(() => {
     if (!home) return;
-    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.75);
+    const onScroll = () => { const form = document.getElementById("start"); setPastHero(form ? form.getBoundingClientRect().bottom < 0 : window.scrollY > window.innerHeight * 0.75); };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -40,7 +40,7 @@ export function MobileDock() {
   return (
     <div className={clsx("lg:hidden fixed inset-x-0 bottom-[var(--cookie-h,0px)] z-40 bg-bg/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)] transition-transform duration-300", show ? "translate-y-0" : "translate-y-[calc(100%+var(--cookie-h,0px))]")} aria-hidden={!show}>
       <div className="container py-2 grid grid-cols-[1.4fr_1fr] gap-2">
-        <Link href="/kalkulacka" tabIndex={show ? undefined : -1} className="btn btn-accent"><Ruler className="h-4 w-4" /> Spočítat cenu</Link>
+        <Link href="/kalkulacka" tabIndex={show ? undefined : -1} className="btn btn-accent"><Ruler className="h-4 w-4" /> Podlaha na klíč</Link>
         <Link href="/vizualizace" tabIndex={show ? undefined : -1} className="btn btn-outline"><Cube className="h-4 w-4" /> Byt ve 3D</Link>
       </div>
     </div>

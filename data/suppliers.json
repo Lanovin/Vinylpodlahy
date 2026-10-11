@@ -5,7 +5,7 @@
     "feedUrl": "file://data/feeds/incoming/floortrade.xml",
     "adapter": "floortrade",
     "shipsFrom": "Brno",
-    "lastSyncAt": "2026-10-03T15:07:33.508Z",
+    "lastSyncAt": "2026-10-09T12:19:47.433Z",
     "lastSyncStatus": "ok",
     "active": true
   },
@@ -15,7 +15,7 @@
     "feedUrl": "file://data/feeds/incoming/vinylia.xml",
     "adapter": "vinylia",
     "shipsFrom": "Praha",
-    "lastSyncAt": "2026-10-03T15:07:54.575Z",
+    "lastSyncAt": "2026-10-09T12:19:47.499Z",
     "lastSyncStatus": "ok",
     "active": true
   },
@@ -25,7 +25,7 @@
     "feedUrl": "file://data/feeds/incoming/nordic.xml",
     "adapter": "nordic",
     "shipsFrom": "Ostrava",
-    "lastSyncAt": "2026-10-03T15:08:03.828Z",
+    "lastSyncAt": "2026-10-09T12:19:47.516Z",
     "lastSyncStatus": "ok",
     "active": true
   }

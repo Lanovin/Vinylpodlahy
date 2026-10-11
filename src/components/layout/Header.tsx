@@ -3,18 +3,16 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { Menu, Search, ShoppingBag, X, ChevronDown, Cube, Ruler } from "@/components/ui/icons";
+import { Menu, Search, ShoppingBag, X, Cube, Ruler } from "@/components/ui/icons";
 import { Logo } from "./Logo";
 import { useCart, useHydrated } from "@/store/cart";
-import { LANDINGS } from "@/lib/catalog";
 
-/** Jednotné názvy: Kalkulačka, Byt ve 3D, Pokládka, Doprava a platba. `xl` = na užším desktopu se nevejde. */
-const NAV: { href: string; label: string; xl?: boolean }[] = [
-  { href: "/kalkulacka", label: "Kalkulačka" },
+/** Menu je záměrně krátké: hlavní je „Podlaha na klíč“ (kalkulačka). Doprava, pokládka a typy podlah jsou v patičce a v kalkulačce. */
+const NAV: { href: string; label: string }[] = [
+  { href: "/kalkulacka", label: "Podlaha na klíč" },
   { href: "/vizualizace", label: "Byt ve 3D" },
-  { href: "/montaz", label: "Pokládka" },
-  { href: "/doprava", label: "Doprava a platba" },
-  { href: "/kontakt", label: "Kontakt", xl: true },
+  { href: "/podlahy", label: "Podlahy" },
+  { href: "/kontakt", label: "Kontakt" },
 ];
 
 export function Header({ overlay = false }: { overlay?: boolean }) {
@@ -49,22 +47,8 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
       <div className="container flex items-center justify-between h-16 md:h-20">
         <Logo light={light} />
         <nav className="hidden lg:flex items-center gap-5 xl:gap-6 text-[0.95rem]">
-          <div className="relative group">
-            <Link href="/podlahy" className="inline-flex items-center gap-1 py-6 hover:opacity-70">Podlahy <ChevronDown className="h-4 w-4" /></Link>
-            <div className="absolute left-1/2 -translate-x-1/2 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-              <div className="card shadow-card p-2 min-w-[260px] text-ink">
-                <Link href="/podlahy" className="block px-3 py-2 rounded hover:bg-bg">Všechny podlahy</Link>
-                <div className="divider my-1" />
-                {LANDINGS.map((l) => (
-                  <Link key={l.slug} href={`/${l.slug}`} className="block px-3 py-2 rounded hover:bg-bg">{l.navLabel}</Link>
-                ))}
-                <div className="divider my-1" />
-                <Link href="/prislusenstvi" className="block px-3 py-2 rounded hover:bg-bg">Příslušenství</Link>
-              </div>
-            </div>
-          </div>
           {NAV.map((n) => (
-            <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70 whitespace-nowrap", n.xl && "hidden xl:inline", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
+            <Link key={n.href} href={n.href} className={clsx("py-6 hover:opacity-70 whitespace-nowrap", pathname === n.href && "underline underline-offset-8")}>{n.label}</Link>
           ))}
         </nav>
         {/* Na telefonu jen hledání, košík a menu (44 px na palec) */}
@@ -99,14 +83,11 @@ export function Header({ overlay = false }: { overlay?: boolean }) {
             <button className="p-2" aria-label="Zavřít" onClick={() => setOpen(false)}><X className="h-6 w-6" /></button>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 py-4 text-lg">
-            {/* Hlavní nástroje jako první — kalkulačka a 3D byt jsou hlavní cesta k nákupu */}
+            {/* Hlavní nástroje jako první: Podlaha na klíč a 3D byt jsou hlavní cesta k nákupu */}
             <div className="grid grid-cols-2 gap-2 mb-3">
-              <Link href="/kalkulacka" onClick={close} className="rounded-md bg-accent text-white p-3.5 flex flex-col gap-2"><Ruler className="h-6 w-6" /><span className="leading-tight">Spočítat cenu<span className="block text-xs text-white/80 mt-0.5">za 2 minuty</span></span></Link>
+              <Link href="/kalkulacka" onClick={close} className="rounded-md bg-accent text-white p-3.5 flex flex-col gap-2"><Ruler className="h-6 w-6" /><span className="leading-tight">Podlaha na klíč<span className="block text-xs text-white/80 mt-0.5">cena za 2 minuty</span></span></Link>
               <Link href="/vizualizace" onClick={close} className="rounded-md bg-ink text-white p-3.5 flex flex-col gap-2"><Cube className="h-6 w-6" /><span className="leading-tight">Byt ve 3D<span className="block text-xs text-white/70 mt-0.5">vyzkoušejte dekor</span></span></Link>
             </div>
-            <Link href="/podlahy" onClick={close} className="block py-3 border-b border-line">Všechny podlahy</Link>
-            {LANDINGS.map((l) => (<Link key={l.slug} href={`/${l.slug}`} onClick={close} className="block py-2.5 pl-4 text-base text-ink-soft">{l.navLabel}</Link>))}
-            <Link href="/prislusenstvi" onClick={close} className="block py-2.5 pl-4 text-base text-ink-soft border-b border-line">Příslušenství</Link>
             {NAV.filter((n) => n.href !== "/kalkulacka" && n.href !== "/vizualizace").map((n) => (
               <Link key={n.href} href={n.href} onClick={close} className="flex items-center justify-between py-3 border-b border-line">{n.label}</Link>
             ))}

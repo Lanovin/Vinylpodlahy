@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const p = products.bySlug(slug);
   if (!p) return {};
   const image = p.images.hero ?? p.images.card;
-  return { title: `${p.brand} ${p.name} — ${fmtCzk(p.pricePerM2)}/m²`, description: `${FLOOR_TYPE_LABEL[p.type]} ${fmtMm(p.thicknessMm)}, nášlap ${fmtMm(p.wearLayerMm)}, třída ${p.usageClass}. ${fmtCzk(p.pricePerM2)}/m², ${fmtCzk(p.pricePerPack)}/balení. Dostupnost ${fmtNum2(p.stockM2)} m².`, alternates: { canonical: `/podlaha/${p.slug}` }, ...(image && { openGraph: { type: "website", locale: "cs_CZ", siteName: SITE_NAME, url: `/podlaha/${p.slug}`, images: [{ url: image, alt: `${p.brand} ${p.name}` }] }, twitter: { card: "summary_large_image" as const, images: [image] } }) };
+  return { title: `${p.brand} ${p.name}: ${fmtCzk(p.pricePerM2)}/m²`, description: `${FLOOR_TYPE_LABEL[p.type]} ${fmtMm(p.thicknessMm)}, nášlap ${fmtMm(p.wearLayerMm)}, třída ${p.usageClass}. ${fmtCzk(p.pricePerM2)}/m², ${fmtCzk(p.pricePerPack)}/balení. Dostupnost ${fmtNum2(p.stockM2)} m².`, alternates: { canonical: `/podlaha/${p.slug}` }, ...(image && { openGraph: { type: "website", locale: "cs_CZ", siteName: SITE_NAME, url: `/podlaha/${p.slug}`, images: [{ url: image, alt: `${p.brand} ${p.name}` }] }, twitter: { card: "summary_large_image" as const, images: [image] } }) };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -51,19 +51,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     ["Typ podlahy", FLOOR_TYPE_LABEL[p.type], TYPE_TERM[p.type]],
     ["Tloušťka", fmtMm(p.thicknessMm)],
     ["Nášlapná vrstva", fmtMm(p.wearLayerMm), "wear"],
-    ["Třída zátěže", `${p.usageClass} — ${USAGE_SHORT[p.usageClass]}`, "usage"],
+    ["Třída zátěže", `${p.usageClass}: ${USAGE_SHORT[p.usageClass]}`, "usage"],
     ["Pokládka", LOCK_LABEL[p.lock], LOCK_TERM[p.lock]],
     ["Podlahové topení", p.floorHeating ? "vhodná" : "nevhodná", "heating"],
-    ["Voděodolnost", p.waterproof ? "ano — i do koupelny" : "ne — jen suché místnosti", "waterproof"],
+    ["Voděodolnost", p.waterproof ? "ano, i do koupelny" : "ne, jen suché místnosti", "waterproof"],
   ];
   const moreSpecs: Spec[] = [
     [p.decorTone === "stone" ? "Rozměr dlaždice" : "Rozměr lamely", `${p.plankLengthMm} × ${p.plankWidthMm} mm`],
     ["Hrany", p.bevel ? "s fází (V-drážka)" : "bez fáze", "bevel"],
     ["Značka / kolekce", `${p.brand} · ${p.collection}`],
     ["Odstín", DECOR_TONE_LABEL[p.decorTone]],
-    ["Integrovaná podložka", p.integratedUnderlay ? "ano — podložku nekupujete" : "ne (podložku přidá kalkulačka)", "ixpe"],
+    ["Integrovaná podložka", p.integratedUnderlay ? "ano, podložku nekupujete" : "ne (podložku přidáme do projektu)", "ixpe"],
     ["m² v balení", `${fmtNum2(p.m2PerPack)} m²`],
-    ["Hmotnost balení", <>{fmtKg(p.packWeightKg)}{p.weightEstimated && <span className="text-warn"> (odhad — dodavatel neuvedl)</span>}</>],
+    ["Hmotnost balení", <>{fmtKg(p.packWeightKg)}{p.weightEstimated && <span className="text-warn"> (odhad, dodavatel neuvedl)</span>}</>],
   ];
   // U lepeného a samolepicího vinylu typ pokládku už říká.
   const summary = [FLOOR_TYPE_LABEL[p.type], fmtMm(p.thicknessMm), `nášlap ${fmtMm(p.wearLayerMm)}`, USAGE_SHORT[p.usageClass], p.lock === "click" ? LOCK_LABEL[p.lock] : null].filter(Boolean).join(" · ");
@@ -76,7 +76,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="container pt-3 md:pt-10">
         <nav className="text-xs text-muted mb-3 md:mb-4 hidden sm:block"><Link href="/" className="hover:text-ink">Domů</Link> / <Link href="/podlahy" className="hover:text-ink">Podlahy</Link> / <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="hover:text-ink">{p.collection}</Link> / <span className="text-ink">{p.decor}</span></nav>
         <Link href={`/podlahy?q=${encodeURIComponent(p.collection)}`} className="sm:hidden inline-flex items-center gap-1 h-9 text-sm text-muted"><ChevronRight className="h-4 w-4 rotate-180" /> {p.brand} · {p.collection}</Link>
-        {paused && <div className="notice notice-warn mb-6">Produkt je dočasně pozastaven — čekáme na potvrzení nové ceny od dodavatele. Podívejte se na podobné dekory.</div>}
+        {paused && <div className="notice notice-warn mb-6">Produkt je dočasně pozastaven, čekáme na potvrzení nové ceny od dodavatele. Podívejte se na podobné dekory.</div>}
         <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12">
           <div className="lg:col-span-7">
             <ProductGallery images={[p.images.hero ?? "", p.images.card ?? "", ...(p.images.gallery.filter((g) => g !== p.images.hero && g !== p.images.card))]} alt={`${p.brand} ${p.name}`}>

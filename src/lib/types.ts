@@ -436,7 +436,7 @@ export interface Alert {
 }
 
 export interface SiteContent {
-  hero: { title: string; subtitle: string; ctaPrimary: string; ctaTertiary: string; image: string };
+  hero: { title: string; subtitle: string; ctaPrimary: string; image: string };
   usps: { title: string; text: string }[];
   homeIntro: { title: string; text: string };
   steps: { title: string; text: string }[];

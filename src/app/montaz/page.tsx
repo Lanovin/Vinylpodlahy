@@ -6,15 +6,24 @@ import { calculations, content, products } from "@/lib/db/repos";
 import { Check, Cube, Ruler } from "@/components/ui/icons";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Pokládka podlahy — poptávka podlaháře", description: "Pokládka vinylové a SPC podlahy orientačně 220–260 Kč/m². Zadejte PSČ a plochu, ověřený podlahář z okolí se ozve s cenou do 2 pracovních dnů.", alternates: { canonical: "/montaz" } };
+/** Orientační cena pokládky se bere z „Orientačních cen na trhu“ (admin → Texty webu), aby se text a meta popis nerozešly. */
+const layingRow = () => content.get().priceGuide.rows.find((r) => /pokládk/i.test(r.label));
+
+export function generateMetadata(): Metadata {
+  const range = layingRow()?.range;
+  return {
+    title: "Pokládka podlahy: poptávka podlaháře",
+    description: `Pokládka vinylové a SPC podlahy${range ? ` orientačně ${range}` : ""}. Zadejte PSČ a plochu, podlahář z okolí se ozve s cenou do 2 pracovních dnů.`,
+    alternates: { canonical: "/montaz" },
+  };
+}
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ product?: string; calc?: string; area?: string; ok?: string }> }) {
   const sp = await searchParams;
   const calc = sp.calc ? calculations.byId(sp.calc) : null;
   const p = sp.product ? products.bySlug(sp.product) : calc ? products.byId(calc.productId) : null;
   const area = sp.area ? parseFloat(sp.area) : calc?.result.totalAreaM2 ?? null;
-  // Orientační cena pokládky z „Orientačních cen na trhu“ (admin → Texty webu).
-  const laying = content.get().priceGuide.rows.find((r) => /pokládk/i.test(r.label));
+  const laying = layingRow();
   // Po odeslání jen potvrzení nahoře — úvodní sloupec by na telefonu odsunul výsledek pod ohyb.
   if (sp.ok) {
     return (

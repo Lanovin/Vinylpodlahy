@@ -45,7 +45,7 @@ export function organizationLd(contact: SiteContent["contact"]) {
     name: SITE_NAME,
     legalName: isFilled(contact.company) ? contact.company.trim() : undefined,
     url: SITE_URL,
-    description: "Internetový obchod s vinylovými a SPC podlahami a příslušenstvím. Kalkulačka spočítá balení, podložku, lišty i dopravu na vaše metry.",
+    description: "Internetový obchod s vinylovými a SPC podlahami a příslušenstvím. Cenu celého projektu spočítáme na vaše metry: balení, podložku, lišty i dopravu.",
     email,
     telephone: phone,
     address: isFilled(contact.address) ? contact.address.trim() : undefined,

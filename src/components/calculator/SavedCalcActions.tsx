@@ -15,7 +15,7 @@ export function SavedCalcActions({ calcId, result, disabled }: { calcId: string;
   // Na telefonu nativní sdílení (WhatsApp, e-mail…), jinak zkopírovat odkaz.
   const share = async () => {
     const url = window.location.href;
-    if (navigator.share) { try { await navigator.share({ title: "Kalkulace podlahy", url }); } catch { /* zrušeno */ } return; }
+    if (navigator.share) { try { await navigator.share({ title: "Podlaha na klíč", url }); } catch { /* zrušeno */ } return; }
     await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1500);
   };
   return (

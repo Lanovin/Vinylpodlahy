@@ -75,7 +75,7 @@ const wood = (o: Omit<Extract<DecorLook, { kind: "wood" }>, "kind">): DecorLook 
 export const COLLECTIONS: SeedCollection[] = [
   {
     supplier: "floortrade", brand: "Quaro", collection: "Basic SPC 4", type: "spc", thickness: 4, wear: 0.3, usageClass: 31, lock: "click",
-    plank: [1220, 183], bevel: false, m2PerPack: 2.23, packKg: 26, heating: true, underlay: false, purchase: 245,
+    plank: [1220, 183], bevel: false, m2PerPack: 2.23, packKg: 17, heating: true, underlay: false, purchase: 245,
     description: "Cenově dostupné SPC do bytů a méně zatěžovaných místností. Bez integrované podložky — doporučujeme podložku IXPE. Voděodolné, vhodné na podlahové topení.",
     decors: [
       { decor: "Dub přírodní", tone: "light-oak", color: "#c9a77c", look: WOOD, stock: 640, days: 3 },
@@ -107,7 +107,7 @@ export const COLLECTIONS: SeedCollection[] = [
   },
   {
     supplier: "vinylia", brand: "Terrano", collection: "Rigid Stone 5.5", type: "spc", thickness: 5.5, wear: 0.55, usageClass: 33, lock: "click",
-    plank: [1220, 180], bevel: true, m2PerPack: 2.2, packKg: 30, heating: true, underlay: true, purchase: 520,
+    plank: [1220, 180], bevel: true, m2PerPack: 2.2, packKg: 21, heating: true, underlay: true, purchase: 520,
     description: "Prémiové SPC s minerálním jádrem a integrovanou IXPE podložkou 1,5 mm. Rozměrově stabilní, 100 % voděodolné, s tlumením kročejového hluku. Vhodné do všech místností včetně koupelen a na podlahové topení.",
     decors: [
       { decor: "Dub skandinávský", tone: "light-oak", color: "#dac8ac", look: wood({ grain: "calm", contrast: 0.17, warmth: 0.6 }), stock: 486, days: 5 },
@@ -145,7 +145,7 @@ export const COLLECTIONS: SeedCollection[] = [
   },
   {
     supplier: "vinylia", brand: "Terrano", collection: "Rigid Stone XL Commercial", type: "spc", thickness: 6, wear: 0.55, usageClass: 42, lock: "click",
-    plank: [1800, 228], bevel: true, m2PerPack: 2.46, packKg: 34, heating: true, underlay: true, purchase: 620,
+    plank: [1800, 228], bevel: true, m2PerPack: 2.46, packKg: 26, heating: true, underlay: true, purchase: 620,
     description: "Komerční SPC třídy 42 v XL formátu 1 800 × 228 mm. Pro kanceláře, obchody, hotely a společné prostory. Integrovaná podložka, zvýšená odolnost proti otěru a kolečkovým židlím.",
     decors: [
       { decor: "Dub písečný", tone: "light-oak", color: "#d0b892", look: wood({ contrast: 0.2 }), stock: 520, days: 6 },

@@ -62,7 +62,7 @@ export function InstallForm({ productId, calculationId, area, productName, sourc
         <div><label className="label" htmlFor="i-zip">PSČ pokládky</label><input id="i-zip" className="input" required inputMode="numeric" pattern="[0-9]{3} ?[0-9]{2}" maxLength={6} title="PSČ ve tvaru 110 00" autoComplete="postal-code" enterKeyHint="next" value={form.zip} onChange={(e) => set("zip", e.target.value)} {...inv("zip")} /></div>
         <div>
           <label className="label" htmlFor="i-area">Plocha (m²)</label><input id="i-area" className="input" required inputMode="decimal" pattern="[0-9]+([,.][0-9]+)?" title="Plocha v m², např. 24,5" enterKeyHint="next" value={form.areaM2} onChange={(e) => set("areaM2", e.target.value)} {...inv("areaM2")} />
-          <Link href="/kalkulacka" className="inline-flex items-center min-h-10 text-sm link">Nevím → spočítat v kalkulačce</Link>
+          <Link href="/kalkulacka" className="inline-flex items-center min-h-10 text-sm link">Nevím, spočítat v Podlaze na klíč</Link>
         </div>
       </div>
       <fieldset id="i-term" tabIndex={-1} className="outline-none scroll-mt-24" aria-invalid={bad === "term" || undefined} aria-describedby={bad === "term" ? "i-term-err" : undefined}>

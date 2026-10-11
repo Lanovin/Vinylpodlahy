@@ -23,7 +23,7 @@ export function GET() {
   for (const p of visible) byType.set(p.type, [...(byType.get(p.type) ?? []), p.pricePerM2]);
   const types = [...byType.entries()].map(([t, prices]) => {
     const lo = Math.min(...prices), hi = Math.max(...prices);
-    return `- ${FLOOR_TYPE_LABEL[t]}: ${prices.length} ${plural(prices.length, "dekor", "dekory", "dekorů")}, ${lo === hi ? fmtInt(lo) : `${fmtInt(lo)}–${fmtInt(hi)}`} Kč/m² vč. DPH`;
+    return `- ${FLOOR_TYPE_LABEL[t]}: ${prices.length} ${plural(prices.length, "dekor", "dekory", "dekorů")}, ${lo === hi ? fmtInt(lo) : `${fmtInt(lo)} až ${fmtInt(hi)}`} Kč/m² vč. DPH`;
   });
 
   const contact = [
@@ -41,7 +41,7 @@ export function GET() {
     "",
     "## Hlavní stránky",
     link("Katalog podlah", "/podlahy", "všechny vinylové a SPC podlahy s filtry (typ, tloušťka, nášlap, třída zátěže, cena, dostupnost)"),
-    link("Kalkulačka projektu", "/kalkulacka", "spočítá balení s prořezem, podložku, lišty, lepidlo i dopravu na zadané metry"),
+    link("Podlaha na klíč", "/kalkulacka", "spočítá balení s prořezem, podložku, lišty, lepidlo i dopravu na zadané metry"),
     link("Byt ve 3D", "/vizualizace", "vizualizace podlahy v modelovém bytě 2+kk"),
     link("Příslušenství", "/prislusenstvi", "podložky, lišty, lepidla, tmely"),
     link("Doprava a platba", "/doprava", "ceník dopravy podle hmotnosti"),

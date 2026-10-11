@@ -48,7 +48,7 @@ export function estimateProductShipping(product: PublicProduct, packs: number, s
 export function deliveryLabel(daysMax: number) {
   if (daysMax <= 0) return "termín upřesníme";
   const lo = Math.max(1, daysMax - 2);
-  return `${lo}–${daysMax} pracovních dní`;
+  return `${lo} až ${daysMax} pracovních dní`;
 }
 
 /** Podíl jedné položky na zásilce (hmotnost, m² podlahy, lhůta) — vstup pro `planShipments`. */
@@ -141,7 +141,7 @@ export function quoteCart(items: CartItem[], carryUp: CarryUpChoice, ctx: Shippi
     const notes: string[] = [];
     if (ps.method === "pallet") notes.push("Paletová přeprava: řidič složí paletu ke krajnici / před dům. Vynáška do patra je příplatek.");
     else notes.push("Balíková přeprava ke dveřím domu.");
-    if (ps.freeShipping) notes.push(`Doprava zdarma — zásilka obsahuje ${ps.floorM2.toFixed(2).replace(".", ",")} m² podlahy (limit ${settings.freeShippingFromM2} m²).`);
+    if (ps.freeShipping) notes.push(`Doprava zdarma, zásilka obsahuje ${ps.floorM2.toFixed(2).replace(".", ",")} m² podlahy (limit ${settings.freeShippingFromM2} m²).`);
     if (ps.weightEstimated) notes.push("Hmotnost části zboží je odhadnuta.");
     return {
       supplierId: ps.supplierId, supplierName: sup?.name ?? "Dodavatel", shipsFrom: sup?.shipsFrom ?? "",
@@ -154,7 +154,7 @@ export function quoteCart(items: CartItem[], carryUp: CarryUpChoice, ctx: Shippi
       deliveryDays: ps.deliveryDays, deliveryLabel: deliveryLabel(ps.deliveryDays), notes,
     };
   });
-  if (shipments.length > 1) warnings.push(`Objednávka obsahuje zboží od ${shipments.length} dodavatelů — přijde ve ${shipments.length} zásilkách, každá s vlastním termínem.`);
+  if (shipments.length > 1) warnings.push(`Objednávka obsahuje zboží od ${shipments.length} dodavatelů, přijde ve ${shipments.length} zásilkách, každá s vlastním termínem.`);
 
   const itemsTotal = lines.reduce((s, l) => s + l.lineTotal, 0);
   const shippingTotal = shipments.reduce((s, x) => s + x.price, 0);

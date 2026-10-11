@@ -29,7 +29,7 @@ export function ProductCard({ p, reason }: { p: PublicProduct; reason?: string }
         </Link>
         {/* Vizualizace nabízí jen dekory skladem. */}
         {p.stockM2 > 0 && (
-          <Link href={`/vizualizace?podlaha=${p.slug}`} aria-label={`${p.decor} — byt ve 3D`} title="Byt ve 3D" className="absolute bottom-2 right-2 grid h-10 w-10 place-items-center rounded-full bg-white/85 text-ink shadow-sm transition-colors hover:bg-white">
+          <Link href={`/vizualizace?podlaha=${p.slug}`} aria-label={`${p.decor}: byt ve 3D`} title="Byt ve 3D" className="absolute bottom-2 right-2 grid h-10 w-10 place-items-center rounded-full bg-white/85 text-ink shadow-sm transition-colors hover:bg-white">
             <Cube className="h-5 w-5" />
           </Link>
         )}

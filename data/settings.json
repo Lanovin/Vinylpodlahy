@@ -5,8 +5,8 @@
   "priceJumpAlertPct": 10,
   "shipping": {
     "parcelMaxKg": 30,
-    "parcelPrice": 149,
-    "parcelAdditionalPrice": 129,
+    "parcelPrice": 349,
+    "parcelAdditionalPrice": 299,
     "palletThresholdKg": 100,
     "palletTiers": [
       {
@@ -34,9 +34,9 @@
     "carryUpPalletPricePerFloor": 690
   },
   "weightEstimateKgPerM2": {
-    "spc": 13,
-    "vinyl-hdf": 9.5,
-    "vinyl-composite": 8,
-    "vinyl-glue": 6
+    "spc": 10,
+    "vinyl-hdf": 9,
+    "vinyl-composite": 9,
+    "vinyl-glue": 4.5
   }
 }
