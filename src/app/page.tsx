@@ -43,32 +43,24 @@ export default function HomePage() {
     <Site overlay>
       <JsonLd data={organizationLd(c.contact)} />
       <JsonLd data={websiteLd()} />
-      {/* HERO: celoplošná fotka a jen velký nadpis. Pod ním 3 body a hned formulář podlahy na klíč. */}
-      <section className="relative flex items-center justify-center text-white min-h-[52svh] md:min-h-[60svh]">
+      {/* HERO: vysoká celoplošná fotka. Nadpis, nenápadné tři kroky a hned formulář podlahy na klíč, vše na fotce. */}
+      <section id="start" className="relative flex items-center justify-center text-white min-h-[100svh] md:min-h-[min(100svh,56rem)] scroll-mt-20">
         <Image src={c.hero.image} alt="" fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/45 to-ink/70" />
-        <div className="relative container text-center pt-24 pb-10 md:py-28">
+        <div className="relative container text-center pt-28 pb-10 md:pt-32 md:pb-16">
           <h1 className="display fade-up">{c.hero.title}</h1>
           <p className="lead lead-light max-w-xl mx-auto mt-3 md:mt-5 fade-up fade-up-2">{c.hero.subtitle}</p>
-        </div>
-      </section>
-
-      {/* JAK TO FUNGUJE: tři body hned pod fotkou, na všech šířkách */}
-      <section className="border-b border-line">
-        <ol className="container grid md:grid-cols-3 gap-5 md:gap-8 py-6 md:py-8">
-          {c.steps.map((s, i) => (
-            <li key={s.title} className="flex gap-4">
-              <span className="text-3xl font-light text-accent leading-none">{String(i + 1).padStart(2, "0")}</span>
-              <div><p className="text-lg leading-tight">{s.title}</p><p className="text-sm text-muted mt-1 leading-snug">{s.text}</p></div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* FORMULÁŘ: první krok podlahy na klíč (metry), zbytek se doptá na další stránce */}
-      <section id="start" className="bg-surface border-b border-line scroll-mt-20">
-        <div className="container py-8 md:py-12">
-          <HeroStart cta={c.hero.ctaPrimary} />
+          <ol className="mt-5 md:mt-7 mx-auto max-w-3xl grid grid-cols-3 gap-3 md:gap-8 text-left fade-up fade-up-2">
+            {c.steps.map((s, i) => (
+              <li key={s.title} className="border-t border-white/35 pt-2.5">
+                <p className="text-sm md:text-base leading-tight"><span className="text-white/60 tabular-nums mr-1.5">{String(i + 1).padStart(2, "0")}</span>{s.title}</p>
+                <p className="hidden md:block text-sm text-white/65 mt-1 leading-snug">{s.text}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-6 md:mt-8 fade-up fade-up-3">
+            <HeroStart cta={c.hero.ctaPrimary} />
+          </div>
         </div>
       </section>
 
